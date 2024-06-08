@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { pool } from "../services/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
-import { BookDetail, BookList } from "@src/models/bookModel";
+import { BookDetail, BookList } from "@src/interfaces/legacy/bookModel";
 import { addBook } from "@src/services/bookService";
 // -- addBook V.1
 // export const addBook = async (req: Request, res: Response) => {

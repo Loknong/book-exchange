@@ -1,5 +1,5 @@
 import { pool } from "./db";
-import { Book } from "@src/models/Books";
+import { Book } from "@src/interfaces/legacy/Books";
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
 // insert book detail to database

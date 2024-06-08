@@ -1,4 +1,4 @@
-import { User } from "@src/models/User";
+import { User } from "@src/interfaces/legacy/User";
 import { pool } from "./db";
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 

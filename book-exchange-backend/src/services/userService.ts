@@ -1,5 +1,5 @@
 import { pool } from "./db";
-import { User } from "../models/User";
+import { User } from "../interfaces/legacy/User";
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
 // Partial<> -> Utility type -> ทำให้ใส้ในเป็น optional

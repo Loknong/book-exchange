@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { pool } from "../services/db";
-import { CreateUserRequest, LoginUser } from "../models/authModel";
+import { CreateUserRequest, LoginUser } from "../interfaces/legacy/authModel";
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { authLogin } from "@src/services/authService";
 import { error } from "console";

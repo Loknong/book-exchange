@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { pool } from "../services/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
-import { IUserOffer } from "@src/models/userAction";
+import { IUserOffer } from "@src/interfaces/legacy/userAction";
 
 export const userGetInventory = async (req: Request, res: Response) => {
   const { userId } = req.params;
