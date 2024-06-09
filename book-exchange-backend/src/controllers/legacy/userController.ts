@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createUser, getUserById } from "@src/services/userService";
+import { createUser, getUserById } from "../../services/legacy/userService";
 
 export const handleCreateUser = async (req: Request, res: Response) => {
   console.log("enter");

@@ -33,3 +33,11 @@ export interface UserResponse {
   message: string;
   data: object
 }
+
+// User Management Interface
+export interface UserEdit {
+  userId : number,
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}

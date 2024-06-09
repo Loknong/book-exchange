@@ -8,7 +8,6 @@ import {
   verifyEmail,
   resendEmailVerification,
 } from "../services/userAuthServices";
-import { error } from "console";
 import { UserLogin, UserSignup } from "@src/interfaces/User";
 
 /**
@@ -24,19 +23,12 @@ export const handleRegister = async (
   console.log(req.body);
   try {
     const result = await registerUser(req.body);
-    if (result) {
-      res.status(200).json(result);
-    } else {
-      res
-        .status(500)
-        .json({ error: `Failed to register for user: ${req.body.username}` });
-    }
+    res.status(200).json(result);
   } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: "unexpected error occurred" });
-    }
+    res.status(401).json({
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
+    });
   }
 };
 
@@ -48,10 +40,27 @@ export const handleAuthenticate = async (
 
   try {
     const result = await authenticateUser(req.body);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(401).json({
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
+    });
+  }
+};
+
+export const handleLogout = async (
+  req: Request<{}, {}, { userId: number }>,
+  res: Response
+) => {
+  console.log(req.body);
+
+  try {
+    const result = await logoutUser(req.body.userId);
     if (result) {
       res.status(200).json(result);
     } else {
-      res.status(500).json(result);
+      res.status(200).json(result);
     }
   } catch (error) {
     if (error instanceof Error) {
@@ -62,22 +71,64 @@ export const handleAuthenticate = async (
   }
 };
 
-export const handleLogout = async (req:Request<{},{},{userId:number}>, res:Response) => {
-  
-}
-// export const handleAuthenticate = (req:Request, res:Response) => {
+export const handleResetPassword = async (
+  req: Request<{}, {}, { userId: number, newPassword: string }>,
+  res: Response
+) => {
+  console.log(req.body);
 
-//     try {
-//         if (condition) {
+  try {
+    const result = await resetPassword(req.body.userId, req.body.newPassword);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(401).json({
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
+    });
+  }
+};
 
-//         } else {
+export const handleForgotPassword = async (
+  req: Request<{}, {}, { username: string; email: string }>,
+  res: Response
+) => {
+  console.log(req.body);
 
-//         }
-//     } catch (error) {
-//         if (error instanceof Error) {
-//             res.status(500).json({error: error.message})
-//         } else {
-//             res.status(500).json({error:"unexpected error occurred"})
-//         }
-//     }
-// }
+  try {
+    const result = await forgotPassword(req.body.username, req.body.email);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(401).json({
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
+    });
+  }
+};
+
+export const handleVerifyEmail = async (req: Request, res: Response) => {
+  console.log(req.body);
+
+  try {
+    const result = await verifyEmail();
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(401).json({
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
+    });
+  }
+};
+
+export const handleResendEmail = async (req: Request, res: Response) => {
+  console.log(req.body);
+
+  try {
+    const result = await resendEmailVerification();
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(401).json({
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
+    });
+  }
+};

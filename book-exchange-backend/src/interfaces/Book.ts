@@ -1,16 +1,21 @@
 export interface Book {
-  bookId: number;
+  bookId?: number;
   title: string;
   author?: string;
   genreId: number;
-  bookView: number;
+  bookView?: number;
   bookCondition?: string;
   description?: string;
   ownerId: number;
-  uniqueId: string;
+  uniqueId?: string;
   thumbnail?: string;
   createdAt: Date;
   updatedAt: Date;
+  status : 'public' | 'private';
+}
+
+export interface BookList {
+  bookList: Book[];
 }
 
 export interface BookCreate {

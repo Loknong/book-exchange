@@ -1,47 +1,39 @@
 import { Request, Response } from "express";
 import { pool } from "../../services/db";
-import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
-import { BookDetail, BookList } from "@src/interfaces/legacy/bookModel";
-import { addBook } from "@src/services/bookService";
-// -- addBook V.1
-// export const addBook = async (req: Request, res: Response) => {
-//   const book: BookDetail = req.body;
-//   try {
-//     const [result] = await pool.query<ResultSetHeader>(
-//       "INSERT INTO books(title, author, description, owner) VALUES(?, ?, ?, ?)",
-//       [book.title, book.author, book.description, book.owner]
-//     );
-//     res
-//       .status(201)
-//       .json({ message: "Book added succesfully", bookId: result.insertId });
-//   } catch (error) {
-//     res.status(500).json({ error: "Internal Error" });
-//   }
-// };
+import { addBook } from "../../services/legacy/bookService";
 
 export const handleAddBook = async (req: Request, res: Response) => {
   console.log(req.body);
-  
-  const { title, author, genre, bookCondition, description, ownerId } = req.body;
+
+  const { title, author, genre, bookCondition, description, ownerId } =
+    req.body;
   const thumbnail = req.file?.filename;
 
   if (!thumbnail) {
-    return res.status(400).json({ error: 'Thumbnail image is required' });
+    return res.status(400).json({ error: "Thumbnail image is required" });
   }
 
   try {
-    const book = await addBook({ title, author, genre, bookCondition, description, ownerId, thumbnail });
+    const book = await addBook({
+      title,
+      author,
+      genre,
+      bookCondition,
+      description,
+      ownerId,
+      thumbnail,
+    });
 
     if (book) {
       res.status(201).json(book);
     } else {
-      res.status(500).json({ error: 'Failed to add the book' });
+      res.status(500).json({ error: "Failed to add the book" });
     }
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ error: error.message });
     } else {
-      res.status(500).json({ error: 'Unexpected error occurred' });
+      res.status(500).json({ error: "Unexpected error occurred" });
     }
   }
 };

@@ -1,6 +1,7 @@
 import express from "express";
 import { testConnection } from "./services/db"; // Adjust the path as needed
-import authRoutes from "./routes/legacy/authRoute";
+// import authRoutes from "./routes/legacy/authRoute";
+import authRoutes from "./routes/userAuthRoutes";
 import bookRoutes from "./routes/legacy/booksRoute";
 import userActionRoutes from "./routes/legacy/userActionRoute";
 import userRoutes from "./routes/legacy/userRoute"

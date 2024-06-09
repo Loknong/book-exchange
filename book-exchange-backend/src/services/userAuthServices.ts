@@ -16,7 +16,7 @@ export const registerUser = async (user: UserSignup): Promise<User | null> => {
   const connection = await pool.getConnection();
   try {
     const [result] = await connection.query<ResultSetHeader>(
-      `INSERT INTO users (firstName, lastName, email, username, userPassword VALUES(?, ?, ?, ?, ?)",)`,
+      `INSERT INTO users (firstName, lastName, email, username, userPassword) VALUES(?, ?, ?, ?, ?)`,
       [
         user.firstName,
         user.lastName,
@@ -26,20 +26,20 @@ export const registerUser = async (user: UserSignup): Promise<User | null> => {
       ]
     );
 
+    if (result.affectedRows === 0) throw new Error("Insert user error");
     const insertId = result.insertId;
+
     const [rows] = await connection.query<RowDataPacket[]>(
       `SELECT * FROM users where userId = ?`,
       [insertId]
     );
 
-    if (rows.length > 0) {
-      return (rows as User[])[0];
-    } else {
-      throw new Error("User not found after insertion");
-    }
+    if (rows.length === 0) throw new Error("User not found after insertion");
+    return (rows as User[])[0];
   } catch (error) {
-    if (error instanceof Error) console.error(`Error creating user: `, error);
-    return null;
+    throw new Error(
+      error instanceof Error ? error.message : "Error creating user"
+    );
   } finally {
     connection.release();
   }
@@ -53,23 +53,22 @@ export const authenticateUser = async (user: UserLogin) => {
       [user.username, user.userPassword]
     );
 
-    if (rows.length > 0) {
-      const [result] = await pool.query<ResultSetHeader>(
-        `UPDATE users SET isLogin = TRUE where username = ? AND userPassword = ?`,
-        [user.username, user.userPassword]
-      );
-      if (result.affectedRows > 0) {
-        return { message: "Login successfully", user: rows[0] };
-      } else {
-        return { message: "Failed to update login status" };
-      }
-    } else {
-      return { message: "Invalid credentials" };
-    }
+    if (rows.length === 0) throw new Error("Invalid credentials");
+
+    const [result] = await pool.query<ResultSetHeader>(
+      `UPDATE users SET isLogin = TRUE where username = ? AND userPassword = ?`,
+      [user.username, user.userPassword]
+    );
+
+    if (result.affectedRows === 0)
+      throw new Error("Failed to update login status");
+    return { message: "Login successfully", user: rows[0] };
   } catch (error) {
-    if (error instanceof Error)
-      console.error("Error authenticate user:", error);
-    return { message: "An error occurred during authentication" };
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "An error occurred during authentication"
+    );
   } finally {
     connection.release();
   }
@@ -84,29 +83,46 @@ export const logoutUser = async (userId: number) => {
       "UPDATE users SET isLogin = FALSE where userId = ?",
       [userId]
     );
-    if (result.affectedRows === 0) return { message: "Logout Not succesfully" };
+    if (result.affectedRows === 0) throw new Error("Logout Not succesfully");
 
     // Other Funcion
 
     return { message: "Logout succesfully" };
   } catch (error) {
-    if (error instanceof Error) console.error("Logout Error :", error);
-    return { message: "Logout failed: Unknown error" };
+    // if (error instanceof Error) console.error("Logout Error :", error);
+    // return { message: "Logout failed: Unknown error" };
+    throw new Error(
+      error instanceof Error ? error.message : "An error occurred during logout"
+    );
   } finally {
     connection.release();
   }
 };
 
 // optional Add later
-export const resetPassword = async (userId: number) => {
+export const resetPassword = async (userId: number, newPassword: string) => {
   const connection = await pool.getConnection();
   try {
-    console.log(`Reset Password where userId = ${userId}`);
-    const user = "mock";
-    return { message: "Reset Password succesfully", user: user };
+    const [result] = await connection.query<ResultSetHeader>(
+      "UPDATE users SET userPassword = ? where userId = ?",
+      [newPassword, userId]
+    );
+    if (result.affectedRows === 0)
+      throw new Error("Error update password fail");
+
+    const [row] = await connection.query<RowDataPacket[]>(
+      "SELECT * FROM users where userId = ?",
+      [userId]
+    );
+    if (row.length === 0)
+      throw new Error("Error cant selet that user after update");
+    return { message: "Reset Password succesfully", user: row[0] };
   } catch (error) {
-    if (error instanceof Error) console.log(`Reset Password error is ${error}`);
-    return { message: "Reset password not success Unknown error" };
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "An error occurred during Reset Password"
+    );
   } finally {
     connection.release();
   }
@@ -120,18 +136,21 @@ export const forgotPassword = async (username: string, email: string) => {
       "SELECT * FROM users where username = ? and email = ? ",
       [username, email]
     );
-    if (rows.length === 0)
-      return { message: "Username or Password not correct" };
+    if (rows.length === 0) throw new Error("Username or Password not correct");
+    //   return { message: "Username or Password not correct" };
 
     // Optional: Send back a password reset link instead of the actual password
     // const resetLink = generatePasswordResetLink(rows[0].username, rows[0].email);
     // return { message: "Password reset link sent to your email", resetLink };
 
     //! For testing return Direct password
-    return { message: "This is your password", password: rows[0].password };
+    return { message: "This is your password", password: rows[0].userPassword };
   } catch (error) {
-    if (error instanceof Error) console.error(`Error is ${error}`);
-    return { message: "Unknown error" };
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "An error occurred during deliver new password"
+    );
   } finally {
     connection.release();
   }
@@ -144,13 +163,3 @@ export const verifyEmail = async () => {
 export const resendEmailVerification = async () => {
   return { message: "resendEmailVerification not implemented yet" };
 };
-
-// const connection = await pool.getConnection();
-//   try {
-
-//   } catch (error) {
-//     if (error instanceof Error) console.error(`Error is ${error}`);
-
-//   } finally {
-//     connection.release()
-//   }
