@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Create Postman to test user management API
 - Refactor code
 - Seperate table images with users, books
+- Add POSTMAN.json
 
 ## [2024-06-08]
 ### Added
