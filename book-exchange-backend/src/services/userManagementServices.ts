@@ -7,7 +7,9 @@ export const getUserProfile = async (userId: string): Promise<User | null> => {
   const connection = await pool.getConnection();
   try {
     const [row] = await connection.query<RowDataPacket[]>(
-      "SELECT * FROM users where userId = ?",
+      `SELECT firstName, lastName, email, username, credit, userProfilePictures.pictureName FROM users
+      LEFT JOIN userProfilePictures
+      ON users.userPictureId = userProfilePictures.pictureId where users.userId = ?`,
       [userId]
     );
     if (row.length === 0) throw new Error("Cannot find this user profile");
@@ -101,6 +103,7 @@ export const addUserBook2 = async (book: BookCreate) => {
     connection.release();
   }
 };
+
 export const addUserBook = async (book: BookCreate) => {
   const connection = await pool.getConnection();
   try {
