@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userGetInventory, userOfferBook } from "@src/controllers/userActionController";
+import { userGetInventory, userOfferBook } from "@src/controllers/legacy/userActionController";
 
 const router = Router();
 

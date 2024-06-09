@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { pool } from "../services/db";
+import { pool } from "../../services/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { IUserOffer } from "@src/interfaces/legacy/userAction";
 

@@ -3,8 +3,20 @@ export interface Offer {
   bookId: number;
   offeredBy: number;
   offeredTo: number;
-  status: string;
+  status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
   offerDetail?: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface OfferCreate {
+  bookId: number;
+  offeredBy: number;
+  offeredTo: number;
+  offerDetails?: string;
+}
+
+export interface OfferUpdate {
+  status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+  offerDetails?: string;
 }

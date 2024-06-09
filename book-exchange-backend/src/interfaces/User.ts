@@ -12,3 +12,24 @@ export interface User {
   expiredDate: Date;
   token: string;
 }
+
+export interface UserSignup {
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  userPassword: string;
+}
+
+export interface UserLogin {
+  username: string;
+  userPassword: string;
+  //jwt : string
+}
+
+export interface UserProfile extends User {}
+
+export interface UserResponse {
+  message: string;
+  data: object
+}

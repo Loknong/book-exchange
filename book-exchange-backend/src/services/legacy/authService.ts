@@ -1,5 +1,5 @@
 import { User } from "@src/interfaces/legacy/User";
-import { pool } from "./db";
+import { pool } from "../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
 // export const authLogin = async (user: Partial<User>) => {

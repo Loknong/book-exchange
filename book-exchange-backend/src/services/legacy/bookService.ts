@@ -1,4 +1,4 @@
-import { pool } from "./db";
+import { pool } from "../db";
 import { Book } from "@src/interfaces/legacy/Books";
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 

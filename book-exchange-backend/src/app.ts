@@ -1,9 +1,9 @@
 import express from "express";
 import { testConnection } from "./services/db"; // Adjust the path as needed
-import authRoutes from "./routes/authRoute";
-import bookRoutes from "./routes/booksRoute";
-import userActionRoutes from "./routes/userActionRoute";
-import userRoutes from "./routes/userRoute"
+import authRoutes from "./routes/legacy/authRoute";
+import bookRoutes from "./routes/legacy/booksRoute";
+import userActionRoutes from "./routes/legacy/userActionRoute";
+import userRoutes from "./routes/legacy/userRoute"
 import { corsMiddleware } from "./middlewares/corsMiddleware";
 
 

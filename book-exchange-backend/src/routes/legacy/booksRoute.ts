@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { handleAddBook, getBooks } from "@src/controllers/bookController";
+import { handleAddBook, getBooks } from "@src/controllers/legacy/bookController";
 
 import { bookUpload } from "@src/middlewares/upload";
 

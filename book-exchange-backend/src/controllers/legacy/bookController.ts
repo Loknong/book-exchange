@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { pool } from "../services/db";
+import { pool } from "../../services/db";
 import { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { BookDetail, BookList } from "@src/interfaces/legacy/bookModel";
 import { addBook } from "@src/services/bookService";
