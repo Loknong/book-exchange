@@ -54,6 +54,7 @@ export const updateUserProfile2 = async (user: UserEdit) => {
 export const updateUserProfile = async (user: UserEdit) => {
   const connection = await pool.getConnection();
   try {
+    await connection.beginTransaction();
     const [currentRow] = await connection.query<RowDataPacket[]>(
       "SELECT firstName, lastName, email FROM users where userId = ?",
       [user.userId]
@@ -79,8 +80,10 @@ export const updateUserProfile = async (user: UserEdit) => {
     );
     if (row.length === 0)
       throw new Error("Error cant select user after update");
+    connection.commit();
     return { message: "Update user profile succesfully", user: row[0] };
   } catch (error) {
+    connection.rollback();
     throw new Error(
       error instanceof Error ? error.message : "Error Update user profile"
     );
@@ -89,6 +92,7 @@ export const updateUserProfile = async (user: UserEdit) => {
   }
 };
 
+// Version 1
 export const addUserBook2 = async (book: BookCreate) => {
   const connection = await pool.getConnection();
   try {
@@ -145,14 +149,30 @@ export const addUserBook2 = async (book: BookCreate) => {
   }
 };
 
+// Version 2
+/**
+ * 0) Check genre have not null
+ * 1) INSERT into books
+ * 2) Check and get InsertId
+ * 3) INSERT into BooksImages
+ * 4) Select Check
+ * 5) SELECT ALL book details
+ */
 export const addUserBook = async (book: BookCreate) => {
   const connection = await pool.getConnection();
   try {
+    await connection.beginTransaction();
     console.log("enter add user book try");
     console.log("book", book);
+    // 0) genreId must be not null
 
-    const [result] = await connection.query<ResultSetHeader>(
-      "INSERT INTO books (title, author, genreId, bookCondition, description, ownerId, thumbnail) VALUES(?, ?, ?, ?, ?, ?, ?)",
+    if (!book.genreId) throw new Error("Error genreId is falsty");
+
+    // 1) insert into books
+    console.log("1");
+
+    const [bookResult] = await connection.query<ResultSetHeader>(
+      "INSERT INTO books (title, author, genreId, bookCondition, description, ownerId) VALUES(?, ?, ?, ?, ?, ?)",
       [
         book.title,
         book.author,
@@ -160,20 +180,51 @@ export const addUserBook = async (book: BookCreate) => {
         book.bookCondition,
         book.description,
         book.ownerId,
-        book.thumbnail,
       ]
     );
-    if (result.affectedRows === 0)
+    if (bookResult.affectedRows === 0)
       throw new Error("Error add a book not succesfully");
-    const insertId = result.insertId;
+
+    // 2) Check and Get InsertId
+    console.log("2");
+    const bookInsertId = bookResult.insertId;
     const [row] = await connection.query<RowDataPacket[]>(
       "SELECT * FROM books where bookId = ?",
-      [insertId]
+      [bookInsertId]
     );
     if (row.length === 0)
       throw new Error("Can not select book after insert complete");
-    return { message: "Insert book succesfully", book: row[0] };
+
+    // 3) INSERT into BooksImages
+    console.log("3");
+    const [imageResutl] = await connection.query<ResultSetHeader>(
+      `INSERT INTO BookImages (bookId, imageName ) VALUES(?, ?)`,
+      [bookInsertId, book.thumbnail]
+    );
+    if (imageResutl.affectedRows === 0)
+      throw new Error("Error upload book images failed");
+    const imageInsertId = imageResutl.insertId;
+    // 4) Select Check
+    console.log("4");
+    const [bookImageRow] = await connection.query<RowDataPacket[]>(
+      `SELECT * FROM BookImages where imageId = ?`,
+      [imageInsertId]
+    );
+    if (bookImageRow.length === 0)
+      throw new Error("Error can't find book images");
+
+    // 5) SELECT ALL book details
+    const [bookDetailRow] = await connection.query<RowDataPacket[]>(
+      `SELECT books.bookId ,books.title, books.author, genres.genre, books.bookView, books.bookCondition ,books.description , bookImages.imageName, books.createAt FROM books 
+    INNER JOIN genres ON books.genreId  = genres.genreId 
+    INNER JOIN bookImages ON books.bookId = bookImages.bookId where books.bookId = ?`,
+      [bookInsertId]
+    );
+
+    connection.commit();
+    return { message: "Insert book succesfully", book: bookDetailRow[0] };
   } catch (error) {
+    connection.rollback();
     throw new Error(
       error instanceof Error ? error.message : "Error add user's new book"
     );
@@ -186,7 +237,9 @@ export const getUserInventory = async (ownerId: string) => {
   const connection = await pool.getConnection();
   try {
     const [row] = await connection.query<RowDataPacket[]>(
-      "SELECT * FROM books where ownerId = ?",
+      `SELECT books.bookId ,books.title, books.author, genres.genre, books.bookView, books.bookCondition ,books.description , bookImages.imageName, books.createAt FROM books 
+      INNER JOIN genres ON books.genreId  = genres.genreId 
+      INNER JOIN bookImages ON books.bookId = bookImages.bookId where books.ownerId =  ?`,
       [ownerId]
     );
     if (row.length === 0) throw new Error("No book for user");
@@ -277,7 +330,6 @@ export const uploadProfilePicture3 = async (
 ) => {
   const connection = await pool.getConnection();
   try {
-
     // Insert to userProfilePictires
     const [pictureResults] = await connection.query<ResultSetHeader>(
       `INSERT INTO userProfilePictures (userId, pictureName, isActive) VALUES(?, ?, 1)`,
@@ -333,8 +385,7 @@ export const uploadProfilePicture = async (
 ) => {
   const connection = await pool.getConnection();
   try {
-
-    await connection.beginTransaction()
+    await connection.beginTransaction();
     // Insert to userProfilePictires
     const [pictureResults] = await connection.query<ResultSetHeader>(
       `INSERT INTO userProfilePictures (userId, pictureName, isActive) VALUES(?, ?, 1)`,
@@ -383,7 +434,6 @@ export const uploadProfilePicture = async (
     connection.release();
   }
 };
-
 
 export const deleteUserAccount = async () => {
   const connection = await pool.getConnection();
