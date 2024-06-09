@@ -1,6 +1,7 @@
 import { User, UserLogin, UserSignup, UserProfile } from "@src/interfaces/User";
 import { pool } from "./db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { error } from "console";
 
 /**
  *
@@ -12,6 +13,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
  * 4) release connection to db
  */
 
+// Version 1
 export const registerUser2 = async (user: UserSignup): Promise<User | null> => {
   const connection = await pool.getConnection();
   try {
@@ -45,7 +47,8 @@ export const registerUser2 = async (user: UserSignup): Promise<User | null> => {
   }
 };
 
-export const registerUser = async (
+// Version 2 after we add images table
+export const registerUser3 = async (
   user: UserSignup,
   pictureName: string | undefined
 ): Promise<User | null> => {
@@ -85,6 +88,59 @@ export const registerUser = async (
     if (rows.length === 0) throw new Error("User not found after insertion");
     return (rows as User[])[0];
   } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Error creating user"
+    );
+  } finally {
+    connection.release();
+  }
+};
+
+// Version 3 use Transition because we have too many query now
+export const registerUser = async (user: UserSignup, pictureName: string | undefined): Promise<User | null> => {
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction(); // Start the transaction
+
+    const [result] = await connection.query<ResultSetHeader>(
+      `INSERT INTO users (firstName, lastName, email, username, userPassword) VALUES(?, ?, ?, ?, ?)`,
+      [
+        user.firstName,
+        user.lastName,
+        user.email,
+        user.username,
+        user.userPassword,
+      ]
+    );
+
+    if (result.affectedRows === 0) throw new Error("Insert user error");
+    const insertId = result.insertId;
+
+    if (pictureName) {
+      const [pictureResult] = await connection.query<ResultSetHeader>(
+        `INSERT INTO userProfilePictures (userId, pictureName, isActive) VALUES (?, ?, 1)`,
+        [insertId, pictureName]
+      );
+      const pictureId = pictureResult.insertId;
+
+      const [updateResult] = await connection.query<ResultSetHeader>(
+        `UPDATE users SET userPictureId = ? WHERE userId = ?`,
+        [pictureId, insertId]
+      );
+      if(updateResult.affectedRows === 0) throw new Error("Update userPictureId not successfully")
+    }
+
+    const [rows] = await connection.query<RowDataPacket[]>(
+      `SELECT * FROM users where userId = ?`,
+      [insertId]
+    );
+
+    if (rows.length === 0) throw new Error("User not found after insertion");
+
+    await connection.commit(); // Commit the transaction if all queries succeed
+    return (rows as User[])[0];
+  } catch (error) {
+    await connection.rollback(); // Rollback the transaction if any query fails
     throw new Error(
       error instanceof Error ? error.message : "Error creating user"
     );
