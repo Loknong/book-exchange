@@ -1,20 +1,20 @@
 import { Router } from "express";
 import { bookUpload } from "@src/middlewares/upload";
+import { handleAddBook, handleGetInventory, handleGetProfile, handleUpdateProfile } from "@src/controllers/userManagementController";
 
 const router = Router();
-router.post('/add-book', bookUpload.single('thumbnail'), )
 
-
-
-
-
+router.get('/profile/:userId', handleGetProfile)
+router.put('/profile/', handleUpdateProfile)
+router.post('/add-book', bookUpload.single('thumbnail'), handleAddBook)
+router.get('/inventory/:ownerId', handleGetInventory)
 
 
 // const router = Router();
 
-// // router.post('/',addBook);
+// router.post('/',addBook);
 // router.get('/',getBooks);
 
 // router.post('/add', bookUpload.single('thumbnail'), handleAddBook);
 
-// export default router;
+export default router;

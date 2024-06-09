@@ -3,7 +3,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { User, UserEdit } from "@src/interfaces/User";
 import { Book, BookCreate, BookUpdate } from "@src/interfaces/Book";
 
-export const getUserProfile = async (userId: number): Promise<User | null> => {
+export const getUserProfile = async (userId: string): Promise<User | null> => {
   const connection = await pool.getConnection();
   try {
     const [row] = await connection.query<RowDataPacket[]>(
@@ -49,6 +49,9 @@ export const updateUserProfile = async (user: UserEdit) => {
 export const addUserBook = async (book: BookCreate) => {
   const connection = await pool.getConnection();
   try {
+    console.log('enter add user book try');
+    console.log("book", book);
+    
     const [result] = await connection.query<ResultSetHeader>(
       "INSERT INTO books (title, author, genreId, bookCondition, description, ownerId, thumbnail) VALUES(?, ?, ?, ?, ?, ?, ?)",
       [
@@ -80,11 +83,11 @@ export const addUserBook = async (book: BookCreate) => {
   }
 };
 
-export const getUserInventory = async (ownerId: number) => {
+export const getUserInventory = async (ownerId: string) => {
   const connection = await pool.getConnection();
   try {
     const [row] = await connection.query<RowDataPacket[]>(
-      "SELECT * FROM books where userId = ?",
+      "SELECT * FROM books where ownerId = ?",
       [ownerId]
     );
     if (row.length === 0) throw new Error("No book for user");
@@ -99,6 +102,9 @@ export const getUserInventory = async (ownerId: number) => {
     connection.release();
   }
 };
+
+
+
 
 export const updateBookStatus = async (
   bookId: number,
@@ -130,6 +136,8 @@ export const updateBookStatus = async (
     connection.release();
   }
 };
+
+
 
 export const uploadProfilePicture = async () => {
   const connection = await pool.getConnection();

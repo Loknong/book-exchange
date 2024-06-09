@@ -2,6 +2,7 @@ import express from "express";
 import { testConnection } from "./services/db"; // Adjust the path as needed
 // import authRoutes from "./routes/legacy/authRoute";
 import authRoutes from "./routes/userAuthRoutes";
+import userManageRoutes from "./routes/userManagementRoutes"
 import bookRoutes from "./routes/legacy/booksRoute";
 import userActionRoutes from "./routes/legacy/userActionRoute";
 import userRoutes from "./routes/legacy/userRoute"
@@ -23,6 +24,8 @@ app.get("/test-db", async (req, res) => {
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userManageRoutes);
+
 app.use("/api/books", bookRoutes);
 app.use("/api/action", userActionRoutes);
 app.use("/api", userRoutes);

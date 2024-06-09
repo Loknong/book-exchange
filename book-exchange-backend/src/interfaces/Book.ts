@@ -21,17 +21,17 @@ export interface BookList {
 export interface BookCreate {
   title: string;
   author?: string;
-  genreId: number;
+  genreId: string;
   bookCondition?: string;
   description?: string;
-  ownerId: number;
+  ownerId: string;
   thumbnail?: string;
 }
 
 export interface BookUpdate {
   title?: string;
   author?: string;
-  genreId?: number;
+  genreId: number;
   bookCondition?: string;
   description?: string;
   thumbnail?: string;
