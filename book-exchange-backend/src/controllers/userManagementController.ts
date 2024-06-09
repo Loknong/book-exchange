@@ -60,9 +60,7 @@ export const handleAddBook = async (req: Request, res: Response) => {
     if (!book) res.status(500).json({ error: "Failed to add the book" });
     res.status(201).json(book);
   } catch (error) {
-    throw new Error(
-      error instanceof Error ? error.message : "Unexpected error occurred"
-    );
+    res.status(400).json({ error: error instanceof Error ? error.message : "Unexpected error occurred" });
   }
 };
 

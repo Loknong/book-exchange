@@ -12,11 +12,4 @@ router.put('/manage-book/:bookId', handleUpdateBookStatus)
 router.post('/profile-picture', userUpload.single('thumbnail'), handleUploadProfileImage)
 
 
-// const router = Router();
-
-// router.post('/',addBook);
-// router.get('/',getBooks);
-
-// router.post('/add', bookUpload.single('thumbnail'), handleAddBook);
-
 export default router;

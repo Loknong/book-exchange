@@ -7,11 +7,12 @@ import {
   handleResetPassword,
   handleVerifyEmail,
 } from "@src/controllers/userAuthController";
+import { userUpload } from "@src/middlewares/upload";
 import { Router } from "express";
 
 const router = Router();
 
-router.post("/signup", handleRegister);
+router.post("/signup",userUpload.single('thumbnail') ,handleRegister);
 router.post("/login", handleAuthenticate);
 router.post("/logout", handleLogout);
 router.post("/forgot-password", handleForgotPassword);

@@ -11,6 +11,11 @@ export interface User {
   isLogin: boolean;
   expiredDate: Date;
   token: string;
+  userPictureId: number;
+}
+
+export interface UserProfilePicture {
+  
 }
 
 export interface UserSignup {
@@ -31,12 +36,12 @@ export interface UserProfile extends User {}
 
 export interface UserResponse {
   message: string;
-  data: object
+  data: object;
 }
 
 // User Management Interface
 export interface UserEdit {
-  userId : number,
+  userId: number;
   firstName?: string;
   lastName?: string;
   email?: string;

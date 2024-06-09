@@ -12,7 +12,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
  * 4) release connection to db
  */
 
-export const registerUser = async (user: UserSignup): Promise<User | null> => {
+export const registerUser2 = async (user: UserSignup): Promise<User | null> => {
   const connection = await pool.getConnection();
   try {
     const [result] = await connection.query<ResultSetHeader>(
@@ -28,6 +28,54 @@ export const registerUser = async (user: UserSignup): Promise<User | null> => {
 
     if (result.affectedRows === 0) throw new Error("Insert user error");
     const insertId = result.insertId;
+
+    const [rows] = await connection.query<RowDataPacket[]>(
+      `SELECT * FROM users where userId = ?`,
+      [insertId]
+    );
+
+    if (rows.length === 0) throw new Error("User not found after insertion");
+    return (rows as User[])[0];
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Error creating user"
+    );
+  } finally {
+    connection.release();
+  }
+};
+
+export const registerUser = async (
+  user: UserSignup,
+  pictureName: string | undefined
+): Promise<User | null> => {
+  const connection = await pool.getConnection();
+  try {
+    const [result] = await connection.query<ResultSetHeader>(
+      `INSERT INTO users (firstName, lastName, email, username, userPassword) VALUES(?, ?, ?, ?, ?)`,
+      [
+        user.firstName,
+        user.lastName,
+        user.email,
+        user.username,
+        user.userPassword,
+      ]
+    );
+
+    if (result.affectedRows === 0) throw new Error("Insert user error");
+    const insertId = result.insertId;
+
+    if (pictureName) {
+      const [pictureResult] = await connection.query<ResultSetHeader>(
+        "INSERT INTO userProfilePictures (userId, pictureName, isActive) VALUES(?, ? ,1)",
+        [insertId, pictureName]
+      );
+      const pictureId = pictureResult.insertId;
+      await connection.query<ResultSetHeader>(
+        `UPDATE users SET userPictureId = ? WHERE userId = ?`,
+        [pictureId, insertId]
+      );
+    }
 
     const [rows] = await connection.query<RowDataPacket[]>(
       `SELECT * FROM users where userId = ?`,

@@ -46,12 +46,67 @@ export const updateUserProfile = async (user: UserEdit) => {
   }
 };
 
+export const addUserBook2 = async (book: BookCreate) => {
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    // Check if genreId exists in genres table
+    const [genreRows] = await connection.query<RowDataPacket[]>(
+      "SELECT genreId FROM genres WHERE genreId = ?",
+      [book.genreId]
+    );
+    if (genreRows.length === 0) {
+      throw new Error(
+        `Genre ID ${book.genreId} does not exist in genres table`
+      );
+    }
+
+    // Insert into the books table
+    const [result] = await connection.query<ResultSetHeader>(
+      "INSERT INTO books (title, author, genreId, bookCondition, description, ownerId, thumbnail) VALUES(?, ?, ?, ?, ?, ?, ?)",
+      [
+        book.title,
+        book.author,
+        book.genreId,
+        book.bookCondition,
+        book.description,
+        book.ownerId,
+        book.thumbnail,
+      ]
+    );
+
+    if (result.affectedRows === 0) {
+      throw new Error("Error adding a book, insertion was not successful");
+    }
+
+    const insertId = result.insertId;
+    const [row] = await connection.query<RowDataPacket[]>(
+      "SELECT * FROM books WHERE bookId = ?",
+      [insertId]
+    );
+    if (row.length === 0) {
+      throw new Error("Cannot select book after insert complete");
+    }
+
+    await connection.commit();
+    return { message: "Insert book successfully", book: row[0] };
+  } catch (error) {
+    await connection.rollback();
+    console.error("Error in addUserBook:", error);
+    throw new Error(
+      error instanceof Error ? error.message : "Error adding user's new book"
+    );
+  } finally {
+    connection.release();
+  }
+};
 export const addUserBook = async (book: BookCreate) => {
   const connection = await pool.getConnection();
   try {
-    console.log('enter add user book try');
+    console.log("enter add user book try");
     console.log("book", book);
-    
+
     const [result] = await connection.query<ResultSetHeader>(
       "INSERT INTO books (title, author, genreId, bookCondition, description, ownerId, thumbnail) VALUES(?, ?, ?, ?, ?, ?, ?)",
       [
@@ -103,9 +158,6 @@ export const getUserInventory = async (ownerId: string) => {
   }
 };
 
-
-
-
 export const updateBookStatus = async (
   bookId: number,
   status: "public" | "private"
@@ -137,19 +189,27 @@ export const updateBookStatus = async (
   }
 };
 
-
-
-export const uploadProfilePicture = async (userId : number, userPicture?: string) => {
+export const uploadProfilePicture = async (
+  userId: number,
+  userPicture?: string
+) => {
   const connection = await pool.getConnection();
   try {
-    const [result] = await connection.query<ResultSetHeader>('UPDATE users SET thumbnail = ? where userId = ?',[userPicture, userId])
-    if (result.affectedRows === 0) throw new Error ("Update profile picture not succesfully")
-        console.log("this");
-        
-        const [row] = await connection.query<RowDataPacket[]>('SELECT thumbnail FROM users where userId = ?', [userId])
-    if (row.length === 0) throw new Error ("Picture that update cant select")
+    const [result] = await connection.query<ResultSetHeader>(
+      "UPDATE users SET thumbnail = ? where userId = ?",
+      [userPicture, userId]
+    );
+    if (result.affectedRows === 0)
+      throw new Error("Update profile picture not succesfully");
+    console.log("this");
 
-    return { message: "Upload profile picture succesfully", user:row[0] };
+    const [row] = await connection.query<RowDataPacket[]>(
+      "SELECT thumbnail FROM users where userId = ?",
+      [userId]
+    );
+    if (row.length === 0) throw new Error("Picture that update cant select");
+
+    return { message: "Upload profile picture succesfully", user: row[0] };
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Error Update user profile"

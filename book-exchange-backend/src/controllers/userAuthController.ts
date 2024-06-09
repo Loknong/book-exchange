@@ -20,9 +20,11 @@ export const handleRegister = async (
   req: Request<{}, {}, UserSignup>,
   res: Response
 ) => {
+  const pictureName = req.file?.filename; // Extract the filename from the uploaded file
   console.log(req.body);
+  console.log(req.file);
   try {
-    const result = await registerUser(req.body);
+    const result = await registerUser(req.body, pictureName);
     res.status(200).json(result);
   } catch (error) {
     res.status(401).json({
