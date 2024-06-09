@@ -113,7 +113,7 @@ export const updateBookStatus = async (
   const connection = await pool.getConnection();
   try {
     const [result] = await connection.query<ResultSetHeader>(
-      "UPDATE books SET status = ? WHERE bookdId = ?",
+      "UPDATE books SET status = ? WHERE bookId = ?",
       [status, bookId]
     );
 
@@ -139,10 +139,17 @@ export const updateBookStatus = async (
 
 
 
-export const uploadProfilePicture = async () => {
+export const uploadProfilePicture = async (userId : number, userPicture?: string) => {
   const connection = await pool.getConnection();
   try {
-    return { message: "upload profile picture not implement yet." };
+    const [result] = await connection.query<ResultSetHeader>('UPDATE users SET thumbnail = ? where userId = ?',[userPicture, userId])
+    if (result.affectedRows === 0) throw new Error ("Update profile picture not succesfully")
+        console.log("this");
+        
+        const [row] = await connection.query<RowDataPacket[]>('SELECT thumbnail FROM users where userId = ?', [userId])
+    if (row.length === 0) throw new Error ("Picture that update cant select")
+
+    return { message: "Upload profile picture succesfully", user:row[0] };
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Error Update user profile"
