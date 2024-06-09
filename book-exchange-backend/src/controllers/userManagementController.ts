@@ -100,10 +100,7 @@ export const handleUpdateBookStatus = async (req: Request, res: Response) => {
 
 
 export const handleUploadProfileImage = async (req: Request, res:Response) => {
-    console.log("This",req.body.userId);
-    console.log(req.file?.filename);
-    
-    try {
+  try {
         const userId = Number(req.body.userId)
         const thumbnail = req.file?.filename;
         if (!thumbnail)

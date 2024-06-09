@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 - Refactor code
 - Seperate table images with users, books
 - Add POSTMAN.json
-- Add Transition to services that insert or update to ensure all operations success before write DB.
+- Add Transition to services that write to DB for ensure all operations success before write DB.
 
 ## [2024-06-08]
 ### Added
