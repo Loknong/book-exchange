@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Complete User Management API Features
 - Create Postman to test user management API
 - Refactor code
+- Seperate table images with users, books
 
 ## [2024-06-08]
 ### Added
