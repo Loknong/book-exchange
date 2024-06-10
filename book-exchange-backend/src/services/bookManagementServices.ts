@@ -4,6 +4,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 export const getBooksList = async () => {
   const connection = await pool.getConnection();
   try {
+    return { message: "not implement yet" };
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Unexpected error occurred"
@@ -34,8 +35,8 @@ export const getBook = async (bookId: number) => {
   }
 };
 
-export const adminAddNewBook = async () => {
-  return { message: "Admin add new book not implement yet." };
+export const adminAddBook = async () => {
+  return { message: "Admin add book not implement yet." };
 };
 
 export const adminUpdateBook = async () => {
@@ -66,6 +67,7 @@ export const getGenres = async () => {
 export const adminAddNewGenre = async (genre: string) => {
   const connection = await pool.getConnection();
   try {
+    connection.beginTransaction();
     const [genreResult] = await connection.query<ResultSetHeader>(
       `INSERT INTO genres (genre) VALUES(?)`,
       [genre]
@@ -83,12 +85,14 @@ export const adminAddNewGenre = async (genre: string) => {
       `SELECT * FROM genres`
     );
     if (genresRow.length === 0) throw new Error("Error cant get genre List");
+    connection.commit();
     return {
       message: "succesfully add genre list",
       genreAdd: genreAddRow[0],
       newGenresList: genresRow,
     };
   } catch (error) {
+    connection.rollback();
     throw new Error(
       error instanceof Error ? error.message : "Unexpected error occurred"
     );
@@ -98,12 +102,18 @@ export const adminAddNewGenre = async (genre: string) => {
 };
 
 export const adminUpdateGenre = async () => {
-    return {messaage: "update genre not implement yet"}
-}
+  // return {messaage: "update genre not implement yet"}
+  const connection = await pool.getConnection();
+  try {
+  } catch (error) {
+  } finally {
+    connection.release()
+  }
+};
 
 export const adminDeleteGenre = async () => {
-  return {message: "delete genre not implement yet"}
-}
+  return { message: "delete genre not implement yet" };
+};
 
 // export const getBooksList = async () => {
 //     const connection = await pool.getConnection();

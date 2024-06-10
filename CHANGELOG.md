@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2024-06-10]
+### Added
+- Complete Book management API
+- Update POSTMAN
+
 ## [2024-06-09]
 ### Added
 - Complete User Auth API Features
