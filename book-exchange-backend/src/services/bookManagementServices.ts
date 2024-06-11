@@ -1,6 +1,8 @@
+import { error } from "console";
 import { pool } from "./db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
+//! NOT IMPLETMENT YET
 export const getBooksList = async () => {
   const connection = await pool.getConnection();
   try {
@@ -17,6 +19,9 @@ export const getBooksList = async () => {
 export const getBook = async (bookId: number) => {
   const connection = await pool.getConnection();
   try {
+    // console.log("bookId", bookId);
+    
+    if (!bookId) throw new Error("bookId is falsy")
     const [bookRow] = await connection.query<RowDataPacket[]>(
       `SELECT books.bookId ,books.title, books.author, genres.genre, books.bookView, books.bookCondition ,books.description , bookImages.imageName, books.createAt FROM books 
       INNER JOIN genres ON books.genreId  = genres.genreId 
@@ -101,18 +106,76 @@ export const adminAddNewGenre = async (genre: string) => {
   }
 };
 
-export const adminUpdateGenre = async () => {
-  // return {messaage: "update genre not implement yet"}
+export const adminUpdateGenre = async (genreId: number, genre: string) => {
   const connection = await pool.getConnection();
   try {
+    if (!genreId) throw new Error("genreId is falsy");
+    const [result] = await connection.query<ResultSetHeader>(
+      `SELECT * FROM genres where genreId = ?`,
+      [genreId]
+    );
+    if (result.affectedRows === 0)
+      throw new Error("Cant select genre fron that id");
+    const [updateResult] = await connection.query<ResultSetHeader>(
+      `UPDATE genres SET genre = ? where genreId = ?`,
+      [genre, genreId]
+    );
+    if (updateResult.affectedRows === 0)
+      throw new Error("Update genres no affected row");
+
+    const [genreRow] = await connection.query<RowDataPacket[]>(
+      `SELECT * FROM genres where genreId = ?`,
+      [genreId]
+    );
+    if (genreRow.length === 0) throw new Error("Error find genre that update");
+    const [genresRows] = await connection.query<RowDataPacket[]>(
+      `SELECT * FROM genres`
+    );
+    if (genresRows.length === 0) throw new Error("Cant find whole genres");
+
+    return {
+      message: "Update genre succesfully",
+      updateGenre: genreRow[0],
+      genres: genresRows,
+    };
   } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Unexpected error occurred"
+    );
   } finally {
-    connection.release()
+    connection.release();
   }
 };
 
-export const adminDeleteGenre = async () => {
-  return { message: "delete genre not implement yet" };
+export const adminDeleteGenre = async (genreId: number) => {
+  const connection = await pool.getConnection();
+  try {
+    if (!genreId) throw new Error("genreID is falsy");
+    const [checkExistResult] = await connection.query<ResultSetHeader>(
+      `SELECT * FROM genres where genreId = ?`,
+      [genreId]
+    );
+    if (checkExistResult.affectedRows === 0)
+      throw new Error("This genre that want to delete is not exist");
+    const [deleteResult] = await connection.query<ResultSetHeader>(
+      `DELETE FROM genres where genreId = ?`,
+      [genreId]
+    );
+    if (deleteResult.affectedRows === 0)
+      throw new Error(`Cant delete genre that id = ${genreId}`);
+    const [genreRows] = await connection.query<RowDataPacket[]>(
+      `SELECT * FROM genres`
+    );
+    if (genreRows.length === 0) throw new Error("Cant find genres");
+
+    return { message: "Delete genre succesfully", newGenres: genreRows };
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Unexpected error occurred"
+    );
+  } finally {
+    connection.release();
+  }
 };
 
 // export const getBooksList = async () => {

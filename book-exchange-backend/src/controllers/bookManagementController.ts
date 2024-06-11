@@ -2,13 +2,16 @@ import {
   adminAddBook,
   adminAddNewGenre,
   adminDeleteBook,
+  adminDeleteGenre,
   adminUpdateBook,
+  adminUpdateGenre,
   getBook,
   getBooksList,
   getGenres,
 } from "@src/services/bookManagementServices";
 import { Request, Response } from "express";
 
+//! NOT IMPLETMENT YET
 export const handleGetAllBook = async (req: Request, res: Response) => {
   console.log(req.body);
   console.log(req.params);
@@ -25,12 +28,11 @@ export const handleGetAllBook = async (req: Request, res: Response) => {
 };
 
 export const handleGetBook = async (
-  req: Request<{}, {}, { bookId: number }>,
+  req: Request<{bookId: number}>,
   res: Response
 ) => {
-  console.log(req.body);
-  console.log(req.params);
-  const bookId = req.body.bookId;
+  // console.log("params",req.params.bookId);
+  const bookId = req.params.bookId;
   try {
     const result = await getBook(bookId);
     res.status(200).json(result);
@@ -90,6 +92,7 @@ export const handleAdminDeleteBook = async (req: Request, res: Response) => {
 export const handleGetGenresList = async (req: Request, res: Response) => {
   console.log(req.body);
   console.log(req.params);
+console.log("genre");
 
   try {
     const result = await getGenres();
@@ -121,24 +124,24 @@ export const handleAddGenre = async (
   }
 };
 
-
 export const handleUpdateGenre = async (
-    req: Request<{}, {}, { genreId: number, genre: string }>,
-    res: Response
-  ) => {
-    console.log(req.body);
-    console.log(req.params);
-    const genreId = req.body.genreId;
-    const genre = req.body.genre;
-    try {
-    } catch (error) {
-      res.status(401).json({
-        error:
-          error instanceof Error ? error.message : "Unexpected error occurred",
-      });
-    }
-  };
-  
+  req: Request<{}, {}, { genreId: number; genre: string }>,
+  res: Response
+) => {
+  console.log(req.body);
+  console.log(req.params);
+  const genreId = req.body.genreId;
+  const genre = req.body.genre;
+  try {
+    const result = await adminUpdateGenre(genreId, genre);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(401).json({
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred",
+    });
+  }
+};
 
 export const handleAdminDeleteGenre = async (
   req: Request<{}, {}, { genreId: number }>,
@@ -148,6 +151,8 @@ export const handleAdminDeleteGenre = async (
   console.log(req.params);
   const genreId = req.body.genreId;
   try {
+    const result = await adminDeleteGenre(genreId);
+    res.status(200).json(result);
   } catch (error) {
     res.status(401).json({
       error:

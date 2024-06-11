@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2024-06-11]
+### Added
+- Got Problem when wrong ordering routes at book management routes.
+
+
 ## [2024-06-10]
 ### Added
 - Complete Book management API
