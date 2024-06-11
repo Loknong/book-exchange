@@ -1,7 +1,7 @@
 # Book Exchange web-application
 
 ## Description
--
+Just practicing for my profile project.
 
 ## Installation
 -
