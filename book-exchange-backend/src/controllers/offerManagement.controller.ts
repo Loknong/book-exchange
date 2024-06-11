@@ -7,6 +7,7 @@ import {
   updateOfferStatus,
   viewUserPendingList,
 } from "@src/services/offerManagement.services";
+import { insertStatusHistory } from "@src/services/util/statusHistory.services";
 import { Request, Response } from "express";
 
 export const handleAdminOfferList = async (req: Request, res: Response) => {
@@ -36,6 +37,7 @@ export const handleMakeOffer = async (
     if (!req.body.offeredTo) throw new Error("offeredTo is falsy");
 
     const result = await makeOffer(req.body);
+    // await insertStatusHistory('offers', result.offerDetail.offerId, result.offerDetail.status)
     res.status(200).json(result);
   } catch (error) {
     res.status(401).json({
