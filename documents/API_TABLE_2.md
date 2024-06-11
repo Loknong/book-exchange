@@ -43,9 +43,9 @@
 
 | Description                            | API Endpoint                               | Method | Request Part   | Example                                                                                                         |
 |----------------------------------------------|--------------------------------------------|--------|----------------|-----------------------------------------------------------------------------------------------------------------|
-| Admin Get all offer list                      | /api/offerss                                | GET   | None           | [{"bookId": 1, "offeredBy": 2, "offeredTo": 3, "offerDetails": "Would you like to exchange?"}...]                    |
+| Admin Get all offer list                      | /api/offers/admin                               | GET   | None           |           |
 | Make an offer on a book                      | /api/offers                                | POST   | Body           | {"bookId": 1, "offeredBy": 2, "offeredTo": 3, "offerDetails": "Would you like to exchange?"}                    |
-| Get a list of all offers for a user          | /api/offers                                | GET    | Query Params   | /api/offers?userId=2                                                                                           |
+| Get a list of all pending, incomplete offers for a user          | /api/offers                                | GET    | Query Params   | /api/offers?userId=2                                                                                           |
 | Get details of a specific offer              | /api/offers/:offerId                       | GET    | Params         | /api/offers/1                                                                                                   |
 | Update status of an offer (accept/reject)    | /api/offers/:offerId                       | PUT    | Params, Body   | /api/offers/1 {"status": "ACCEPTED"}                                                                            |
 | Get offer history for the user               | /api/users/offers/history                  | GET    | Query Params   | /api/users/offers/history?userId=2                                                                              |

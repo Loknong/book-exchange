@@ -40,6 +40,7 @@ export const adminViewAllOfferList = async () => {
 };
 
 export const makeOffer = async (offer: OfferCreate) => {
+  // I think offeredBy and bookId must not be exist same because it can offer per one user once
   // Check at controller value is correct
   // check all these exist => bookId, offeredBy, offeredTo
   // Then insert these
@@ -62,6 +63,12 @@ export const makeOffer = async (offer: OfferCreate) => {
     );
     if (checkOfferedBy.length === 0)
       throw new Error("Can't find OfferedBy userID");
+
+    // Check offeredBy does not offered this book before, for current state
+    const [bookAndOfferedByCheck] = await connection.query<RowDataPacket[]>(
+      `SELECT offerId from offers where bookId = ? AND offeredBy = ?`,[offer.bookId, offer.offeredBy]
+    )
+    if(bookAndOfferedByCheck.length > 0) throw new Error("This user is currently offered to this book.")
 
     // Check offeredTo user is exist
     const [checkofferedTo] = await connection.query<RowDataPacket[]>(
@@ -198,7 +205,7 @@ export const updateOfferStatus = async (offerId: number, status: 'ACCEPTED'| 'RE
   try {
    await  connection.beginTransaction();
     const [checkOfferId] = await connection.query<RowDataPacket[]>(
-      `SELECT offerId from offer where offerid = ?`,
+      `SELECT offerId from offers where offerid = ?`,
       [offerId]
     );
     if (checkOfferId.length === 0)
@@ -243,16 +250,22 @@ export const updateOfferStatus = async (offerId: number, status: 'ACCEPTED'| 'RE
 export const getOfferHistory = async (userId: number) => {
   const connection = await pool.getConnection();
   try {
+    console.log(userId);
+    
     const [checkUserIdExist] = await connection.query<RowDataPacket[]>(
-      `SELECT * FROM offers WHERE offeredBy = ? OR offeredTo = ?')`,
+      `SELECT * FROM offers WHERE offeredBy = ? OR offeredTo = ?`,
       [userId, userId]
     );
+    console.log("11");
+    
     if (checkUserIdExist.length === 0)
       throw new Error(`User ${userId} is not exist on offers table`);
     const [userOfferRow] = await connection.query<RowDataPacket[]>(
-      `SELECT * FROM offers WHERE (offeredBy = ? OR offeredTo = ?) AND status IN ('COMPLETED', 'REJECTED')`,
+      `SELECT * FROM offers WHERE (offeredBy = ? OR offeredTo = ?) AND status NOT IN ('COMPLETED', 'REJECTED')`,
       [userId, userId]
     );
+    console.log("22");
+    
     if (userOfferRow.length === 0)
       throw new Error(`Cant find any offer history form userId = ${userId}`);
     return {

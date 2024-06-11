@@ -6,7 +6,11 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 export const getBooksList = async () => {
   const connection = await pool.getConnection();
   try {
-    return { message: "not implement yet" };
+    const [getBookList] = await connection.query<RowDataPacket[]>(`SELECT books.bookId ,books.title, books.author, genres.genre, books.bookView, books.bookCondition ,books.description , bookImages.imageName, books.createAt FROM books 
+    INNER JOIN genres ON books.genreId  = genres.genreId 
+    INNER JOIN bookImages ON books.bookId = bookImages.bookId`)
+    if(getBookList.length === 0) throw new Error ("Error cant get any book in list")
+    return { message: "succesfully to get all books", books:getBookList };
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Unexpected error occurred"
