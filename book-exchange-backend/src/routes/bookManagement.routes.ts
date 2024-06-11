@@ -1,4 +1,4 @@
-import { handleAddGenre, handleAdminAddBook, handleAdminDeleteBook, handleAdminDeleteGenre, handleAdminUpdateBook, handleGetAllBook, handleGetBook, handleGetGenresList, handleUpdateGenre } from "@src/controllers/bookManagementController";
+import { handleAddGenre, handleAdminAddBook, handleAdminDeleteBook, handleAdminDeleteGenre, handleAdminUpdateBook, handleGetAllBook, handleGetBook, handleGetGenresList, handleUpdateGenre } from "@src/controllers/bookManagement.controller";
 import { Router } from "express";
 const router = Router();
 

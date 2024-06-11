@@ -6,7 +6,7 @@ import {
   updateBookStatus,
   updateUserProfile,
   uploadProfilePicture,
-} from "@src/services/userManagementServices";
+} from "@src/services/userManagement.services";
 import { Request, Response } from "express";
 
 export const handleGetProfile = async (req: Request, res: Response) => {

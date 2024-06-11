@@ -6,7 +6,7 @@ import {
   handleResendEmail,
   handleResetPassword,
   handleVerifyEmail,
-} from "@src/controllers/userAuthController";
+} from "@src/controllers/userAuth.controller";
 import { userUpload } from "@src/middlewares/upload";
 import { Router } from "express";
 

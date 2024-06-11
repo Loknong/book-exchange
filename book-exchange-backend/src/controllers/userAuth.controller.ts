@@ -7,7 +7,7 @@ import {
   forgotPassword,
   verifyEmail,
   resendEmailVerification,
-} from "../services/userAuthServices";
+} from "../services/userAuth.services";
 import { UserLogin, UserSignup } from "@src/interfaces/User";
 
 /**

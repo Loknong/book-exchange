@@ -9,9 +9,13 @@ All notable changes to this project will be documented in this file.
 - Complete Offer Management API
 - Plan to validate value by use  `express-validator`
 
+### Changed
+- File naming convention from xxCccBbb to xxCcc.bbb.ts for readability
+
 ### Fixed
 - Got Problem when wrong ordering routes at book management routes.
 - All req.params, req.body that use wrong.
+- Merge LogSettings into Log // Interfaces
 
 
 ## [2024-06-10]

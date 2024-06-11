@@ -8,7 +8,7 @@ import {
   getBook,
   getBooksList,
   getGenres,
-} from "@src/services/bookManagementServices";
+} from "@src/services/bookManagement.services";
 import { Request, Response } from "express";
 
 //! NOT IMPLETMENT YET

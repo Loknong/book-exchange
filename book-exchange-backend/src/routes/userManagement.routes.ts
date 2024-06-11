@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { bookUpload, userUpload } from "@src/middlewares/upload";
-import { handleAddBook, handleGetInventory, handleGetProfile, handleUpdateBookStatus, handleUpdateProfile, handleUploadProfileImage } from "@src/controllers/userManagementController";
+import { handleAddBook, handleGetInventory, handleGetProfile, handleUpdateBookStatus, handleUpdateProfile, handleUploadProfileImage } from "@src/controllers/userManagement.controller";
 
 const router = Router();
 

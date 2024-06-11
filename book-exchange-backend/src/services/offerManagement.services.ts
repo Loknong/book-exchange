@@ -193,39 +193,39 @@ export const getOfferDetail = async (offerId: number) => {
 // SELECT CHECK our put date is correct
 // commmit
 
-export const updateOfferStatus = async (offer: OfferUpdate) => {
+export const updateOfferStatus = async (offerId: number, status: 'ACCEPTED'| 'REJECTED' | 'COMPLETED') => {
   const connection = await pool.getConnection();
   try {
-    connection.beginTransaction();
+   await  connection.beginTransaction();
     const [checkOfferId] = await connection.query<RowDataPacket[]>(
       `SELECT offerId from offer where offerid = ?`,
-      [offer.offerId]
+      [offerId]
     );
     if (checkOfferId.length === 0)
-      throw new Error(`Update, OfferId = ${offer.offerId} not exist`);
+      throw new Error(`Update, OfferId = ${offerId} not exist`);
     const [updateResult] = await connection.query<ResultSetHeader>(
       `UPDATE offers SET status = ? where offerId = ?`,
-      [offer.status, offer.offerId]
+      [status, offerId]
     );
     if (updateResult.affectedRows === 0)
       throw new Error(
-        `Error update offer status = ${offer.status} at offerId = ${offer.offerId} is not completed`
+        `Error update offer status = ${status} at offerId = ${offerId} is not completed`
       );
     const [checkUpdateOffer] = await connection.query<RowDataPacket[]>(
       `SELECT * FROM offers where offerId = ?`,
-      [offer.offerId]
+      [offerId]
     );
 
     if (checkUpdateOffer.length === 0)
       throw new Error("Error cant find offer row");
 
-    connection.commit();
+    await connection.commit();
     return {
       message: "succesfully to update offer status",
       row: checkUpdateOffer[0],
     };
   } catch (error) {
-    connection.rollback();
+   await connection.rollback();
     throw new Error(
       error instanceof Error
         ? error.message
