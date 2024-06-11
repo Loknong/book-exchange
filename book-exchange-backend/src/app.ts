@@ -5,6 +5,7 @@ import authRoutes from "./routes/userAuth.routes";
 import userManageRoutes from "./routes/userManagement.routes"
 // import bookRoutes from "./routes/legacy/booksRoute";
 import bookRoutes from "./routes/bookManagement.routes";
+import offerRoutes from "./routes/offerManagement.routes"
 
 import userActionRoutes from "./routes/legacy/userActionRoute";
 import userRoutes from "./routes/legacy/userRoute"
@@ -28,6 +29,9 @@ app.get("/test-db", async (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userManageRoutes);
 app.use("/api/books", bookRoutes);
+app.use("/api/offers", offerRoutes);
+
+// Old
 app.use("/api/action", userActionRoutes);
 app.use("/api", userRoutes);
 app.use('/uploads', express.static('uploads')); // Serve static files from 'uploads' directory

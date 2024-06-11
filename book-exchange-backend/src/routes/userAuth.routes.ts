@@ -1,6 +1,7 @@
 import {
   handleAuthenticate,
   handleForgotPassword,
+  handleGetUserList,
   handleLogout,
   handleRegister,
   handleResendEmail,
@@ -19,5 +20,6 @@ router.post("/forgot-password", handleForgotPassword);
 router.post("/reset-password", handleResetPassword);
 router.post("/verify-email", handleVerifyEmail);
 router.post("/resend-verification-email", handleResendEmail);
+router.get("/list", handleGetUserList)
 
 export default router;

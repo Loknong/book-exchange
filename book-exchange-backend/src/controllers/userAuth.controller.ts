@@ -7,6 +7,7 @@ import {
   forgotPassword,
   verifyEmail,
   resendEmailVerification,
+  getUserList,
 } from "../services/userAuth.services";
 import { UserLogin, UserSignup } from "@src/interfaces/User";
 
@@ -74,7 +75,7 @@ export const handleLogout = async (
 };
 
 export const handleResetPassword = async (
-  req: Request<{}, {}, { userId: number, newPassword: string }>,
+  req: Request<{}, {}, { userId: number; newPassword: string }>,
   res: Response
 ) => {
   console.log(req.body);
@@ -131,6 +132,18 @@ export const handleResendEmail = async (req: Request, res: Response) => {
     res.status(401).json({
       error:
         error instanceof Error ? error.message : "Unexpected error occurred",
+    });
+  }
+};
+
+export const handleGetUserList = async (req: Request, res: Response) => {
+  try {
+    const result = await getUserList();
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error:
+        error instanceof Error ? error.message : "unexpected error occurred",
     });
   }
 };

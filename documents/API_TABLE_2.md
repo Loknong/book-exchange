@@ -43,6 +43,7 @@
 
 | Description                            | API Endpoint                               | Method | Request Part   | Example                                                                                                         |
 |----------------------------------------------|--------------------------------------------|--------|----------------|-----------------------------------------------------------------------------------------------------------------|
+| Admin Get all offer list                      | /api/offerss                                | GET   | None           | [{"bookId": 1, "offeredBy": 2, "offeredTo": 3, "offerDetails": "Would you like to exchange?"}...]                    |
 | Make an offer on a book                      | /api/offers                                | POST   | Body           | {"bookId": 1, "offeredBy": 2, "offeredTo": 3, "offerDetails": "Would you like to exchange?"}                    |
 | Get a list of all offers for a user          | /api/offers                                | GET    | Query Params   | /api/offers?userId=2                                                                                           |
 | Get details of a specific offer              | /api/offers/:offerId                       | GET    | Params         | /api/offers/1                                                                                                   |

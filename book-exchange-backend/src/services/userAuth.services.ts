@@ -97,7 +97,10 @@ export const registerUser3 = async (
 };
 
 // Version 3 use Transition because we have too many query now
-export const registerUser = async (user: UserSignup, pictureName: string | undefined): Promise<User | null> => {
+export const registerUser = async (
+  user: UserSignup,
+  pictureName: string | undefined
+): Promise<User | null> => {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction(); // Start the transaction
@@ -127,7 +130,8 @@ export const registerUser = async (user: UserSignup, pictureName: string | undef
         `UPDATE users SET userPictureId = ? WHERE userId = ?`,
         [pictureId, insertId]
       );
-      if(updateResult.affectedRows === 0) throw new Error("Update userPictureId not successfully")
+      if (updateResult.affectedRows === 0)
+        throw new Error("Update userPictureId not successfully");
     }
 
     const [rows] = await connection.query<RowDataPacket[]>(
@@ -266,4 +270,23 @@ export const verifyEmail = async () => {
 
 export const resendEmailVerification = async () => {
   return { message: "resendEmailVerification not implemented yet" };
+};
+
+export const getUserList = async () => {
+  const connection = await pool.getConnection();
+  try {
+    const [userList] = await connection.query<
+      RowDataPacket[]
+    >(`SELECT users.userId, firstName, lastName, email, username, credit, userProfilePictures.pictureName FROM users
+    LEFT JOIN userProfilePictures
+    ON users.userPictureId = userProfilePictures.pictureId`);
+    if (userList.length === 0) throw new Error("Cant get any user list");
+    return { message: "succesfully to get user list", userList: userList };
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Unexpected error occurred."
+    );
+  } finally {
+    connection.release();
+  }
 };
