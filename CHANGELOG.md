@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+## [202406-12]
+- Add table statusHistory: to track our trasaction, offers, payment, and adminMagement book process
+- Do store procedure think then review our main flow again. To made it seamless and no need to adjust lated.
+- modify status column for transaction, offers, payment, adminManagement for handle more status for sub process
+- Add address user. To store destincation for users table.
 
 ## [2024-06-11]
 ### Knowledge

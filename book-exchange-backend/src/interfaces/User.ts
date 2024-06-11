@@ -46,3 +46,20 @@ export interface UserEdit {
   lastName?: string;
   email?: string;
 }
+
+
+export interface Address {
+  addressId: number;
+  userid : number;
+  houseNumber : string;
+  village : string;
+  street : string;
+  subdistrict: string;
+  district : string;
+  province : string;
+  postalCode: string;
+  country : string;
+  phoneNumber: string;
+  createdAt : Date;
+  updatedAt : Date;
+}

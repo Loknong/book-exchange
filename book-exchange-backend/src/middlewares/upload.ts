@@ -29,3 +29,8 @@ export const userUpload = multer({
   storage: storageConfig('uploads/users/'),
   fileFilter: fileFilter,
 });
+
+export const paymentEvidence = multer({
+  storage: storageConfig('uploads/payment/'),
+  fileFilter: fileFilter,
+});
