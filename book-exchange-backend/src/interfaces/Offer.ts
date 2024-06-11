@@ -17,6 +17,6 @@ export interface OfferCreate {
 }
 
 export interface OfferUpdate {
-  status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
-  offerDetails?: string;
+  offerId: number,
+  status: 'ACCEPTED' | 'REJECTED' | 'COMPLETE' | 'PENDING';
 }

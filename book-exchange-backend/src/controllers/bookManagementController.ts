@@ -49,6 +49,7 @@ export const handleAdminAddBook = async (req: Request, res: Response) => {
   console.log(req.params);
 
   try {
+  
     const result = await adminAddBook();
     res.status(200).json(result);
   } catch (error) {
@@ -106,15 +107,16 @@ console.log("genre");
 };
 
 export const handleAddGenre = async (
-  req: Request<{}, {}, { genre: string }>,
+  req: Request<{}, {}, { genreName: string }>,
   res: Response
 ) => {
   console.log(req.body);
-  console.log(req.params);
-  const genre = req.body.genre;
+  const genreName = req.body.genreName;
+console.log(genreName);
 
   try {
-    const result = await adminAddNewGenre(genre);
+    if(!genreName) throw new Error("genreName is falsy")
+    const result = await adminAddNewGenre(genreName);
     res.status(200).json(result);
   } catch (error) {
     res.status(401).json({
@@ -125,15 +127,19 @@ export const handleAddGenre = async (
 };
 
 export const handleUpdateGenre = async (
-  req: Request<{}, {}, { genreId: number; genre: string }>,
+  req: Request<{genreId: number; }, {}, { genreName: string }>,
   res: Response
 ) => {
   console.log(req.body);
   console.log(req.params);
-  const genreId = req.body.genreId;
-  const genre = req.body.genre;
+  const genreId = req.params.genreId;
+  const genreName = req.body.genreName;
   try {
-    const result = await adminUpdateGenre(genreId, genre);
+    console.log("genreId", genreId);
+    console.log("genreName", genreName);
+    
+    
+    const result = await adminUpdateGenre(genreId, genreName);
     res.status(200).json(result);
   } catch (error) {
     res.status(401).json({
@@ -144,12 +150,12 @@ export const handleUpdateGenre = async (
 };
 
 export const handleAdminDeleteGenre = async (
-  req: Request<{}, {}, { genreId: number }>,
+  req: Request<{genreId: number}>,
   res: Response
 ) => {
   console.log(req.body);
   console.log(req.params);
-  const genreId = req.body.genreId;
+  const genreId = req.params.genreId;
   try {
     const result = await adminDeleteGenre(genreId);
     res.status(200).json(result);

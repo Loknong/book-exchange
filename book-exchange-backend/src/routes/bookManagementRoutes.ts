@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/genre", handleGetGenresList);
 router.post("/genre", handleAddGenre);
-router.put("/genre", handleUpdateGenre);
+router.put("/genre/:genreId", handleUpdateGenre);
 router.delete("/genre/:genreId", handleAdminDeleteGenre);
 
 

@@ -6,7 +6,12 @@ All notable changes to this project will be documented in this file.
 
 ## [2024-06-11]
 ### Added
+- Complete Offer Management API
+- Plan to validate value by use  `express-validator`
+
+### Fixed
 - Got Problem when wrong ordering routes at book management routes.
+- All req.params, req.body that use wrong.
 
 
 ## [2024-06-10]
