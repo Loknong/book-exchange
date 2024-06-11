@@ -36,3 +36,9 @@ export interface BookUpdate {
   description?: string;
   thumbnail?: string;
 }
+
+export interface GetBooksListParams {
+  search?: string;
+  filter?: string;
+  sort?: string;
+}

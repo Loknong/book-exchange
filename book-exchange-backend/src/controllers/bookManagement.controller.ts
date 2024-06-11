@@ -12,12 +12,32 @@ import {
 import { Request, Response } from "express";
 
 //! NOT IMPLETMENT YET
-export const handleGetAllBook = async (req: Request, res: Response) => {
-  console.log(req.body);
-  console.log(req.params);
+// export const handleGetAllBook = async (req: Request, res: Response) => {
+//   console.log(req.body);
+//   console.log(req.params);
 
+//   try {
+//     const result = await getBooksList();
+//     res.status(200).json(result);
+//   } catch (error) {
+//     res.status(401).json({
+//       error:
+//         error instanceof Error ? error.message : "Unexpected error occurred",
+//     });
+//   }
+// };
+
+export const handleGetAllBook = async (req: Request, res: Response) => {
   try {
-    const result = await getBooksList();
+    const { search, filter, sort } = req.query;
+    console.log(req.query);
+    const result = await getBooksList({
+      search: search as string,
+      filter: filter as string,
+      sort: sort as string,
+    });
+
+
     res.status(200).json(result);
   } catch (error) {
     res.status(401).json({
@@ -28,7 +48,7 @@ export const handleGetAllBook = async (req: Request, res: Response) => {
 };
 
 export const handleGetBook = async (
-  req: Request<{bookId: number}>,
+  req: Request<{ bookId: number }>,
   res: Response
 ) => {
   // console.log("params",req.params.bookId);
@@ -49,7 +69,6 @@ export const handleAdminAddBook = async (req: Request, res: Response) => {
   console.log(req.params);
 
   try {
-  
     const result = await adminAddBook();
     res.status(200).json(result);
   } catch (error) {
@@ -93,7 +112,7 @@ export const handleAdminDeleteBook = async (req: Request, res: Response) => {
 export const handleGetGenresList = async (req: Request, res: Response) => {
   console.log(req.body);
   console.log(req.params);
-console.log("genre");
+  console.log("genre");
 
   try {
     const result = await getGenres();
@@ -112,10 +131,10 @@ export const handleAddGenre = async (
 ) => {
   console.log(req.body);
   const genreName = req.body.genreName;
-console.log(genreName);
+  console.log(genreName);
 
   try {
-    if(!genreName) throw new Error("genreName is falsy")
+    if (!genreName) throw new Error("genreName is falsy");
     const result = await adminAddNewGenre(genreName);
     res.status(200).json(result);
   } catch (error) {
@@ -127,7 +146,7 @@ console.log(genreName);
 };
 
 export const handleUpdateGenre = async (
-  req: Request<{genreId: number; }, {}, { genreName: string }>,
+  req: Request<{ genreId: number }, {}, { genreName: string }>,
   res: Response
 ) => {
   console.log(req.body);
@@ -137,8 +156,7 @@ export const handleUpdateGenre = async (
   try {
     console.log("genreId", genreId);
     console.log("genreName", genreName);
-    
-    
+
     const result = await adminUpdateGenre(genreId, genreName);
     res.status(200).json(result);
   } catch (error) {
@@ -150,7 +168,7 @@ export const handleUpdateGenre = async (
 };
 
 export const handleAdminDeleteGenre = async (
-  req: Request<{genreId: number}>,
+  req: Request<{ genreId: number }>,
   res: Response
 ) => {
   console.log(req.body);

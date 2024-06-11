@@ -1,16 +1,68 @@
 import { error } from "console";
 import { pool } from "./db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { GetBooksListParams } from "@src/interfaces/Book";
 
 //! NOT IMPLETMENT YET
-export const getBooksList = async () => {
+// export const getBooksList = async (filter: string) => {
+//   const connection = await pool.getConnection();
+//   try {
+//     const [getBookList] = await connection.query<
+//       RowDataPacket[]
+//     >(`SELECT books.bookId ,books.title, books.author, genres.genre, books.bookView, books.bookCondition ,books.description , bookImages.imageName, books.createAt FROM books
+//     INNER JOIN genres ON books.genreId  = genres.genreId
+//     INNER JOIN bookImages ON books.bookId = bookImages.bookId`); // where genre = ?, order by
+//     if (getBookList.length === 0)
+//       throw new Error("Error cant get any book in list");
+//     return { message: "succesfully to get all books", books: getBookList };
+//   } catch (error) {
+//     throw new Error(
+//       error instanceof Error ? error.message : "Unexpected error occurred"
+//     );
+//   } finally {
+//     connection.release();
+//   }
+// };
+
+export const getBooksList = async ({
+  search,
+  filter,
+  sort,
+}: GetBooksListParams) => {
   const connection = await pool.getConnection();
   try {
-    const [getBookList] = await connection.query<RowDataPacket[]>(`SELECT books.bookId ,books.title, books.author, genres.genre, books.bookView, books.bookCondition ,books.description , bookImages.imageName, books.createAt FROM books 
-    INNER JOIN genres ON books.genreId  = genres.genreId 
-    INNER JOIN bookImages ON books.bookId = bookImages.bookId`)
-    if(getBookList.length === 0) throw new Error ("Error cant get any book in list")
-    return { message: "succesfully to get all books", books:getBookList };
+    let query = `SELECT books.bookId, books.title, books.author, genres.genre, books.bookView, books.bookCondition, books.description, bookImages.imageName, books.createAt
+                 FROM books 
+                 INNER JOIN genres ON books.genreId = genres.genreId 
+                 INNER JOIN bookImages ON books.bookId = bookImages.bookId`;
+
+    const queryParams: string[] = [];
+
+    if (filter) {
+      query += ` WHERE genres.genreId = ?`;
+      queryParams.push(filter);
+    }
+
+    if (search) {
+      query += filter ? ` AND books.title LIKE ?` : ` WHERE books.title LIKE ?`;
+      queryParams.push(`%${search}%`);
+    }
+
+    if (sort) {
+      const orderBy =
+        sort === "latest" ? "books.createAt DESC" : "books.createAt ASC";
+      query += ` ORDER BY ${orderBy}`;
+    }
+
+    const [getBookList] = await connection.query<RowDataPacket[]>(
+      query,
+      queryParams
+    );
+
+    if (getBookList.length === 0)
+      throw new Error("Error: can't get any book in list");
+
+    return { message: "Successfully retrieved all books", books: getBookList };
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Unexpected error occurred"
@@ -24,8 +76,8 @@ export const getBook = async (bookId: number) => {
   const connection = await pool.getConnection();
   try {
     // console.log("bookId", bookId);
-    
-    if (!bookId) throw new Error("bookId is falsy")
+
+    if (!bookId) throw new Error("bookId is falsy");
     const [bookRow] = await connection.query<RowDataPacket[]>(
       `SELECT books.bookId ,books.title, books.author, genres.genre, books.bookView, books.bookCondition ,books.description , bookImages.imageName, books.createAt FROM books 
       INNER JOIN genres ON books.genreId  = genres.genreId 

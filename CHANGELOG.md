@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ## [2024-06-11]
+### Knowledge
+- Express file upload lib.
+- POSTMAN can loop POST API or ASK CHAT -> for images we fix images name with fix path
+
 ### Added
 - Complete Offer Management API
 - Plan to validate value by use  `express-validator`
