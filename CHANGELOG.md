@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
 - Add table UserTransactionStatus For tracking, Updating user status
 - Add Logging Status to handle when status is appear, change and dissappear for table
   - Offers, Transaction, Payments, AdminManagement and UserTransactionStatus.
+- Complete Plan, Clear concept, Re schema of some table again to handle more data value (most from ENUM to VARCHAR(255))
+- implement src/processes process manager to controll flow of transactions.
 
 ## [2024-06-12]
 
