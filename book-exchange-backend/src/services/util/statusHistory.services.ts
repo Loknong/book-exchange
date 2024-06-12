@@ -17,8 +17,10 @@ export const insertStatusHistory = async (
   const getKeyRefId = (tableName: string) => {
     if (tableName === "offers" || "transactions" || "payments") {
       return tableName.slice(0, tableName.length - 1) + "Id";
-    } else {
+    } else if(tableName === 'adminManagement'){
       return "managementId";
+    } else {
+      throw new Error ("Invalid reference table name.")
     }
   };
   let refId = getKeyRefId(referenceTable);
@@ -52,7 +54,7 @@ export const insertStatusHistory = async (
       throw new Error("Error insert logging not success");
     const insertLogId = insertLogResult.insertId;
     const [fbInsertLogging] = await connection.query<RowDataPacket[]>(
-      `SELECT * FROM statusHostory where historyId = `,
+      `SELECT * FROM statusHistory where historyId = ?`,
       [insertLogId]
     );
     console.log("5");

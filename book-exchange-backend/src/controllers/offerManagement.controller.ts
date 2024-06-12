@@ -26,10 +26,7 @@ export const handleMakeOffer = async (
   req: Request<{}, {}, OfferCreate>,
   res: Response
 ) => {
-  //   const bookId = req.body.bookId;
-  //   const offeredBy = req.body.offeredBy;
-  //   const offeredTo = req.body.offeredTo;
-  //   const offerDetails = req.body.offerDetails;
+  
   console.log("req.body", req.body);
   try {
     if (!req.body.bookId) throw new Error("bookId is falsy");
@@ -37,7 +34,7 @@ export const handleMakeOffer = async (
     if (!req.body.offeredTo) throw new Error("offeredTo is falsy");
 
     const result = await makeOffer(req.body);
-    // await insertStatusHistory('offers', result.offerDetail.offerId, result.offerDetail.status)
+    await insertStatusHistory('offers', result.offerDetail.offerId, result.offerDetail.status)
     res.status(200).json(result);
   } catch (error) {
     res.status(401).json({
