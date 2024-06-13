@@ -11,7 +11,8 @@ import userActionRoutes from "./routes/legacy/userActionRoute";
 import userRoutes from "./routes/legacy/userRoute"
 import { corsMiddleware } from "./middlewares/corsMiddleware";
 
-
+// for testing services
+import transactionRoutes from "./routes/transactions.routes.test"
 
 const app = express();
 
@@ -30,6 +31,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userManageRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/offers", offerRoutes);
+
+// Services Test
+app.use("/api/transactions", transactionRoutes);
 
 // Old
 app.use("/api/action", userActionRoutes);
