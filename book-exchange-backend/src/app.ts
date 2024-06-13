@@ -13,6 +13,8 @@ import { corsMiddleware } from "./middlewares/corsMiddleware";
 
 // for testing services
 import transactionRoutes from "./routes/transactions.routes.test"
+import userTransactionStatusRoutes from "./routes/userTransaction.routes.test"
+
 
 const app = express();
 
@@ -34,6 +36,7 @@ app.use("/api/offers", offerRoutes);
 
 // Services Test
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/user-transactions", userTransactionStatusRoutes);
 
 // Old
 app.use("/api/action", userActionRoutes);

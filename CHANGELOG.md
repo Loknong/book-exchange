@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2024-06-14]
+### Notes:
+- Need to change checking condition for services, userTransactionStatus from id to transactionId AND userId
+
 ## [2024-06-13]
 
 - REVIEW and revise API table for relate thing to transaction again.
