@@ -4,7 +4,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 // Check is that Offer is exist
 // Then create our transacation
 // Then Wait
-export const createNewTransaction = async (offerId: number) => {
+export const createTransaction = async (offerId: number) => {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
@@ -51,3 +51,8 @@ export const createNewTransaction = async (offerId: number) => {
     connection.release();
   }
 };
+
+//? Update status of existing transaction.
+export const updateTransactionStatus = async (transacationId : ) => {
+  
+}
