@@ -1,6 +1,7 @@
 # Ignore node_modules in both frontend and backend
 book-exchange-backend/node_modules/
 book-exchange-frontend/node_modules/
+book-exchange-backend-mvc/node_modules/
 
 # Ignore logs
 logs
@@ -15,6 +16,7 @@ build/
 
 # Ignore environment variables
 book-exchange-backend/.env
+book-exchange-backend-mvc/.env
 book-exchange-frontend/.env
 
 # Ignore IDE and OS specific files
