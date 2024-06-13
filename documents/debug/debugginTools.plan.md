@@ -1,9 +1,7 @@
-import { pool } from "@src/services/db";
 
-// Task
-/**
- * 1) Clear Schema database, and create database // conclusion do
- * DB thing
+## Task
+
+ * 1) Clear Schema database, and create database // conclusion do DB thing
  * 2) Do services for each database Then test with commond controller and API
  * 3) review flow again then make API handle reject process
  * 4) Make process manager focus on our seqeunce charts.
