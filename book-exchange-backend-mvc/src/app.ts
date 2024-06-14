@@ -14,6 +14,7 @@ import { corsMiddleware } from "./middlewares/corsMiddleware";
 // for testing services
 import transactionRoutes from "./routes/transactions.routes.test"
 import userTransactionStatusRoutes from "./routes/userTransaction.routes.test"
+import { testPrismaConnection } from "./services/prismaService";
 
 
 const app = express();
@@ -26,6 +27,12 @@ app.use(express.json());
 app.get("/test-db", async (req, res) => {
   const result = await testConnection();
   res.send(result);
+});
+
+// Test Prisma connection route
+app.get("/test-prisma", async (req, res) => {
+  const result = await testPrismaConnection();
+  res.json(result);
 });
 
 // Routes
