@@ -17,6 +17,11 @@ export const createUser = async (
   return user;
 };
 
+export const getUsers = async (prisma: PrismaClient) => {
+  const users = await prisma.users.findMany();
+  return users;
+};
+
 export const getUserById = async (prisma: PrismaClient, id: number) => {
   const user = await prisma.users.findUnique({ where: { id } });
   return user;
