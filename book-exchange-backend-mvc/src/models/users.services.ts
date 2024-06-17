@@ -2,13 +2,18 @@ import { PrismaClient } from "@prisma/client";
 import {
   CreateUserRequest,
   UpdateUserRequest,
+  UserResponse,
 } from "../types/base/users.types";
 
 export const createUser = async (
   prisma: PrismaClient,
   data: CreateUserRequest
-) => {
+): Promise<UserResponse> => {
+  console.log(data);
+
   const user = await prisma.users.create({ data });
+  console.log(user);
+
   return user;
 };
 
@@ -26,7 +31,7 @@ export const updateUser = async (
   return user;
 };
 
-export const deleteUser = async (prisma: PrismaClient, id) => {
+export const deleteUser = async (prisma: PrismaClient, id: number) => {
   const user = await prisma.users.delete({ where: { id } });
   return user;
 };

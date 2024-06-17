@@ -1,4 +1,4 @@
-export * from './auth.types';
+// export * from './auth.types';
 export * from './connectionChecks.types';
 export * from './genres.types';
 export * from './users.types';

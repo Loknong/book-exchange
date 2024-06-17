@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2024-06-18]
+- Complete Prisma schema, re-constrcut of table
+- Complete Models folder with basic CRUD
+- Prepared Unit test for Models
+
+## [2024-06-15 - 2024-06-17]
+- Migrate backend to MVC patter
+- Use prisma as ORM instead raw SQL query
+- Use Models fodler collect all action to Database.
+- In services folder we only collect function that relate to bussiness logic, Avoid SQL think or Prisma think in this folder.
+
 ## [2024-06-14]
 ### Notes:
 - Need to change checking condition for services, userTransactionStatus from id to transactionId AND userId

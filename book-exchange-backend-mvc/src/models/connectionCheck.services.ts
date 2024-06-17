@@ -7,6 +7,7 @@ export const createConnectionCheck = async (prisma: PrismaClient, data: CreateCo
 };
 
 export const getConnectionCheckById = async (prisma: PrismaClient, id: number): Promise<ConnectionCheckResponse | null> => {
+  
   const connectionCheck = await prisma.connectionChecks.findUnique({ where: { id } });
   return connectionCheck;
 };

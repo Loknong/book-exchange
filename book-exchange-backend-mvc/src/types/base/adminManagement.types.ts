@@ -10,7 +10,7 @@ export interface AdminManagement {
 export interface CreateAdminManagementRequest {
   transactionId: number;
   status: AdminStatus;
-  details: string;
+  details?: string;
 }
 
 export interface UpdateAdminManagementRequest {

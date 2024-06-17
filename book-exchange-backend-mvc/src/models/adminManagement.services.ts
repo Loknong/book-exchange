@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import {
+  AdminManagementResponse,
   CreateAdminManagementRequest,
   UpdateAdminManagementRequest,
 } from "../types/base/adminManagement.types";
