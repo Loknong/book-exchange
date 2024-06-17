@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 export const testPrismaConnection = async () => {
     try {
-        const connectionCheck = await prisma.connectionCheck.findMany();
+        const connectionCheck = await prisma.connectionChecks.findMany();
         return {
             message:"Database connection successful.",
             data: connectionCheck,
