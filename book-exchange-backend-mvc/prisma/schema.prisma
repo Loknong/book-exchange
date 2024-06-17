@@ -23,23 +23,23 @@ model Genres {
 }
 
 model Users {
-  id                Int                   @id @default(autoincrement())
+  id                Int                     @id @default(autoincrement())
   firstName         String
   lastName          String
-  email             String                @unique
-  username          String                @unique
+  email             String                  @unique
+  username          String                  @unique
   password          String
-  credit            Int                   @default(0)
+  credit            Int                     @default(0)
   token             String?
   pictureId         Int?
-  isLoggedIn        Boolean               @default(false)
-  createdAt         DateTime              @default(now())
-  updatedAt         DateTime              @updatedAt
-  expiredAt         DateTime              @updatedAt
+  isLoggedIn        Boolean                 @default(false)
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+  expiredAt         DateTime                @updatedAt
   books             Books[]
   notifications     Notifications[]
-  offersOffered     Offers[]              @relation("OffersOfferedBy")
-  offersReceived    Offers[]              @relation("OffersOfferedTo")
+  offersOffered     Offers[]                @relation("OffersOfferedBy")
+  offersReceived    Offers[]                @relation("OffersOfferedTo")
   payments          Payments[]
   transactionStatus UserTransactionStatus[]
   addresses         UserAddress[]
@@ -105,15 +105,15 @@ enum OfferStatus {
 }
 
 model Transactions {
-  id                      Int                   @id @default(autoincrement())
-  offerId                 Int
-  offer                   Offers                @relation(fields: [offerId], references: [id])
-  status                  TransactionStatus     @default(PENDING)
-  createdAt               DateTime              @default(now())
-  updatedAt               DateTime              @default(now())
-  payments                Payments[]
-  userTransactionStatus   UserTransactionStatus?
-  adminManagement         AdminManagement?
+  id                    Int                     @id @default(autoincrement())
+  offerId               Int
+  offer                 Offers                  @relation(fields: [offerId], references: [id])
+  status                TransactionStatus       @default(PENDING)
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @default(now())
+  payments              Payments[]
+  userTransactionStatus UserTransactionStatus[]
+  adminManagement       AdminManagement?
 }
 
 enum TransactionStatus {
@@ -152,13 +152,13 @@ enum PaymentStatus {
 
 model UserTransactionStatus {
   id            Int            @id @default(autoincrement())
-  transactionId Int             @unique
-  transaction   Transactions    @relation(fields: [transactionId], references: [id])
+  transactionId Int
+  transaction   Transactions   @relation(fields: [transactionId], references: [id])
   userId        Int
-  user          Users           @relation(fields: [userId], references: [id])
-  status        UserTranStatus  @default(PENDING)
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @default(now())
+  user          Users          @relation(fields: [userId], references: [id])
+  status        UserTranStatus @default(PENDING)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
 }
 
 enum UserTranStatus {

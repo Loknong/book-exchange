@@ -110,7 +110,7 @@ model Courses {
     professorId  Int
     professor    Professors  @relation(fields: [professorId], references: [profressorId])
     course_material CourseMaterials[]
-    e
+    
 }
 
 model Enrollments {
