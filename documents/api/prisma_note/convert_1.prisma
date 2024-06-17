@@ -1,0 +1,144 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// Table 1: Users
+// Users
+
+// Column	Type	Constraints
+// id	INT	PRIMARY KEY, AUTO_INCREMENT
+// name	VARCHAR(255)	NOT NULL
+// email	VARCHAR(255)	NOT NULL, UNIQUE
+// password	VARCHAR(255)	NOT NULL
+// created_at	TIMESTAMP	DEFAULT CURRENT_TIMESTAMP
+// Table 2: Posts
+// Posts
+
+// Column	Type	Constraints
+// id	INT	PRIMARY KEY, AUTO_INCREMENT
+// title	VARCHAR(255)	NOT NULL
+// content	TEXT	
+// user_id	INT	FOREIGN KEY (user_id) REFERENCES Users(id)
+// created_at	TIMESTAMP	DEFAULT CURRENT_TIMESTAMP
+// Table 3: Comments
+// Comments
+
+// Column	Type	Constraints
+// id	INT	PRIMARY KEY, AUTO_INCREMENT
+// content	TEXT	
+// user_id	INT	FOREIGN KEY (user_id) REFERENCES Users(id)
+// post_id	INT	FOREIGN KEY (post_id) REFERENCES Posts(id)
+// created_at	TIMESTAMP	DEFAULT CURRENT_TIMESTAMP
+// Table 4: Categories
+// Categories
+
+// Column	Type	Constraints
+// id	INT	PRIMARY KEY, AUTO_INCREMENT
+// name	VARCHAR(255)	NOT NULL, UNIQUE
+// Table 5: PostCategories
+// PostCategories
+
+// Column	Type	Constraints
+// post_id	INT	FOREIGN KEY (post_id) REFERENCES Posts(id)
+// category_id	INT	FOREIGN KEY (category_id) REFERENCES Categories(id)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ConnectionCheck {
+  id             Int    @id @default(autoincrement())
+  connectionType String
+  detail         String
+}
+
+model Users {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String     @unique
+  password  String
+  create_at DateTime   @default(now())
+  Posts     Posts[]
+  Comment   Comments[]
+}
+
+model Posts {
+  id             Int              @id @default(autoincrement())
+  title          String
+  context        String?
+  user_id        Int
+  user           Users            @relation(fields: [user_id], references: [id])
+  created_at     DateTime         @default(now())
+  Comment        Comments[]
+  PostCategories PostCategories[]
+}
+
+model Comments {
+  id         Int      @id @default(autoincrement())
+  content    String
+  user_id    Int
+  user       Users    @relation(fields: [user_id], references: [id])
+  post_id    Int
+  post       Posts    @relation(fields: [post_id], references: [id])
+  created_at DateTime @default(now())
+}
+
+model Categories {
+  id             Int              @id @default(autoincrement())
+  name           String
+  PostCategories PostCategories[]
+}
+
+model PostCategories {
+  post_id     Int
+  post        Posts      @relation(fields: [post_id], references: [id])
+  category_id Int
+  category    Categories @relation(fields: [category_id], references: [id])
+
+  @@id([post_id, category_id])
+}
+
+// 2nd 
+
+model Books {
+  book_id      Int      @id @default(autoincrement())
+  title        String
+  author_id    Int
+  author       Authors  @relation(fields: [author_id], references: [id])
+  published_at DateTime
+  isbn         String   @unique
+
+  Loan Loans[]
+}
+
+model Authors {
+  id        Int      @id @default(autoincrement())
+  name      String
+  birthdate DateTime?
+  book      Books[]
+}
+
+model Members {
+  member_id Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  joined_at DateTime?
+  Loan      Loans[]
+}
+
+model Loans {
+  Loan_id     Int       @id @default(autoincrement())
+  book_id     Int
+  book        Books     @relation(fields: [book_id], references: [book_id])
+  member_id   Int
+  member      Members   @relation(fields: [member_id], references: [member_id])
+  loaned_at   DateTime  @default(now())
+  returned_at DateTime?
+}

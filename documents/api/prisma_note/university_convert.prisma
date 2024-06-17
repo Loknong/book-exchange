@@ -1,0 +1,137 @@
+// Database Schema: University Management System
+// Table 1: Students
+// Students
+
+// Column	Type	Constraints
+// id	INT	PRIMARY KEY, AUTO_INCREMENT
+// first_name	VARCHAR(255)	NOT NULL
+// last_name	VARCHAR(255)	NOT NULL
+// email	VARCHAR(255)	NOT NULL, UNIQUE
+// birthdate	DATE	
+// enrollment_year	INT	
+// Table 2: Professors
+// Professors
+
+// Column	Type	Constraints
+// id	INT	PRIMARY KEY, AUTO_INCREMENT
+// first_name	VARCHAR(255)	NOT NULL
+// last_name	VARCHAR(255)	NOT NULL
+// email	VARCHAR(255)	NOT NULL, UNIQUE
+// hire_date	DATE	
+// department_id	INT	FOREIGN KEY (department_id) REFERENCES Departments(id)
+// Table 3: Departments
+// Departments
+
+// Column	Type	Constraints
+// id	INT	PRIMARY KEY, AUTO_INCREMENT
+// name	VARCHAR(255)	NOT NULL, UNIQUE
+// head_id	INT	FOREIGN KEY (head_id) REFERENCES Professors(id)
+// Table 4: Courses
+// Courses
+
+// Column	Type	Constraints
+// id	INT	PRIMARY KEY, AUTO_INCREMENT
+// name	VARCHAR(255)	NOT NULL
+// code	VARCHAR(10)	NOT NULL, UNIQUE
+// department_id	INT	FOREIGN KEY (department_id) REFERENCES Departments(id)
+// professor_id	INT	FOREIGN KEY (professor_id) REFERENCES Professors(id)
+// Table 5: Enrollments
+// Enrollments
+
+// Column	Type	Constraints
+// student_id	INT	FOREIGN KEY (student_id) REFERENCES Students(id)
+// course_id	INT	FOREIGN KEY (course_id) REFERENCES Courses(id)
+// enrollment_date	DATE	DEFAULT CURRENT_TIMESTAMP
+// Table 6: CourseMaterials
+// CourseMaterials
+
+// Column	Type	Constraints
+// id	INT	PRIMARY KEY, AUTO_INCREMENT
+// course_id	INT	FOREIGN KEY (course_id) REFERENCES Courses(id)
+// title	VARCHAR(255)	NOT NULL
+// content_url	VARCHAR(255)	
+// material_type	ENUM	('VIDEO', 'DOCUMENT', 'SLIDES')
+
+// Summary
+// This schema includes a variety of Prisma features, such as:
+
+// Composite primary keys (Enrollment model)
+// One-to-many relationships (Student-Enrollment, Professor-Course)
+// Many-to-many relationships via join table (Enrollment)
+// Enums (CourseMaterial model with MaterialType)
+// Self-referencing relationships (Professor-Department)
+// Optional fields (birthdate, departmentId, etc.)
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model Students {
+    studentId      Int           @id @default(autoincrement())
+    firstName      String
+    lastName       String
+    email          String        @unique
+    birthdate      DateTime?
+    enrollmentYear Int?
+    Entrollment    Enrollments[]
+}
+
+model Professors {
+    profressorId Int           @id @default(autoincrement())
+    firstName    String
+    lastName     String
+    email        String
+    hireDate     DateTime?
+    departmentId Int
+    department   Departments? @relation(fields: [departmentId], references: [departmentId])
+    courese      Courses[]
+    entrollment  Enrollments[]
+}
+
+model Departments {
+    departmentId   Int        @id @default(autoincrement())
+    name           String     @unique
+    headId         Int
+    head Professors @relation(fields: [headId], references: [profressorId])
+    course         Courses[]
+}
+
+model Courses {
+    courseId     Int         @id @default(autoincrement())
+    name         String
+    code         String      @unique
+    departmentId Int
+    department   Departments @relation(fields: [departmentId], references: [departmentId])
+    professorId  Int
+    professor    Professors  @relation(fields: [professorId], references: [profressorId])
+    course_material CourseMaterials[]
+    e
+}
+
+model Enrollments {
+    studentId   Int
+    student     Students   @relation(fields: [studentId], references: [studentId])
+    courseId    Int
+    course Courses @relation()
+    @@id([studentId, professorId])
+}
+
+model CourseMaterials {
+    id Int @id @default(autoincrement())
+    course_id Int 
+    course Courses @relation(fields: [id], references: [courseId])
+    title String
+    content_url String?
+    material_type material
+}
+
+enum material {
+    VIDEO
+    DOCUMENT
+    SLIDES
+}
