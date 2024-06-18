@@ -10,7 +10,7 @@ export interface UserProfilePicture {
 export interface CreateUserProfilePictureRequest {
   userId: number;
   name: string;
-  isActive : boolean
+  isActive : boolean;
 }
 
 export interface UpdateUserProfilePictureRequest {
