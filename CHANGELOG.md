@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Complete Prisma schema, re-constrcut of table
 - Complete Models folder with basic CRUD
 - Prepared Unit test for Models
+- Complete 1 API route (createUser function) to see example coding style for our design
+- Complete 1 API that use transaction (createUser with userImages). To see defiend our style too.
 
 ## [2024-06-15 - 2024-06-17]
 - Migrate backend to MVC patter

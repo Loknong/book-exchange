@@ -7,8 +7,7 @@ import userManageRoutes from "./routes/userManagement.routes"
 import bookRoutes from "./routes/bookManagement.routes";
 import offerRoutes from "./routes/offerManagement.routes"
 
-import userActionRoutes from "./routes/legacy/userActionRoute";
-import userRoutes from "./routes/legacy/userRoute"
+
 import { corsMiddleware } from "./middlewares/corsMiddleware";
 
 // for testing services
@@ -16,6 +15,8 @@ import transactionRoutes from "./routes/transactions.routes.test"
 import userTransactionStatusRoutes from "./routes/userTransaction.routes.test"
 import { testFind, testPrismaConnection } from "./services/prismaService";
 
+// after migrate to prisma routes
+import userPrismaRoute from "./routes/userAction.routes"
 
 const app = express();
 
@@ -50,9 +51,11 @@ app.use("/api/offers", offerRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/user-transactions", userTransactionStatusRoutes);
 
+// Migrate Prisma Routes
+app.use("/v2/api/user", userPrismaRoute);
+
+
 // Old
-app.use("/api/action", userActionRoutes);
-app.use("/api", userRoutes);
 app.use('/uploads', express.static('uploads')); // Serve static files from 'uploads' directory
 
 const PORT = process.env.PORT || 3000;
