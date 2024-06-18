@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Complete 1 API that use transaction (createUser with userImages). To see defiend our style too.
 - Create type PrismaTransactionClient = PrismaClient | Prisma.TransactionClient; for handle transaction action
 - Adjust all type in update to Partial<>
+- Add DatabaseManagement routes for 1) Reset all data, 2) Insert Mock data 3) 1 then 2.
 
 ## [2024-06-15 - 2024-06-17]
 - Migrate backend to MVC patter

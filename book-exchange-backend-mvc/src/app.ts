@@ -16,7 +16,10 @@ import userTransactionStatusRoutes from "./routes/userTransaction.routes.test"
 import { testFind, testPrismaConnection } from "./services/prismaService";
 
 // after migrate to prisma routes
+import databaseRoute  from "./routes/databaseManagement.routes"
 import userPrismaRoute from "./routes/userAction.routes"
+
+
 
 const app = express();
 
@@ -50,6 +53,7 @@ app.use("/api/offers", offerRoutes);
 // Services Test
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/user-transactions", userTransactionStatusRoutes);
+app.use("/v2/api/database", databaseRoute)
 
 // Migrate Prisma Routes
 app.use("/v2/api/user", userPrismaRoute);
