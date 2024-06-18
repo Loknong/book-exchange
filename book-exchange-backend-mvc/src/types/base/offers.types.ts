@@ -1,3 +1,5 @@
+import { OfferStatus } from "@prisma/client";
+
 export interface Offer {
     id: number;
     bookId: number;
@@ -36,9 +38,9 @@ export interface Offer {
     updatedAt: Date;
   }
   
-  export enum OfferStatus {
-    PENDING = 'PENDING',
-    ACCEPTED = 'ACCEPTED',
-    REJECTED = 'REJECTED'
-  }
+  // export enum OfferStatus {
+  //   PENDING = 'PENDING',
+  //   ACCEPTED = 'ACCEPTED',
+  //   REJECTED = 'REJECTED'
+  // }
   

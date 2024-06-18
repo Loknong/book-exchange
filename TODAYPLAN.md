@@ -1,4 +1,8 @@
 # Today Plan
+## [2024-06-19]
+1) Check all model services can work properly
+2) Test API with each model services
+3) Continue Lists all bussiness logic.
 
 ## [2024-06-18]
 

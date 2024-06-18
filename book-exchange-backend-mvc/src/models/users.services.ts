@@ -20,8 +20,32 @@ export const createUser = async (
 };
 
 export const getUsers = async (prisma: PrismaTransactionClient) => {
-  const users = await prisma.users.findMany();
-  return users;
+  const users = await prisma.users.findMany({
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      credit: true,
+      profilePictures: {
+        where: {
+          isActive: true,
+        },
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+ const newUsers = users.map(user => {
+  const profilePictures = user.profilePictures.length > 0 ? user.profilePictures[0].name : null;
+  return {
+    ...user,
+    profilePictures
+  }
+ })
+
+  return newUsers;
 };
 
 export const getUserById = async (
@@ -38,12 +62,12 @@ export const getUserById = async (
       credit: true,
       profilePictures: {
         where: {
-          isActive: true
+          isActive: true,
         },
-        select:{
+        select: {
           name: true,
-        }
-      }
+        },
+      },
     },
   });
   return user;

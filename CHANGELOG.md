@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2024-06-19]
+
+- Complete databaseManagement.
+- Type need to adjust for ENUM. use ENUM that we decleared in prisma model instead declare new ENUM.
+- Need to check all basic services model. Is it workable and no bug, check compatible when using with complete api, Type and our models is match.
+- Listing our bussienes logic ...
+
 ## [2024-06-18]
+
 - Complete Prisma schema, re-constrcut of table
 - Complete Models folder with basic CRUD
 - Prepared Unit test for Models
@@ -15,13 +23,16 @@ All notable changes to this project will be documented in this file.
 - Add DatabaseManagement routes for 1) Reset all data, 2) Insert Mock data 3) 1 then 2.
 
 ## [2024-06-15 - 2024-06-17]
+
 - Migrate backend to MVC patter
 - Use prisma as ORM instead raw SQL query
 - Use Models fodler collect all action to Database.
 - In services folder we only collect function that relate to bussiness logic, Avoid SQL think or Prisma think in this folder.
 
 ## [2024-06-14]
+
 ### Notes:
+
 - Need to change checking condition for services, userTransactionStatus from id to transactionId AND userId
 
 ## [2024-06-13]

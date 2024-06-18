@@ -4,7 +4,7 @@ import {
   UpdateBookImageRequest,
 } from "../types/base/bookImages.types";
 import { PrismaTransactionClient } from "@src/types/utils/primaAlias.types";
-export const craeteBookImage = async (
+export const createBookImage = async (
   prisma: PrismaTransactionClient,
   data: CreateBookImageRequest
 ) => {

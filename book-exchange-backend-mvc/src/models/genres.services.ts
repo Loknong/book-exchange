@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaTransactionClient } from "@src/types/utils/primaAlias.types";
 import {
   CreateGenreRequest,
+  GenreResponse,
   UpdateGenreRequest,
 } from "../types/base/genres.types";
 
@@ -13,10 +14,23 @@ export const createGenre = async (
   return genre;
 };
 
+export const createGenreMany = async (
+  prisma: PrismaTransactionClient,
+  data: CreateGenreRequest[]
+) => {
+  const genres = await prisma.genres.createMany({data});
+  return genres
+}
+
 export const getGenreById = async (prisma: PrismaTransactionClient, id: number) => {
   const genre = await prisma.genres.findUnique({ where: { id } });
   return genre;
 };
+
+export const getGenreList = async (prisma: PrismaTransactionClient): Promise<GenreResponse[]> => {
+  const genres = await prisma.genres.findMany()
+  return genres
+}
 
 export const updateGenre = async (
   prisma: PrismaTransactionClient,
