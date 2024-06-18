@@ -4,16 +4,18 @@ import {
   UpdateUserProfilePictureRequest,
 } from "@src/types";
 
+import { PrismaTransactionClient } from "@src/types/utils/primaAlias.types";
+
 export const createUserProfilePicture = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   data: CreateUserProfilePictureRequest
 ) => {
-  const userProfilePiture = await prisma.userProfilePictures.create({ data });
+  const userProfilePiture = await prisma.userProfilePictures.create({ data});
   return userProfilePiture;
 };
 
 export const getUserProfilePictureById = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   id: number
 ) => {
   const userProfilePicture = await prisma.userProfilePictures.findUnique({
@@ -24,7 +26,7 @@ export const getUserProfilePictureById = async (
 };
 
 export const UpdateUserProfilePicture = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   id: number,
   data: UpdateUserProfilePictureRequest
 ) => {
@@ -37,7 +39,7 @@ export const UpdateUserProfilePicture = async (
 };
 
 export const deleteUserProfilePicture = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   id: number
 ) => {
   const userProfilePicture = await prisma.userProfilePictures.delete({

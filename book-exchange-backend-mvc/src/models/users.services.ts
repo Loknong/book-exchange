@@ -1,12 +1,14 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaTransactionClient } from "@src/types/utils/primaAlias.types";
 import {
   CreateUserRequest,
   UpdateUserRequest,
   UserResponse,
 } from "../types/base/users.types";
 
+// export type PrismaTransactionClient = PrismaClient | Prisma.TransactionClient;
+
 export const createUser = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   data: CreateUserRequest
 ): Promise<UserResponse> => {
   console.log(data);
@@ -17,26 +19,49 @@ export const createUser = async (
   return user;
 };
 
-export const getUsers = async (prisma: PrismaClient) => {
+export const getUsers = async (prisma: PrismaTransactionClient) => {
   const users = await prisma.users.findMany();
   return users;
 };
 
-export const getUserById = async (prisma: PrismaClient, id: number) => {
-  const user = await prisma.users.findUnique({ where: { id } });
+export const getUserById = async (
+  prisma: PrismaTransactionClient,
+  id: number
+) => {
+  const user = await prisma.users.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      credit: true,
+      profilePictures: {
+        where: {
+          isActive: true
+        },
+        select:{
+          name: true,
+        }
+      }
+    },
+  });
   return user;
 };
 
 export const updateUser = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   id: number,
-  data: UpdateUserRequest
+  data: Partial<UpdateUserRequest>
 ) => {
   const user = await prisma.users.update({ where: { id }, data });
   return user;
 };
 
-export const deleteUser = async (prisma: PrismaClient, id: number) => {
+export const deleteUser = async (
+  prisma: PrismaTransactionClient,
+  id: number
+) => {
   const user = await prisma.users.delete({ where: { id } });
   return user;
 };

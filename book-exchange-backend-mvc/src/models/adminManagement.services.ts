@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaTransactionClient } from "@src/types/utils/primaAlias.types";
 import {
   AdminManagementResponse,
   CreateAdminManagementRequest,
@@ -6,20 +6,20 @@ import {
 } from "../types/base/adminManagement.types";
 
 export const craeteAdminEvent = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   data: CreateAdminManagementRequest
 ) => {
   const adminEvent = await prisma.adminManagement.create({ data });
   return adminEvent;
 };
 
-export const getAdminEventById = async (prisma: PrismaClient, id: number) => {
+export const getAdminEventById = async (prisma: PrismaTransactionClient, id: number) => {
   const adminEvent = await prisma.adminManagement.findUnique({ where: { id } });
   return adminEvent;
 };
 
 export const updateAdminEvent = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   id: number,
   data: UpdateAdminManagementRequest
 ) => {
@@ -30,7 +30,7 @@ export const updateAdminEvent = async (
   return adminEvent;
 };
 
-export const deleteAdminEvent = async (prisma: PrismaClient, id: number) => {
+export const deleteAdminEvent = async (prisma: PrismaTransactionClient, id: number) => {
   const adminEvent = await prisma.adminManagement.delete({ where: { id } });
   return adminEvent;
 };

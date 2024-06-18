@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 - Prepared Unit test for Models
 - Complete 1 API route (createUser function) to see example coding style for our design
 - Complete 1 API that use transaction (createUser with userImages). To see defiend our style too.
+- Create type PrismaTransactionClient = PrismaClient | Prisma.TransactionClient; for handle transaction action
+- Adjust all type in update to Partial<>
 
 ## [2024-06-15 - 2024-06-17]
 - Migrate backend to MVC patter

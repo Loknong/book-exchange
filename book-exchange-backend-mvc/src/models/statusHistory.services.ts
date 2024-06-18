@@ -1,11 +1,12 @@
 import { PrismaClient } from "@prisma/client";
+import { PrismaTransactionClient } from "@src/types/utils/primaAlias.types";
 import {
   CreateStatusHistoryRequest,
   UpdateStatusHistoryRequest,
 } from "@src/types";
 
 export const createStatusHistory = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   data: CreateStatusHistoryRequest
 ) => {
   const statusHistory = await prisma.statusHistory.create({ data });
@@ -13,7 +14,7 @@ export const createStatusHistory = async (
 };
 
 export const getStatusHistoryById = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   id: number
 ) => {
   const statusHistory = await prisma.statusHistory.findUnique({
@@ -23,7 +24,7 @@ export const getStatusHistoryById = async (
 };
 
 export const updateStatusHistory = async (
-  prisma: PrismaClient,
+  prisma: PrismaTransactionClient,
   id: number,
   data: UpdateStatusHistoryRequest
 ) => {
@@ -34,7 +35,7 @@ export const updateStatusHistory = async (
   return statusHistory;
 };
 
-export const deleteStatusHistory = async (prisma: PrismaClient, id: number) => {
+export const deleteStatusHistory = async (prisma: PrismaTransactionClient, id: number) => {
   const statusHistory = await prisma.statusHistory.delete({ where: { id } });
   return statusHistory;
 };
