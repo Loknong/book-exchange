@@ -37,15 +37,8 @@ export const getUsers = async (prisma: PrismaTransactionClient) => {
       },
     },
   });
- const newUsers = users.map(user => {
-  const profilePictures = user.profilePictures.length > 0 ? user.profilePictures[0].name : null;
-  return {
-    ...user,
-    profilePictures
-  }
- })
 
-  return newUsers;
+  return users;
 };
 
 export const getUserById = async (

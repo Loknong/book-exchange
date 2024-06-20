@@ -5,6 +5,6 @@ const router = Router();
 
 router.post("/reset", databaseController.handleResetDatabase);
 router.post('/mock', databaseController.handleMockData);
-router.post("/setup");
+router.post("/setup", databaseController.handleSetup);
 
 export default router;
