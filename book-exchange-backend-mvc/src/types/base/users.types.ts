@@ -35,6 +35,9 @@ export interface UpdateUserRequest {
   expiredAt?: Date;
 }
 
+
+
+
 export interface UserResponse {
   id: number;
   firstName: string;

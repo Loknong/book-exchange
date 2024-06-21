@@ -7,18 +7,18 @@ export const testPrismaConnection = async () => {
   try {
     // const connectionCheck = await prisma.connectionChecks.findMany()
     // const connectionCheck = await getConnectionCheckById (prisma, 1)
-    const connectionCheck = await createUser(prisma, {
-      firstName: "Jukkapan2",
-      lastName: "Kongjun2",
-      email: "jukkapan3@.com",
-      username: "guest11123",
-      password: "password1112",
-    });
+    // const connectionCheck = await createUser(prisma, {
+    //   firstName: "Jukkapan2",
+    //   lastName: "Kongjun2",
+    //   email: "jukkapan3@.com",
+    //   username: "guest11123",
+    //   password: "password1112",
+    // });
 
-    const feedbackGet = await getUserById(prisma, connectionCheck.id);
+    const feedbackGet = await getUserById(prisma, 1);
     return {
       message: "Database connection successful.",
-      data: connectionCheck,
+      // data: connectionCheck,
       feedbackGet: feedbackGet,
     };
   } catch (error) {

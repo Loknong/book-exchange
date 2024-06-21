@@ -14,9 +14,11 @@ export const createUserProfilePicture = async (
   return userProfilePiture;
 };
 
+
+
 export const getUserProfilePictureById = async (
   prisma: PrismaTransactionClient,
-  id: number
+  id: number,
 ) => {
   const userProfilePicture = await prisma.userProfilePictures.findUnique({
     where: { id },
