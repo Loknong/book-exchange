@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [2024-06-22]
+
+- Restructure project to base on features
+
 ## [2024-06-19]
 
 - Complete databaseManagement.
