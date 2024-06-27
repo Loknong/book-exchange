@@ -32,6 +32,7 @@ model Users {
   credit            Int                     @default(0)
   token             String?
   pictureId         Int?
+  addressId         Int?
   isLoggedIn        Boolean                 @default(false)
   createdAt         DateTime                @default(now())
   updatedAt         DateTime                @updatedAt

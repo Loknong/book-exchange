@@ -8,11 +8,29 @@ export interface User {
   credit: number;
   token?: string;
   pictureId?: number;
+  addressId?: number;
   isLoggedIn: boolean;
   createdAt: Date;
   updatedAt: Date;
   expiredAt: Date;
 }
+
+export interface UserAddress {
+  id: number;
+  userId: number;
+  houseNumber: string;
+  village?: string;
+  street?: string;
+  subdistrict: string;
+  district: string;
+  province: string;
+  postalCode: string;
+  country: string;
+  phoneNumber?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 
 export interface UpdateUserRequest {
   firstName?: string;

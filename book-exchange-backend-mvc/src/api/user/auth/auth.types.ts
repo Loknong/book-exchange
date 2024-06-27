@@ -21,4 +21,7 @@ export interface UserLoginRequest {
 export interface UserLoginResponse
   extends Omit<UserResponse, "updatedAt" | "createdAt"> {}
 
-export interface UserLogoutResponse {}
+export interface UserLogoutRequest {
+  userId : number;
+}
+

@@ -12,11 +12,10 @@ export const registerUser = async (
 
     return {
       id: user.id,
-      firstName : user.firstName,
-      lastName : user.lastName,
-      email : user.email,
-      username : user.username,
-
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      username: user.username,
     };
   } catch (error) {
     console.error("Error registering user with profile:", error);
@@ -33,6 +32,8 @@ export const registerUserWithProfile = async (
   profileData: string
 ) => {
   try {
+    console.log("Enter");
+
     return prisma.$transaction(async (transactionPrisma) => {
       const tempUser = await transactionPrisma.users.create({ data: data });
       const profile = await transactionPrisma.userProfilePictures.create({
@@ -46,7 +47,15 @@ export const registerUserWithProfile = async (
         where: { id: tempUser.id },
         data: { pictureId: profile.id },
       });
-      return { user, profile };
+
+      return {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        username: user.username,
+        imageUrl: profile.name,
+      };
     });
   } catch (error) {
     console.error("Error registering user with profile:", error);
@@ -57,6 +66,42 @@ export const registerUserWithProfile = async (
 };
 
 // loginUser
-export const loginUser = async (prisma: PrismaClient, data:UserLoginRequest) => {
-  const 
-}
+export const loginUser = async (
+  prisma: PrismaClient,
+  data: UserLoginRequest
+) => {
+  const result = await prisma.users.update({
+    where: { username: data.username, password: data.password },
+    data: {
+      isLoggedIn: true,
+    },
+  });
+
+  console.log("Result", result);
+
+  return {
+    id: result.id,
+    firstName: result.firstName,
+    lastName: result.lastName,
+    email: result.email,
+    username: result.username,
+    credit: result.credit,
+    isLoggedIn: result.isLoggedIn,
+  };
+};
+
+// logoutUser
+export const logoutUser = async (prisma: PrismaClient, userId: number) => {
+  const result = await prisma.users.update({
+    where: { id: userId },
+    data: { isLoggedIn: false },
+  });
+  return {
+    id: result.id,
+    firstName: result.firstName,
+    lastName: result.lastName,
+    email: result.email,
+    username: result.username,
+    isLoggedIn: result.isLoggedIn,
+  };
+};
