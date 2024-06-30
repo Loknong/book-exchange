@@ -5,7 +5,10 @@ export interface UpdateUserInfo {
   addressId?: number;
 }
 
-
 export interface UpdateUserImage {
-    userId: number;
+  userId: number;
+}
+
+export interface UserProfileRequest {
+  userId: number;
 }

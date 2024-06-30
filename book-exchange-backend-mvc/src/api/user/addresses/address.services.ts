@@ -58,8 +58,7 @@ export const deleteUserAddress = async (
 // Get Partial User Address List
 export const getAddressList = async (
   prisma: PrismaClient,
-  data: GetUserAddressList,
- 
+  data: GetUserAddressList
 ) => {
   const selectField =
     data.addressMode === "Partial"
@@ -72,7 +71,6 @@ export const getAddressList = async (
   });
 
   console.log(userAddressList);
-  
-  return  {message: "User Address List", data: userAddressList}
 
+  return { message: "User Address List", data: userAddressList };
 };
