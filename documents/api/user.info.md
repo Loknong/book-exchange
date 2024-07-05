@@ -90,22 +90,22 @@
 
 **Features List**:
 
-1. **Get User Profile:**
+1. [x] **Get User Profile:**
 
    - Endpoint `GET /users/profiles/:userId`
    - Description: Retrieves user profile details.
 
-2. **Update User Profile:**
+2. [x] **Update User Profile:**
 
    - Endpoint `PUT /users/profiles/:userId`
    - Description: Updates user profile details.
 
-3. **Add Profile Picture:**
+3. [x] **Add Profile Picture:**
 
    - Endpoint `POST /users/profiles/picture/:userId`
    - Description: Adds a profile picture for a user.
 
-4. **Delete Profile Picture:**
+4. [ ] **Delete Profile Picture:** 
    - Endpoint `DELETE /users/profiles/picture/:userId`
    - Description: Deletes a profile picture for a user.
 
