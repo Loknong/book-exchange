@@ -43,6 +43,7 @@ export const registerUserWithProfile = async (
           isActive: true,
         },
       });
+      
       const user = await transactionPrisma.users.update({
         where: { id: tempUser.id },
         data: { pictureId: profile.id },

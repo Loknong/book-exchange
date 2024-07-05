@@ -11,4 +11,14 @@ export interface UpdateUserImage {
 
 export interface UserProfileRequest {
   userId: number;
+  query: {
+    details?: string;
+    withAddress?: "full" | "short" ;
+    withPicture?: string;
+    roles?: string;
+    activityLogs?: string;
+    accountStatus?: string;
+    transactions?: string;
+    notifications?: string;
+  };
 }
