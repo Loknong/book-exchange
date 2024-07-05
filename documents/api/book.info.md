@@ -4,27 +4,6 @@
 
 ### Explore
 
-**Explore** encompasses functionalities related to exploring books within the application.
-
-**Common Elements**:
-
-- Book Listings: List of books available for exploration.
-- Search Sort and Filters: Mechanisms to search sort and filter books.
-- Book Discovery: Finding books based on various criteria such as popularity, new arrivals, and recommendations.
-
-**Usage**:
-
-- Displaying a list of books for users to explore.
-- Allowing users to search, filter and sort books based on criteria.
-- Providing recommendations and discovery features.
-
-**Example Use Case**:
-
-- Book Browsing: Showing a list of books available for exploration.
-- Search Books: Allowing users to search for books by title, author, genre, etc.
-- Filter Books: Providing filters to narrow down the list of books.
-- Sort Books: Allowing users to sort books based on different criteria.
-
 **Features List**:
 
 1. Get Book Listings
@@ -38,26 +17,47 @@
      - `sort`: Sort books by criteria such as popularity, new arrivals, etc.
      - `page`: Pagination to get the desired page of results.
      - `limit`: Number of results per page.
+     - `view`: Filter by views (e.g., most viewed, recently viewed).
+     - Table: Books, Genres
+     - When to Use: When users want to explore the collection of books available in the application.
+
+   **Response**
+
+   ```
+   {
+   "message": "Books retrieved successfully",
+   "data": [
+         {
+            "id": 1,
+            "title": "Book Title",
+            "author": "Author Name",
+            "genre": "Genre Name",
+            "views": 100,
+            "condition": "New",
+            "description": "Book Description",
+            "status": "PUBLIC",
+            "createdAt": "2023-01-01T00:00:00.000Z",
+            "updatedAt": "2023-01-01T00:00:00.000Z"
+         },
+         {
+            "id": 2,
+            "title": "Book Title",
+            "author": "Author Name",
+            "genre": "Genre Name",
+            "views": 100,
+            "condition": "New",
+            "description": "Book Description",
+            "status": "PUBLIC",
+            "createdAt": "2023-01-01T00:00:00.000Z",
+            "updatedAt": "2023-01-01T00:00:00.000Z"
+         },
+         ...
+      ]
+   }
+
+   ```
 
 ### Genres
-
-**Genres** encompasses functionalities related to managing book genres within the application.
-
-**Common Elements**:
-
-- **Genre Management**: CRUD operations for book genres.
-
-**Usage**:
-
-- Managing the list of book genres.
-- Associating books with genres.
-
-**Example Use Case**:
-
-- **Add Genre**: Adding a new book genre.
-- **Get Genres**: Retrieving all book genres.
-- **Update Genre**: Updating an existing book genre.
-- **Delete Genre**: Deleting a book genre.
 
 **Features List**:
 
@@ -65,39 +65,83 @@
 
    - Endpoint: `POST /books/genres`
    - Description: Adds a new book genre.
+   - Table: Genres
+   - When to Use: When adding a new genre to the application.
+
+**Response**
+
+```
+{
+   "message": "Genre added successfully",
+   "data": {
+      "id": 1,
+      "name": "Genre Name"
+   }
+}
+
+```
 
 2. **Get Genres**:
 
    - Endpoint: `GET /books/genres`
    - Description: Retrieves all book genres.
+   - Table: Genres
+   - When to Use: When displaying the list of genres in the application.
+
+     **Response**
+
+   ```
+   {
+      "message": "Genre retrieved successfully",
+      "data":[ {
+         "id": 1,
+         "name": "Genre Name"
+      }, ...]
+   }
+
+   ```
 
 3. **Update Genre**:
 
    - Endpoint: `PUT /books/genres/:genreId`
    - Description: Updates an existing book genre.
+   - Table: Genres
+   - When to Use: When modifying the details of an existing genre.
+
+     **Response**
+
+   ```
+   {
+      "message": "Genre updated successfully",
+      "data": {
+         "id": 1,
+         "name": "Updated Genre Name"
+      }
+   }
+
+   ```
 
 4. **Delete Genre**:
+
    - Endpoint: `DELETE /books/genres/:genreId`
    - Description: Deletes a book genre.
+   - Table: Genres
+   - When to Use: When removing a genre from the application.
+
+     **Response**
+
+   ```
+   {
+      "message": "Genre deleted successfully",
+      "data": {
+         "id": 1,
+         "name": "Genre Name"
+      }
+   }
+
+   ```
 
 ### UserBooks
-
-**UserBooks** encompasses functionalities related to managing user-specific book operations within the application.
-
-**Common Elements**:
-
-- **User Book Management**: CRUD operations for books associated with a user.
-
-**Usage**:
-
-- Allowing users to manage their own books within the exchange system.
-
-**Example Use Case**:
-
-- **Add User Book**: Adding a new book for a user.
-- **Get User Books**: Retrieving all books associated with a user.
-- **Update User Book**: Updating an existing book for a user.
-- **Delete User Book**: Deleting a user book.
 
 **Features List**:
 
@@ -105,130 +149,113 @@
 
    - Endpoint: `POST /books/userBooks`
    - Description: Adds a new book for a user.
+   - Table: Books, Users
+   - When to Use: When a user wants to add a book to their collection.
+
+   **Response**
+
+   ```
+   {
+      "message": "Book added successfully",
+      "data": {
+         "id": 1,
+         "title": "Book Title",
+         "author": "Author Name",
+         "genre": "Genre Name",
+         "views": 0,
+         "condition": "New",
+         "description": "Book Description",
+         "status": "PUBLIC",
+         "createdAt": "2023-01-01T00:00:00.000Z",
+         "updatedAt": "2023-01-01T00:00:00.000Z"
+      }
+   }
+
+   ```
 
 2. **Get User Books**:
 
    - Endpoint: `GET /books/userBooks/:userId`
    - Description: Retrieves all books associated with a user.
+   - Table: Books, Users
+   - When to Use: When displaying the list of books added by a user.
+
+   **Response**
+
+   ```
+   {
+     "message": "User books retrieved successfully",
+      "data": [
+         {
+            "id": 1,
+            "title": "Book Title",
+            "author": "Author Name",
+            "genre": "Genre Name",
+            "views": 100,
+            "condition": "New",
+            "description": "Book Description",
+            "status": "PUBLIC",
+            "createdAt": "2023-01-01T00:00:00.000Z",
+            "updatedAt": "2023-01-01T00:00:00.000Z"
+         },
+         ...
+      ]
+   }
+
+   ```
 
 3. **Update User Book**:
 
    - Endpoint: `PUT /books/userBooks/:bookId`
    - Description: Updates an existing book for a user.
+   - Table: Books, Users
+   - When to Use: When a user wants to update the details of a book in their collection.
+
+   **Response**
+
+   ```
+   {
+      "message": "Book updated successfully",
+      "data": {
+         "id": 1,
+         "title": "Book Title",
+         "author": "Author Name",
+         "genre": "Genre Name",
+         "views": 0,
+         "condition": "New",
+         "description": "Book Description",
+         "status": "PUBLIC",
+         "createdAt": "2023-01-01T00:00:00.000Z",
+         "updatedAt": "2023-01-01T00:00:00.000Z"
+      }
+   }
+
+   ```
 
 4. **Delete User Book**:
+
    - Endpoint: `DELETE /books/userBooks/:bookId`
    - Description: Deletes a user book.
+   - Table: Books, Users
+   - When to Use: When a user wants to remove a book from their collection.
 
-### Views
+   **Response**
 
-**Views** encompasses functionalities related to tracking and managing book views within the application. Additionally, it provides the capability to retrieve lists of books for display in the sidebar, including popular, recently viewed, and most viewed books.
+   ```
+   {
+      "message": "Book deleted successfully",
+      "data": {
+         "id": 1,
+         "title": "Deleted Book Title",
+         "author": "Deleted Author Name",
+         "genre": "Deleted Genre Name",
+         "views": 150,
+         "condition": "Deleted",
+         "description": "Deleted Book Description",
+         "status": "PRIVATE",
+         "createdAt": "2023-01-01T00:00:00.000Z",
+         "updatedAt": "2023-01-01T00:00:00.000Z"
+      }
+   }
 
-**Common Elements**:
-
-- **Book View Tracking**: Tracking the number of views for each book.
-- **Sidebar Book Listings**: Providing lists of books for display in the sidebar.
-
-**Usage**:
-
-- Monitoring the popularity of books based on views.
-- Providing insights into user engagement with books.
-- Displaying lists of books in the sidebar for enhanced user engagement.
-
-**Example Use Case**:
-
-- **Track Book View**: Tracking a view for a specific book.
-- **Get Book Views**: Retrieving the number of views for a book.
-- **Get Popular Books**: Retrieving a list of popular books based on views.
-- **Get Recently Viewed Books**: Retrieving a list of books recently viewed by the user.
-- **Get Most Viewed Books**: Retrieving a list of the most viewed books.
-
-**Features List**:
-
-1. **Track Book View**:
-
-   - Endpoint: `POST /books/views/:bookId`
-   - Description: Tracks a view for a specific book.
-
-2. **Get Book Views**:
-
-   - Endpoint: `GET /books/views/:bookId`
-   - Description: Retrieves the number of views for a book.
-
-3. **Get Popular Books**:
-
-   - Endpoint: `GET /books/views/popular`
-   - Description: Retrieves a list of popular books based on views.
-
-4. **Get Recently Viewed Books**:
-
-   - Endpoint: `GET /books/views/recently-viewed`
-   - Description: Retrieves a list of books recently viewed by the user.
-
-5. **Get Most Viewed Books**:
-   - Endpoint: `GET /books/views/most-viewed`
-   - Description: Retrieves a list of the most viewed books.
-
-### Recommendations
-
-**Recommendations** encompasses functionalities related to providing personalized book recommendations to users within the application.
-
-**Common Elements**:
-
-- **Personalized Recommendations**: Generating book suggestions tailored to individual user preferences.
-- **User Behavior Analysis**: Analyzing user interactions to inform recommendations.
-
-**Usage**:
-
-- Suggesting books based on user preferences, history, and behavior.
-- Enhancing user engagement by offering relevant book recommendations.
-
-**Example Use Case**:
-
-- **Get Recommended Books**: Providing a list of books tailored to a user's preferences.
-- **Analyze User Behavior**: Using past interactions to inform future recommendations.
-
-**Features List**:
-
-1. **Get Recommended Books**:
-
-   - Endpoint: `GET /books/recommendations`
-   - Description: Provides a list of books tailored to a user's preferences.
-   - Query Parameters:
-     - `userId`: The ID of the user to get recommendations for.
-     - `limit`: Number of recommendations to retrieve.
-
-2. **Analyze User Behavior**:
-   - Description: Analyzes user interactions with the platform to generate personalized recommendations.
-   - Internal process, not exposed as an endpoint.
-
-**Section Ideas to Build Recommendations**:
-
-1. **User Profile Building**:
-
-   - Collect data on user preferences, history, and behavior.
-   - Create a profile for each user that includes preferred genres, authors, and interaction history.
-
-2. **Similarity Calculation**:
-
-   - Use collaborative filtering to identify users with similar preferences and behaviors.
-   - Calculate similarity scores between users based on shared book interactions.
-
-3. **Content-Based Filtering**:
-
-   - Analyze the content of books the user has interacted with (e.g., genre, author, keywords).
-   - Find books with similar attributes to those the user has shown interest in.
-
-4. **Hybrid Recommendation Approach**:
-
-   - Combine collaborative filtering and content-based filtering for comprehensive recommendations.
-   - Start with collaborative filtering to identify similar users, then refine with content-based filtering.
-
-5. **Ranking and Personalization**:
-
-   - Rank the recommended books based on relevance scores from both filtering methods.
-   - Apply additional factors such as book popularity, recent activity, and new arrivals for personalization.
-
-6. **Feedback Loop**:
-   - Continuously update the recommendation model based on user feedback and new interaction data.
-   - Use machine learning algorithms to improve recommendation accuracy over time.
+   ```
