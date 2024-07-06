@@ -45,3 +45,24 @@ export const handleSetup = async (
     });
   }
 };
+
+export const handleTablesDetail = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  console.log(req.query);
+  
+  const tableName = String(req.query.tableName);
+  try {
+    const result = await databaseService.getTablesAndDescriptions(
+      prisma,
+      tableName
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error:
+        error instanceof Error ? error.message : "Unexpected error occurred.",
+    });
+  }
+};

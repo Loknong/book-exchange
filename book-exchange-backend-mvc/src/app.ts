@@ -11,6 +11,8 @@ import userPrismaRoute from "./routes/userAction.routes";
 
 // new way
 import userRoutes from "./api/user/user.routes"
+import bookRoutes from "./api/books/book.routes"
+
 const app = express();
 
 app.use(corsMiddleware);
@@ -37,6 +39,7 @@ app.use("/uploads", express.static("uploads")); // Serve static files from 'uplo
 
 //newest
 app.use("/api/users", userRoutes)
+app.use("/api/books", bookRoutes)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

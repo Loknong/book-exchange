@@ -321,6 +321,7 @@ const mockBooks: CreateBookRequest[] = [
     bookImageId: 0,
   },
 ];
+
 export const resetDatabase = async (prisma: PrismaClient) => {
   const resetDatabase = prisma.$transaction(async (transactionPrisma) => {
     await databaseModel.resetDatabase(transactionPrisma);
@@ -466,4 +467,52 @@ export const resetAndMockDatabase = async (prisma: PrismaClient) => {
       bookList,
     };
   });
+};
+
+interface TableDescription {
+  Field: string;
+  Type: string;
+  Null: string;
+  Key: string;
+  Default: string | null;
+  Extra: string;
+}
+
+interface TableInfo {
+  tableName: string;
+  description: TableDescription[];
+}
+
+export const getTablesAndDescriptions = async (
+  prisma: PrismaClient,
+  tableName: string | undefined
+): Promise<TableInfo[]> => {
+  // Get all table names
+  const tables: { Tables_in_book_exchange_prisma: string }[] =
+    await prisma.$queryRaw`SHOW TABLES`;
+
+  console.log("Show Tables", tables);
+  const tempTable = tableName
+    ? tables.filter(
+        (table) => table.Tables_in_book_exchange_prisma === tableName
+      )
+    : tables;
+  console.log("tempTable", tempTable);
+
+  // Iterate through each table and get its description
+  const tableDescriptions: TableInfo[] = await Promise.all(
+    tempTable.map(async (table) => {
+      const tableName = table.Tables_in_book_exchange_prisma;
+      const description: TableDescription[] = await prisma.$queryRawUnsafe(
+        `DESCRIBE ${tableName}`
+      );
+
+      return {
+        tableName,
+        description,
+      };
+    })
+  );
+  // console.log("tableDescriptions", tableDescriptions);
+  return tableDescriptions;
 };
