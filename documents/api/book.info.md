@@ -20,13 +20,15 @@
      - `view`: Filter by views (e.g., most viewed, recently viewed).
      - Table: Books, Genres
      - When to Use: When users want to explore the collection of books available in the application.
+     - Pagination: Supports pagination through page and limit query parameters.
 
    **Response**
 
    ```
    {
    "message": "Books retrieved successfully",
-   "data": [
+   "data": {
+      "books": [
          {
             "id": 1,
             "title": "Book Title",
@@ -52,8 +54,15 @@
             "updatedAt": "2023-01-01T00:00:00.000Z"
          },
          ...
-      ]
-   }
+      ],
+         "pagination": {
+            "totalItems": 100,
+            "totalPages": 10,
+            "currentPage": 1,
+            "itemsPerPage": 10
+         }
+         }
+      }
 
    ```
 

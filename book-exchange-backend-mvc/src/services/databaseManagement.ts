@@ -17,6 +17,7 @@ import {
   UpdateBookRequest,
   UserResponse,
 } from "@src/types";
+import { CreateAddressRequest } from "@src/api/user/addresses/address.types";
 const mockUsers: CreateUserRequest[] = [
   {
     firstName: "John",
@@ -97,6 +98,129 @@ const mockGenres: CreateGenreRequest[] = [
   { name: "Mystery" },
   { name: "Biography" },
 ];
+const mockAddresses = [
+  {
+    userId: 1,
+    houseNumber: "123/45",
+    village: "Moo 5",
+    street: "Sukhumvit Road",
+    subdistrict: "Bang Na",
+    district: "Bang Na",
+    province: "Bangkok",
+    postalCode: "10260",
+    country: "Thailand",
+    phoneNumber: "0812345678",
+  },
+  {
+    userId: 2,
+    houseNumber: "789/12",
+    village: "Moo 2",
+    street: "Rama IV Road",
+    subdistrict: "Khlong Toei",
+    district: "Khlong Toei",
+    province: "Bangkok",
+    postalCode: "10110",
+    country: "Thailand",
+    phoneNumber: "0823456789",
+  },
+  {
+    userId: 3,
+    houseNumber: "456/78",
+    village: "Moo 4",
+    street: "Ratchadaphisek Road",
+    subdistrict: "Din Daeng",
+    district: "Din Daeng",
+    province: "Bangkok",
+    postalCode: "10400",
+    country: "Thailand",
+    phoneNumber: "0834567890",
+  },
+  {
+    userId: 4,
+    houseNumber: "321/65",
+    village: "Moo 6",
+    street: "Phahon Yothin Road",
+    subdistrict: "Chatuchak",
+    district: "Chatuchak",
+    province: "Bangkok",
+    postalCode: "10900",
+    country: "Thailand",
+    phoneNumber: "0845678901",
+  },
+  {
+    userId: 5,
+    houseNumber: "654/98",
+    village: "Moo 3",
+    street: "Sathorn Road",
+    subdistrict: "Yannawa",
+    district: "Sathorn",
+    province: "Bangkok",
+    postalCode: "10120",
+    country: "Thailand",
+    phoneNumber: "0856789012",
+  },
+  {
+    userId: 6,
+    houseNumber: "987/21",
+    village: "Moo 1",
+    street: "Silom Road",
+    subdistrict: "Silom",
+    district: "Bang Rak",
+    province: "Bangkok",
+    postalCode: "10500",
+    country: "Thailand",
+    phoneNumber: "0867890123",
+  },
+  {
+    userId: 7,
+    houseNumber: "741/52",
+    village: "Moo 8",
+    street: "Charoen Krung Road",
+    subdistrict: "Samphanthawong",
+    district: "Samphanthawong",
+    province: "Bangkok",
+    postalCode: "10100",
+    country: "Thailand",
+    phoneNumber: "0878901234",
+  },
+  {
+    userId: 8,
+    houseNumber: "852/36",
+    village: "Moo 9",
+    street: "Ladprao Road",
+    subdistrict: "Wang Thonglang",
+    district: "Wang Thonglang",
+    province: "Bangkok",
+    postalCode: "10310",
+    country: "Thailand",
+    phoneNumber: "0889012345",
+  },
+  {
+    userId: 9,
+    houseNumber: "963/74",
+    village: "Moo 7",
+    street: "Vibhavadi Rangsit Road",
+    subdistrict: "Don Mueang",
+    district: "Don Mueang",
+    province: "Bangkok",
+    postalCode: "10210",
+    country: "Thailand",
+    phoneNumber: "0890123456",
+  },
+  {
+    userId: 10,
+    houseNumber: "159/33",
+    village: "Moo 10",
+    street: "Ngamwongwan Road",
+    subdistrict: "Bang Khen",
+    district: "Bang Khen",
+    province: "Bangkok",
+    postalCode: "10220",
+    country: "Thailand",
+    phoneNumber: "0901234567",
+  },
+];
+
 const mockBooks: CreateBookRequest[] = [
   {
     title: "To Kill a Mockingbird",
@@ -426,6 +550,17 @@ export const resetAndMockDatabase = async (prisma: PrismaClient) => {
       });
     }
 
+    // Mock User Address
+    for (let index = 0; index < mockAddresses.length; index++) {
+      const address = await transactionPrisma.userAddress.create({
+        data: mockAddresses[index],
+      });
+      await transactionPrisma.users.update({
+        where: { id: mockAddresses[index].userId },
+        data: { addressId: address.id },
+      });
+    }
+
     // Mock Genres
     await genreModel.createGenreMany(transactionPrisma, mockGenres);
 
@@ -454,6 +589,7 @@ export const resetAndMockDatabase = async (prisma: PrismaClient) => {
     const newUser = tempUserList.map((user) => {
       const profilePictures =
         user.profilePictures.length > 0 ? user.profilePictures[0].name : null;
+
       return {
         ...user,
         profilePictures,

@@ -27,6 +27,7 @@ export const getUsers = async (prisma: PrismaTransactionClient) => {
       lastName: true,
       email: true,
       credit: true,
+      addresses: true,
       profilePictures: {
         where: {
           isActive: true,
