@@ -24,6 +24,7 @@ export interface CreateBookRequest {
   ownerId: number;
   status: BookStatus;
   bookImageId: number;
+  views?:number;
 }
 
 export interface UpdateBookRequest {

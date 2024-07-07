@@ -45,6 +45,7 @@ model Users {
   transactionStatus UserTransactionStatus[]
   addresses         UserAddress[]
   profilePictures   UserProfilePictures[]
+  logs              Logs[]
 }
 
 model Books {
@@ -202,6 +203,8 @@ model Logs {
   level     String
   message   String
   createdAt DateTime @default(now())
+  userId    Int?
+  user      Users?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model LogSettings {

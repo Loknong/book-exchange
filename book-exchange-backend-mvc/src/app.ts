@@ -8,12 +8,17 @@ import { testFind, testPrismaConnection } from "./services/prismaService";
 import databaseRoute from "./routes/databaseManagement.routes";
 import userPrismaRoute from "./routes/userAction.routes";
 
+// playground
+import {isValidState} from "./utils/testScript"
 
 // new way
 import userRoutes from "./api/user/user.routes"
 import bookRoutes from "./api/books/book.routes"
 
 const app = express();
+
+console.log("Is Valid State:", isValidState);
+
 
 app.use(corsMiddleware);
 app.use(express.json());

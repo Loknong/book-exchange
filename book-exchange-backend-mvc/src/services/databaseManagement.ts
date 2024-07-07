@@ -232,6 +232,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "1984",
@@ -243,6 +244,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "The Great Gatsby",
@@ -253,6 +255,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "Harry Potter and the Philosopher's Stone",
@@ -263,6 +266,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "The Hobbit",
@@ -274,6 +278,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "Pride and Prejudice",
@@ -285,6 +290,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "The Catcher in the Rye",
@@ -295,6 +301,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "The Diary of a Young Girl",
@@ -306,6 +313,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "Animal Farm",
@@ -317,6 +325,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "The Book Thief",
@@ -328,6 +337,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "The Lord of the Rings",
@@ -338,6 +348,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "Gone with the Wind",
@@ -348,6 +359,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "The Adventures of Sherlock Holmes",
@@ -359,6 +371,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "Brave New World",
@@ -369,6 +382,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "Wuthering Heights",
@@ -380,6 +394,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "The Chronicles of Narnia",
@@ -391,6 +406,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "Jane Eyre",
@@ -401,6 +417,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "The Kite Runner",
@@ -412,6 +429,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "Moby-Dick",
@@ -422,6 +440,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "War and Peace",
@@ -432,6 +451,7 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
   {
     title: "Hamlet",
@@ -443,8 +463,10 @@ const mockBooks: CreateBookRequest[] = [
     ownerId: Math.floor(Math.random() * 10) + 1,
     status: BookStatus.PUBLIC,
     bookImageId: 0,
+    views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
 ];
+
 
 export const resetDatabase = async (prisma: PrismaClient) => {
   const resetDatabase = prisma.$transaction(async (transactionPrisma) => {

@@ -22,6 +22,22 @@ interface Noti {
   createdAt: string;
 }
 
+type Address = {
+  id: number;
+  userId: number | null; // Allow null here
+  houseNumber: string;
+  village: string | null;
+  street: string | null;
+  subdistrict: string;
+  district: string;
+  province: string;
+  postalCode: string;
+  country: string;
+  phoneNumber: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 interface UserProfileResponse {
   id: number;
   firstName: string;
@@ -32,7 +48,7 @@ interface UserProfileResponse {
   createdAt: Date;
   updatedAt: Date;
   profilePictures?: string;
-  addresses?: Partial<UserAddress>[];
+  addresses?: Partial<Address>[];
   notification?: Noti[] | null;
 }
 
