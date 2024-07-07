@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `Logs` ADD COLUMN `userId` INTEGER NULL;
+
+-- AddForeignKey
+ALTER TABLE `Logs` ADD CONSTRAINT `Logs_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `Users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
