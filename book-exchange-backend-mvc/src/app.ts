@@ -14,6 +14,7 @@ import {isValidState} from "./utils/testScript"
 // new way
 import userRoutes from "./api/user/user.routes"
 import bookRoutes from "./api/books/book.routes"
+import exchangeRoutes from "./api/exchange/exchange.routes"
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use("/uploads", express.static("uploads")); // Serve static files from 'uplo
 //newest
 app.use("/api/users", userRoutes)
 app.use("/api/books", bookRoutes)
+app.use("/api/exchange", exchangeRoutes)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
