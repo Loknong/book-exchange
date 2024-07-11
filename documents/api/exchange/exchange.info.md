@@ -681,7 +681,7 @@ Exchange encompasses functionalities related to managing the book exchange proce
 
 2. **Update User Transaction Status**:
 
-   - Endpoint: `PUT /exchange/user-transaction-status/:userId`
+   - Endpoint: `PUT /exchange/user-transaction-status/:userId/:transactionId`
    - Description: Updates the user transaction status.
    - **Allowed Update Status**
      - PENDING: ["CONFIRMED", "CANCELED"]
@@ -706,11 +706,11 @@ Exchange encompasses functionalities related to managing the book exchange proce
 
      ```
       {
-         "message": "Transaction status retrieved successfully",
+         "message": "User transaction status retrieved successfully",
          "data": {
             "transactionId": 789,
             "offerId": 1,
-            "status": "PENDING",
+            "status": "COMFIRMED",
             "createdAt": "2023-01-01T00:00:00.000Z"
          }
       }

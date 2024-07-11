@@ -1,17 +1,19 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma, TransactionStatus } from "@prisma/client";
+import {
+  validateStateError,
+  validateStateTransition,
+} from "../utils/validateStateChange";
 
 // Create Transactions
 export const createTransaction = async (
-  prisma: PrismaClient,
+  prisma: Prisma.TransactionClient,
   offerId: number
 ) => {
-  const transacion = await prisma.transactions.create({
+  return await prisma.transactions.create({
     data: {
       offerId,
     },
   });
-
-  return transacion;
 };
 
 // Get Transactions
@@ -66,6 +68,30 @@ export const getTransacitonById = async (
 };
 
 // Update Transaction
-export const updateTransaction = async (prisma:PrismaClient, ) => {
+export const updateTransaction = async (
+  prisma: Prisma.TransactionClient,
+  transacionId: number,
+  status: TransactionStatus
+) => {
+  const transacion = await prisma.transactions.findUnique({
+    where: { id: transacionId },
+  });
 
+  if (!transacion) throw new Error("Transaction does not exist");
+
+  // Status is same way
+  const isAllowed = validateStateTransition(
+    "TransactionStatus",
+    transacion.status,
+    transacion.status
+  );
+  if (!isAllowed)
+    throw new Error(
+      validateStateError("Offers", "OfferStatus", transacion.status)
+    );
+
+  return prisma.transactions.update({
+    where: { id: transacionId },
+    data: { status },
+  });
 };

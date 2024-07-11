@@ -48,3 +48,11 @@ export const validateStateTransition = (
 export const validateStateError = (table: string, entity: string, currentState:string) => {
   return `${table} update state error, state must exist in ${allowedTransitions[entity][currentState]}`;
 };
+
+export const validateState = (entity: string, currentState: string, newState: string) => {
+  const isAllowed = validateStateTransition(entity, currentState, newState);
+  if (!isAllowed) {
+    throw new Error(validateStateError(entity, `${entity}Status`, currentState));
+  }
+};
+

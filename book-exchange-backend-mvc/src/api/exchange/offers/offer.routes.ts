@@ -6,7 +6,7 @@ const router = Router();
 // Create Offer
 router.post("/", controller.handleCreateOffer)
 // Update Offer
-router.put("/:offerId", controller.handleUpdateOffer)
+// router.put("/:offerId", controller.handleUpdateOffer)
 
 // Get Offers
 router.get("/:userId", controller.handleGetOffers)
