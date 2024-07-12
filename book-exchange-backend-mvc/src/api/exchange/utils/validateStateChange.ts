@@ -31,6 +31,9 @@ const allowedTransitions = {
   OfferStatus: {
     PENDING: ["ACCEPTED", "REJECTED"],
   },
+  Payment: {
+    PENDING: ["COMPLETED", "FAILED"],
+  },
 } as any;
 
 export const validateStateTransition = (
@@ -45,14 +48,23 @@ export const validateStateTransition = (
   return allowedTransitions[entity]?.[currentState]?.includes(newState);
 };
 
-export const validateStateError = (table: string, entity: string, currentState:string) => {
+export const validateStateError = (
+  table: string,
+  entity: string,
+  currentState: string
+) => {
   return `${table} update state error, state must exist in ${allowedTransitions[entity][currentState]}`;
 };
 
-export const validateState = (entity: string, currentState: string, newState: string) => {
+export const validateState = (
+  entity: string,
+  currentState: string,
+  newState: string
+) => {
   const isAllowed = validateStateTransition(entity, currentState, newState);
   if (!isAllowed) {
-    throw new Error(validateStateError(entity, `${entity}Status`, currentState));
+    throw new Error(
+      validateStateError(entity, `${entity}Status`, currentState)
+    );
   }
 };
-

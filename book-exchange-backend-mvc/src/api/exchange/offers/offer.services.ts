@@ -113,7 +113,6 @@ export const updateOffer = async (
   });
 
   if (!offer) throw new Error("Offer does not exist");
-
   // Status is same way
   const isAllowed = validateStateTransition(
     "OfferStatus",

@@ -4,63 +4,47 @@ import { logAction } from "@src/api/log/log.services";
 import { createTransaction } from "../../transactions/transaction.services";
 import * as UserStatus from "../../user-status/userTransactionStatus.services";
 
-interface createTransaction {
-  offerId: number;
-}
-interface userId {
-  offeredById: number;
-  offeredToId: number;
-}
-interface createUserTransaction {
-  userId: userId;
-  transactionId: number;
-}
-
 export const handleOfferAccepted = async (
   prismaTransaction: Prisma.TransactionClient,
-  createTransactionData: createTransaction,
-  createUserTransactionData: createUserTransaction
+  offerId: number,
+  offeredById: number,
+  offeredToId: number
 ) => {
-  const transaction = await createTransaction(
-    prismaTransaction,
-    createTransactionData.offerId
-  );
+  const transaction = await createTransaction(prismaTransaction, offerId);
+
+  if (!transaction) throw new Error("Create transacion not success.");
 
   const userTransaction = await UserStatus.createUserTransaction(
     prismaTransaction,
     [
       {
-        userId: createUserTransactionData.userId.offeredById,
-        transactionId: createUserTransactionData.transactionId,
+        userId: offeredById,
+        transactionId: transaction.id,
       },
       {
-        userId: createUserTransactionData.userId.offeredToId,
-        transactionId: createUserTransactionData.transactionId,
+        userId: offeredToId,
+        transactionId: transaction.id,
       },
     ]
   );
 
+  if (userTransaction.count === 0)
+    throw new Error("Update user transaction status not success");
+
   await sendNotification(
-    createUserTransactionData.userId.offeredById,
+    offeredById,
     "Transaction created, awaiting confirmation"
   );
   await sendNotification(
-    createUserTransactionData.userId.offeredToId,
+    offeredToId,
     "Transaction created, awaiting confirmation"
   );
   await logAction("Transaction Created", transaction.id);
+
   return { transactionCreate: transaction, userTransaction };
 };
 
-export const handleOfferRejected = async (
-  createUserTransactionData: createUserTransaction
-) => {
-  await sendNotification(
-    createUserTransactionData.userId.offeredById,
-    "Your offer was rejected"
-  );
-  await logAction(
-    "Offer Rejected",
-    createUserTransactionData.userId.offeredById
-  );
+export const handleOfferRejected = async (offeredById: number) => {
+  await sendNotification(offeredById, "Your offer was rejected");
+  await logAction("Offer Rejected", offeredById);
 };

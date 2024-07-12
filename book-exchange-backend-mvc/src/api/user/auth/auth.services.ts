@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { CreateUserRequest, UserLoginRequest } from "./auth.types";
+import bcrypt from "bcryptjs";
 
 // registerUser
 export const registerUser = async (
@@ -7,7 +8,10 @@ export const registerUser = async (
   data: CreateUserRequest
 ) => {
   try {
-    const user = await prisma.users.create({ data });
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const user = await prisma.users.create({
+      data: { ...data, password: hashedPassword },
+    });
     // console.log("User", user);
 
     return {
@@ -32,10 +36,13 @@ export const registerUserWithProfile = async (
   profileData: string
 ) => {
   try {
-    console.log("Enter");
+    console.log("Gamu");
+    const hashedPassword = await bcrypt.hash(data.password, 10);
 
     return prisma.$transaction(async (transactionPrisma) => {
-      const tempUser = await transactionPrisma.users.create({ data: data });
+      const tempUser = await transactionPrisma.users.create({
+        data: { ...data, password: hashedPassword },
+      });
       const profile = await transactionPrisma.userProfilePictures.create({
         data: {
           userId: tempUser.id,
@@ -43,7 +50,7 @@ export const registerUserWithProfile = async (
           isActive: true,
         },
       });
-      
+
       const user = await transactionPrisma.users.update({
         where: { id: tempUser.id },
         data: { pictureId: profile.id },
@@ -56,6 +63,7 @@ export const registerUserWithProfile = async (
         email: user.email,
         username: user.username,
         imageUrl: profile.name,
+        password: user.password,
       };
     });
   } catch (error) {
@@ -71,24 +79,41 @@ export const loginUser = async (
   prisma: PrismaClient,
   data: UserLoginRequest
 ) => {
-  const result = await prisma.users.update({
-    where: { username: data.username, password: data.password },
-    data: {
-      isLoggedIn: true,
-    },
-  });
+  try {
+    const user = await prisma.users.findUnique({
+      where: { username: data.username },
+    });
 
-  console.log("Result", result);
+    if (!user) {
+      throw new Error("Invalid username or password.");
+    }
 
-  return {
-    id: result.id,
-    firstName: result.firstName,
-    lastName: result.lastName,
-    email: result.email,
-    username: result.username,
-    credit: result.credit,
-    isLoggedIn: result.isLoggedIn,
-  };
+    const isPasswordValid = await bcrypt.compare(data.password, user.password);
+
+    if (!isPasswordValid) {
+      throw new Error("Invalid username or password.");
+    }
+
+    const result = await prisma.users.update({
+      where: { id: user.id },
+      data: { isLoggedIn: true },
+    });
+
+    return {
+      id: result.id,
+      firstName: result.firstName,
+      lastName: result.lastName,
+      email: result.email,
+      username: result.username,
+      credit: result.credit,
+      isLoggedIn: result.isLoggedIn,
+    };
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    throw new Error(
+      "Failed to login. Please check your username and password."
+    );
+  }
 };
 
 // logoutUser

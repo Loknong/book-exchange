@@ -9,6 +9,12 @@ interface CreateUserTransaction {
   transactionId: number;
 }
 
+interface GetUserTransactionWhere {
+  userId?: number;
+  userTransactionId?: number;
+  transactionId?: number;
+}
+
 // Create User Transaciton Status
 export const createUserTransaction = async (
   prisma: Prisma.TransactionClient,
@@ -19,55 +25,43 @@ export const createUserTransaction = async (
   });
 };
 
-// Get Transactions
-export const getTransacitonById = async (
+// Get User Transactions
+export const getUserTransaction = async (
   prisma: PrismaClient,
-  transactionId: number
+  where: GetUserTransactionWhere
 ) => {
-  const transaction = await prisma.transactions.findUnique({
-    where: { id: transactionId },
-    select: {
-      id: true,
-      offerId: true,
-      offer: {
-        select: {
-          status: true,
-          offeredById: true,
-          offeredBy: {
-            select: {
-              firstName: true,
-              lastName: true,
-              email: true,
-              username: true,
-            },
-          },
-          offeredToId: true,
-          offeredTo: {
-            select: {
-              firstName: true,
-              lastName: true,
-              email: true,
-              username: true,
-            },
-          },
+  const transaction = await prisma.userTransactionStatus.findMany({
+    where: {
+      id: where.userTransactionId ? where.userTransactionId : undefined,
+      userId: where.userId ? where.userId : undefined,
+      transactionId: where.transactionId ? where.transactionId : undefined,
+    },
+    include: {
+      user: {
+        include: {
+          payments: true,
         },
       },
-      status: true,
-      payments: true,
-      userTransactionStatus: true,
-      adminManagement: true,
-      updatedAt: true,
-      createdAt: true,
     },
-    // include: {
-    //   offer: true,
-    //   adminManagement: true,
-    //   payments: true,
-    //   userTransactionStatus: true,
-    // },
   });
+  const modifiedTransactions = transaction.map((transaction) => {
+    const payment = transaction.user.payments[0];
+    const user = {
+      firstName: transaction.user.firstName,
+      lastName: transaction.user.lastName,
+      username: transaction.user.username,
+      email: transaction.user.email,
+      //   payment: payment
+    };
+    return {
+      ...transaction,
+      user,
+      payment,
+    };
+  });
+  console.log("UserTransactionStatus", modifiedTransactions);
 
-  return transaction;
+  return modifiedTransactions;
 };
 
 // Update User Transaction Status
@@ -77,13 +71,24 @@ export const updateUserTransaction = async (
   userId: number,
   status: UserTranStatus
 ) => {
+  // Check transaction is not canceld or completed
+  const transaction = await prisma.transactions.findFirst({
+    where: { id: transactionId },
+  });
+  console.log("aaaa", transaction);
+
+  if (transaction?.status === "CANCELED")
+    throw new Error(
+      `Transaction is already ${transaction?.status} by someone, Cant update user status`
+    );
+
   // find user status row isExist
   const isExist = await prisma.userTransactionStatus.findMany({
     where: {
-      transactionId,
-      userId,
+      AND: [{ transactionId }, { userId }],
     },
   });
+  console.log("isExist", isExist);
 
   if (!isExist) throw new Error("User Status row does not exist!!");
 
@@ -93,6 +98,8 @@ export const updateUserTransaction = async (
     isExist[0].status,
     status
   );
+
+  console.log("isAllowed", isAllowed);
 
   if (!isAllowed)
     throw new Error(

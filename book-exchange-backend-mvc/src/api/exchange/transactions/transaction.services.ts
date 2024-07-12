@@ -83,7 +83,7 @@ export const updateTransaction = async (
   const isAllowed = validateStateTransition(
     "TransactionStatus",
     transacion.status,
-    transacion.status
+    status
   );
   if (!isAllowed)
     throw new Error(
