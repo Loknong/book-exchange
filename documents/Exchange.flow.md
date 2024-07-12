@@ -103,243 +103,226 @@ sequenceDiagram
 
 ```
 
-Got it! I'll focus on separating the user actions and automatic transitions in the entire process. Here's the detailed sequence of each part of the process, clearly indicating user actions and automatic transitions:
+Understood. We'll combine the user actions with the automatic transitions into a single flow. Each diagram will reflect both the user-triggered actions and the subsequent automatic transitions that occur as a result. This will show the full lifecycle of each status update, including both manual and automatic parts.
 
-### Offer Creation Process
+### 1. handleCanceledCase
 
-#### User Action: Creating an Offer
+#### When User Cancels
 
 ```mermaid
 sequenceDiagram
     participant User
-    participant OffersTable as Offers Table
+    participant HandleUserTransaction as Handle User Transaction
+    participant TransactionsTable as Transactions Table
     participant NotificationSystem as Notification System
     participant LoggingSystem as Logging System
 
-    User->>OffersTable: Insert into offers (status: PENDING)
-    OffersTable->>NotificationSystem: Notify book owner
-    OffersTable->>LoggingSystem: Log offer creation
+    User->>HandleUserTransaction: Initiate handleCanceledCase
+    HandleUserTransaction->>TransactionsTable: Update transaction status to CANCELED
+    HandleUserTransaction->>NotificationSystem: Notify both users
+    HandleUserTransaction->>LoggingSystem: Log transaction cancellation
 ```
 
-### Offer Response Process
+### 2. handleConfirmedCase
 
-#### User Action: Responding to an Offer
+#### When User Confirms
 
 ```mermaid
 sequenceDiagram
-    participant Owner
-    participant OffersTable as Offers Table
+    participant User
+    participant HandleUserTransaction as Handle User Transaction
+    participant UserTransactionStatusTable as User Transaction Status Table
+    participant TransactionsTable as Transactions Table
+    participant PaymentsTable as Payments Table
     participant NotificationSystem as Notification System
     participant LoggingSystem as Logging System
-    participant TransactionsTable as Transactions Table
 
-    alt Owner Rejects
-        Owner->>OffersTable: Update offers (status: REJECTED)
-        OffersTable->>NotificationSystem: Notify interested user
-        OffersTable->>LoggingSystem: Log rejection
-    else Owner Accepts
-        Owner->>OffersTable: Update offers (status: ACCEPTED)
-        OffersTable->>LoggingSystem: Log acceptance
+    User->>HandleUserTransaction: Initiate handleConfirmedCase
+    HandleUserTransaction->>UserTransactionStatusTable: Check confirmation status for both users
+    alt Both users confirmed
+        HandleUserTransaction->>TransactionsTable: Update transaction status to CONFIRMED
+        HandleUserTransaction->>PaymentsTable: Create payment details (status: PENDING)
+        HandleUserTransaction->>UserTransactionStatusTable: Update status to USER_PAYMENT_PENDING
+        HandleUserTransaction->>NotificationSystem: Notify both users about payment details
+        HandleUserTransaction->>LoggingSystem: Log confirmation and payment creation
 
-        note over OffersTable: Automatic transition
-        OffersTable->>TransactionsTable: Insert into transactions (status: PENDING)
-        TransactionsTable->>NotificationSystem: Notify both users about transaction creation
-        TransactionsTable->>LoggingSystem: Log transaction creation
-
-        note over TransactionsTable: Automatic transition
-        TransactionsTable->>UserTransactionStatusTable: Insert into UTT (status: PENDING) for both users
+        note over HandleUserTransaction, PaymentsTable: Automatic transition
+        PaymentsTable->>TransactionsTable: Update status to PAYMENT_IN_PROGRESS
+    else One user confirmed
+        HandleUserTransaction->>NotificationSystem: Notify user to wait for other user's confirmation
+        HandleUserTransaction->>LoggingSystem: Log single user confirmation
     end
 ```
 
-### User Transaction Status Creation Process
+### 3. handleWaitingCheckEvidenceCase
 
-#### Automatic Transition: Creating User Transaction Status
-
-```mermaid
-sequenceDiagram
-    participant TransactionsTable as Transactions Table
-    participant UserTransactionStatusTable as User Transaction Status Table
-
-    TransactionsTable->>UserTransactionStatusTable: Insert into UTT (status: PENDING) for both users
-```
-
-### User Cancellation Process
-
-#### User Action: Canceling a Transaction
+#### When User Submits Payment Evidence
 
 ```mermaid
 sequenceDiagram
     participant User
-    participant UserTransactionStatusTable as User Transaction Status Table
-    participant TransactionsTable as Transactions Table
-    participant NotificationSystem as Notification System
-    participant LoggingSystem as Logging System
-
-    User->>UserTransactionStatusTable: Update UTT (status: CANCELED)
-    UserTransactionStatusTable->>TransactionsTable: Update transactions (status: CANCELED)
-    TransactionsTable->>NotificationSystem: Notify both users
-    TransactionsTable->>LoggingSystem: Log cancellation
-```
-
-### User Confirmation Process
-
-#### User Action: Confirming a Transaction
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant UserTransactionStatusTable as User Transaction Status Table
-    participant TransactionsTable as Transactions Table
-    participant NotificationSystem as Notification System
-    participant LoggingSystem as Logging System
-
-    User->>UserTransactionStatusTable: Update UTT (status: CONFIRMED) for both users
-    UserTransactionStatusTable->>TransactionsTable: Update transactions (status: CONFIRMED)
-    TransactionsTable->>NotificationSystem: Notify both users
-    TransactionsTable->>LoggingSystem: Log confirmation
-```
-
-### Payment Initiation Process
-
-#### User Action: Submitting Payment Evidence
-
-```mermaid
-sequenceDiagram
-    participant User
+    participant HandleUserTransaction as Handle User Transaction
     participant PaymentsTable as Payments Table
-    participant TransactionsTable as Transactions Table
+    participant AdminManagementTable as Admin Management Table
     participant NotificationSystem as Notification System
     participant LoggingSystem as Logging System
-    participant UserTransactionStatusTable as User Transaction Status Table
-    participant AdminManagementTable as Admin Management Table
 
-    note over TransactionsTable: Automatic transition
-    TransactionsTable->>PaymentsTable: Insert into payments (status: PAYMENT_PENDING)
-    PaymentsTable->>TransactionsTable: Update transactions (status: PAYMENT_PENDING)
-    PaymentsTable->>NotificationSystem: Notify both users with payment details
-    PaymentsTable->>LoggingSystem: Log payment creation
-
-    User->>PaymentsTable: Update payments (status: PENDING, evidence: submitted)
-    PaymentsTable->>AdminManagementTable: Insert into admin management (status: CHECKING_PAYMENT_EVIDENCE)
-    PaymentsTable->>UserTransactionStatusTable: Update UTT (status: WAITING_CHECK_EVIDENCE)
-    PaymentsTable->>TransactionsTable: Update transactions (status: PAYMENT_IN_PROGRESS)
-    PaymentsTable->>NotificationSystem: Notify admin
-    PaymentsTable->>LoggingSystem: Log payment submission
+    User->>HandleUserTransaction: Submit payment evidence
+    HandleUserTransaction->>PaymentsTable: Update payment status to WAITING_CHECK_EVIDENCE
+    HandleUserTransaction->>AdminManagementTable: Notify admin to check payment evidence
+    HandleUserTransaction->>NotificationSystem: Notify admin and user
+    HandleUserTransaction->>LoggingSystem: Log payment evidence submission
 ```
 
-### Admin Payment Verification Process
+### 4. handlePaymentSuccessCase
 
-#### Automatic Transition: Admin Verification of Payment
+#### When Payment is Successful
 
 ```mermaid
 sequenceDiagram
     participant Admin
-    participant AdminManagementTable as Admin Management Table
+    participant HandleUserTransaction as Handle User Transaction
     participant PaymentsTable as Payments Table
     participant TransactionsTable as Transactions Table
     participant UserTransactionStatusTable as User Transaction Status Table
     participant NotificationSystem as Notification System
     participant LoggingSystem as Logging System
 
-    Admin->>AdminManagementTable: Update admin management (status: CHECKED_PAYMENT_COMPLETED)
+    Admin->>HandleUserTransaction: Verify payment success
+    HandleUserTransaction->>PaymentsTable: Update payment status to PAYMENT_SUCCESS
+    HandleUserTransaction->>TransactionsTable: Update transaction status to PAYMENT_COMPLETED
+    HandleUserTransaction->>UserTransactionStatusTable: Update user transaction status to PAYMENT_SUCCESS
+    HandleUserTransaction->>NotificationSystem: Notify both users of payment success
+    HandleUserTransaction->>LoggingSystem: Log payment success
 
-    alt Payment Fails
-        Admin->>PaymentsTable: Update payments (status: FAILED)
-        PaymentsTable->>TransactionsTable: Update transactions (status: PAYMENT_FAILED)
-        PaymentsTable->>UserTransactionStatusTable: Update UTT (status: PAYMENT_FAILED)
-        PaymentsTable->>NotificationSystem: Notify both users
-        PaymentsTable->>LoggingSystem: Log payment failure
-    else Payment Succeeds
-        Admin->>PaymentsTable: Update payments (status: COMPLETED)
-        PaymentsTable->>TransactionsTable: Update transactions (status: PAYMENT_COMPLETED)
-        PaymentsTable->>UserTransactionStatusTable: Update UTT (status: PAYMENT_SUCCESS)
-        PaymentsTable->>NotificationSystem: Notify both users
-        PaymentsTable->>LoggingSystem: Log payment success
-    end
+    note over HandleUserTransaction, TransactionsTable: Automatic transition
+    TransactionsTable->>UserTransactionStatusTable: Update status to RECEIVED_ADDRESS
+    TransactionsTable->>NotificationSystem: Notify users about address receipt
+    TransactionsTable->>LoggingSystem: Log address receipt
 ```
 
-### Address Exchange Process
+### 5. handlePaymentFailedCase
 
-#### Automatic Transition: Sending Address
+#### When Payment Fails
 
 ```mermaid
 sequenceDiagram
     participant Admin
+    participant HandleUserTransaction as Handle User Transaction
+    participant PaymentsTable as Payments Table
     participant TransactionsTable as Transactions Table
-    participant AdminManagementTable as Admin Management Table
     participant UserTransactionStatusTable as User Transaction Status Table
     participant NotificationSystem as Notification System
     participant LoggingSystem as Logging System
 
-    note over PaymentsTable: Automatic transition
-    PaymentsTable->>TransactionsTable: Update transactions (status: ADDRESS_SENT)
-    TransactionsTable->>AdminManagementTable: Update admin management (status: SENDING_ADDRESS)
-    TransactionsTable->>UserTransactionStatusTable: Update UTT (status: RECEIVED_ADDRESS)
-    TransactionsTable->>NotificationSystem: Notify both users with admin's address
-    TransactionsTable->>LoggingSystem: Log address sent
+    Admin->>HandleUserTransaction: Verify payment failure
+    HandleUserTransaction->>PaymentsTable: Update payment status to PAYMENT_FAILED
+    HandleUserTransaction->>TransactionsTable: Update transaction status to PAYMENT_FAILED
+    HandleUserTransaction->>UserTransactionStatusTable: Update user transaction status to PAYMENT_FAILED
+    HandleUserTransaction->>NotificationSystem: Notify both users of payment failure
+    HandleUserTransaction->>LoggingSystem: Log payment failure
 ```
 
-### Book Shipping Process
+### 6. handleReceivedAddressCase
 
-#### User Action: Sending the Book
+#### When Address is Received
 
 ```mermaid
 sequenceDiagram
     participant User
+    participant HandleUserTransaction as Handle User Transaction
+    participant TransactionsTable as Transactions Table
+    participant UserTransactionStatusTable as User Transaction Status Table
+    participant NotificationSystem as Notification System
+    participant LoggingSystem as Logging System
+
+    User->>HandleUserTransaction: Confirm address receipt
+    HandleUserTransaction->>UserTransactionStatusTable: Update status to RECEIVED_ADDRESS
+    HandleUserTransaction->>TransactionsTable: Update transaction status to ADDRESS_SENT
+    HandleUserTransaction->>NotificationSystem: Notify both users of address receipt
+    HandleUserTransaction->>LoggingSystem: Log address receipt
+
+    note over HandleUserTransaction, UserTransactionStatusTable: Automatic transition
+    UserTransactionStatusTable->>AdminManagementTable: Notify admin to wait for book
+    UserTransactionStatusTable->>LoggingSystem: Log book sending
+```
+
+### 7. handleSendingBookCase
+
+#### When User Sends the Book
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant HandleUserTransaction as Handle User Transaction
+    participant TransactionsTable as Transactions Table
     participant UserTransactionStatusTable as User Transaction Status Table
     participant AdminManagementTable as Admin Management Table
     participant NotificationSystem as Notification System
     participant LoggingSystem as Logging System
-    participant Admin
 
-    User->>UserTransactionStatusTable: Update UTT (status: SENDING_BOOK)
-    User->>AdminManagementTable: Update admin management (status: WAITING_BOOK)
-    User->>NotificationSystem: Notify admin
-    User->>LoggingSystem: Log book shipment
+    User->>HandleUserTransaction: Confirm book sent
+    HandleUserTransaction->>UserTransactionStatusTable: Update status to SENDING_BOOK
+    HandleUserTransaction->>AdminManagementTable: Notify admin to wait for book
+    HandleUserTransaction->>NotificationSystem: Notify admin and user
+    HandleUserTransaction->>LoggingSystem: Log book sent
 
-    note over AdminManagementTable: Automatic transition
-    AdminManagementTable->>Admin: Admin receives book
-    Admin->>AdminManagementTable: Update admin management (status: RECEIVED_BOOK)
-    Admin->>UserTransactionStatusTable: Update UTT (status: SEND_BOOK_COMPLETED)
-    Admin->>NotificationSystem: Notify users about book receipt
-    Admin->>LoggingSystem: Log book receipt
+    note over HandleUserTransaction, AdminManagementTable: Automatic transition
+    AdminManagementTable->>TransactionsTable: Update status to BOOK_RECEIVED
+    AdminManagementTable->>NotificationSystem: Notify users about book receipt
+    AdminManagementTable->>LoggingSystem: Log book receipt
 ```
 
-### Final Book Shipping to Users Process
+### 8. handleBookReceivedByAdminCase
 
-#### Admin Action: Sending the Book to User
+#### When Admin Receives the Book
 
 ```mermaid
 sequenceDiagram
     participant Admin
-    participant AdminManagementTable as Admin Management Table
-    participant UserTransactionStatusTable as User Transaction Status Table
+    participant HandleUserTransaction as Handle User Transaction
     participant TransactionsTable as Transactions Table
+    participant UserTransactionStatusTable as User Transaction Status Table
     participant NotificationSystem as Notification System
     participant LoggingSystem as Logging System
+
+    Admin->>HandleUserTransaction: Confirm book receipt
+    HandleUserTransaction->>UserTransactionStatusTable: Update status to SEND_BOOK_COMPLETED
+    HandleUserTransaction->>TransactionsTable: Update transaction status to BOOK_RECEIVED
+    HandleUserTransaction->>NotificationSystem: Notify both users of book receipt
+    HandleUserTransaction->>LoggingSystem: Log book receipt
+
+    note over HandleUserTransaction, TransactionsTable: Automatic transition
+    TransactionsTable->>AdminManagementTable: Notify admin to send book to user
+    TransactionsTable->>LoggingSystem: Log book sending to user
+```
+
+### 9. handleWaitingReceivedBookCase
+
+#### When Waiting for Book Receipt
+
+```mermaid
+sequenceDiagram
     participant User
+    participant HandleUserTransaction as Handle User Transaction
+    participant TransactionsTable as Transactions Table
+    participant UserTransactionStatusTable as User Transaction Status Table
+    participant NotificationSystem as Notification System
+    participant LoggingSystem as Logging System
 
-    Admin->>AdminManagementTable: Update admin management (status: SENDING_BOOK_TO_USER)
-    Admin->>UserTransactionStatusTable: Update UTT (status: WAITING_RECEIVED_BOOK)
-    Admin->>TransactionsTable: Update transactions (status: SEND_BOOK_TO_USER)
-    Admin->>NotificationSystem: Notify users about book shipment
-    Admin->>LoggingSystem: Log book shipment
+    User->>HandleUserTransaction: Confirm book receipt
+    HandleUserTransaction->>UserTransactionStatusTable: Update status to RECEIVED_BOOK
+    HandleUserTransaction->>TransactionsTable: Update transaction status to COMPLETED
+    HandleUserTransaction->>NotificationSystem: Notify both users of transaction completion
+    HandleUserTransaction->>LoggingSystem: Log transaction completion
 
-    note over UserTransactionStatusTable: Automatic transition
-    UserTransactionStatusTable->>User: User receives book
-    User->>UserTransactionStatusTable: Update UTT (status: RECEIVED_BOOK)
-    User->>AdminManagementTable: Update admin management (status: COMPLETED)
-
-    alt Both Users Confirm Receipt
-        User->>TransactionsTable: Update transactions (status: COMPLETED)
-        TransactionsTable->>NotificationSystem: Notify completion
-        TransactionsTable->>LoggingSystem: Log transaction completion
-    end
+    note over HandleUserTransaction, TransactionsTable: Automatic transition
+    TransactionsTable->>LoggingSystem: Log final completion
 ```
 
 ### Combined State Flowchart
 
-#### Overall Process with User Actions and Automatic Transitions
+#### Full Process Including User Actions and Automatic Transitions
 
 ```mermaid
 graph TD
@@ -348,15 +331,15 @@ graph TD
     User2 -->|Automatic<br>Transaction created| Trans1[PENDING]
     Trans1 -->|User Action<br>Both users confirm| Trans2[CONFIRMED]
     Trans2 -->|Automatic<br>Payment details created| Payment1[PENDING]
-    Payment1 -->|User Action<br>Payment in progress| Payment2[PAYMENT_IN_PROGRESS]
-    Payment2 -->|User Action<br>Payment evidence submitted| Payment3[PAYMENT_COMPLETED]
+    Payment1 -->|User Action<br>Payment evidence submitted| Payment2[PAYMENT_IN_PROGRESS]
+    Payment2 -->|Automatic<br>Payment completed| Payment3[PAYMENT_COMPLETED]
     Payment2 -->|Automatic<br>Payment failed| Payment4[PAYMENT_FAILED]
     Payment3 -->|Automatic<br>Address sent| Trans3[ADDRESS_SENT]
-    Trans3 -->|User Action<br>User received
-
- address| UTT3[RECEIVED_ADDRESS]
+    Trans3 -->|User Action<br>User received address| UTT3[RECEIVED_ADDRESS]
     UTT3 -->|User Action<br>User sends book| UTT4[SENDING_BOOK]
-    UTT4 -->|Automatic<br>Admin waiting for book| Admin1[WAITING_BOOK]
+    UTT4 -->|Automatic<br>Admin waiting for book| Admin1[WAITING_BOOK
+
+]
     Admin1 -->|Admin Action<br>Admin received book| Admin2[RECEIVED_BOOK]
     Admin2 -->|Automatic<br>User transaction completed| UTT5[SEND_BOOK_COMPLETED]
     Admin2 -->|Automatic<br>Transaction completed| Trans4[SEND_BOOK_COMPLETED]
@@ -366,4 +349,4 @@ graph TD
     UTT7 -->|Automatic<br>Transaction completed| Trans5[COMPLETED]
 ```
 
-This detailed sequence breaks down the user actions and automatic transitions, ensuring that you can easily understand which parts are triggered by user actions and which are automatic.
+These combined diagrams reflect the full lifecycle of each status update, including both user actions and the automatic transitions that follow. This ensures that every aspect of the process is covered, showing how each state leads to the next.
