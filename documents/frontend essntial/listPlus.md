@@ -603,8 +603,7 @@ route configurations do not hinder accessibility by providing appropriate ARIA l
     - **Performance**: Optimize route hooks for fast rendering by minimizing re-renders and using memoization.
     - **Accessibility**: Ensure route hooks do not hinder accessibility by providing appropriate ARIA labels and focus states.
 
-100.  **Fallback Routes**
-
+100. **Fallback Routes**
 
     - **Design Techniques**: Implement fallback routes for unknown paths. Ensure fallback routes are clear and user-friendly.
     - **Performance**: Optimize fallback routes for fast rendering by minimizing re-renders and using memoization.
