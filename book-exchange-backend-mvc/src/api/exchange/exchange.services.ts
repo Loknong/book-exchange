@@ -4,15 +4,20 @@ import {
   UserTranStatus,
   OfferStatus,
   TransactionStatus,
+  AdminStatus,
+  PaymentStatus,
 } from "@prisma/client";
 import { updateOffer } from "./offers/offer.services";
 import * as UserStatus from "./user-status/userTransactionStatus.services";
+import * as AdminServices from "./admin/admin.services";
+
 import * as HandleUserTransaction from "./utils/handler/userTransactionHandlers";
 import {
   handleOfferAccepted,
   handleOfferRejected,
 } from "./utils/handler/offerHandlers";
 import { v4 as uuidv4 } from "uuid";
+import { sendAddress } from "./utils/handler/adminManagementHandlers";
 
 interface data {
   status: OfferStatus;
@@ -82,7 +87,8 @@ export const updateUserTransacionChain = async (
   prisma: PrismaClient,
   transactionId: number,
   userId: number,
-  status: UserTranStatus
+  status: UserTranStatus,
+  imageUrl?: string
 ) => {
   return prisma.$transaction(
     async (prismaTransaction: Prisma.TransactionClient) => {
@@ -117,12 +123,48 @@ export const updateUserTransacionChain = async (
           // console.log("result", result);
 
           break;
-        case "USER_PAYMENT_PENDING":
+        // case "USER_PAYMENT_PENDING":
         case "WAITING_CHECK_EVIDENCE":
+          if (imageUrl)
+            result = await HandleUserTransaction.UserUpdatePayment(
+              prismaTransaction,
+              transactionId,
+              userId,
+              imageUrl
+            );
+          break;
+        // for PAYMENT_SUCCESS and PAYMENT_FAILED admin call these function
         case "PAYMENT_SUCCESS":
+          result = await HandleUserTransaction.PaymentSuccessCase(
+            prismaTransaction,
+            transactionId,
+            userId
+            // PaymentStatus.COMPLETED
+          );
+          console.log("Payment Success", transactionId, userId);
+          break;
+
         case "PAYMENT_FAILED":
+          result = await HandleUserTransaction.PaymentFailCase(
+            prismaTransaction,
+            transactionId,
+            userId
+            // PaymentStatus.COMPLETED
+          );
+          console.log("Payment Failed", transactionId, userId);
+          break;
         case "RECEIVED_ADDRESS":
+          result = await HandleUserTransaction.ReceivedAddress(
+            prismaTransaction,
+            transactionId,
+          )
+          break;
         case "SENDING_BOOK":
+          result = await HandleUserTransaction.SendingBook(
+            prismaTransaction,
+            transactionId,
+            userId
+          )
         case "SEND_BOOK_COMPLETED":
         case "WAITING_RECEIVED_BOOK":
         case "RECEIVED_BOOK":
@@ -138,11 +180,32 @@ export const updateUserTransacionChain = async (
   );
 };
 
-export const processUserPayment = async () => {
-  // Check Upload Evidnce is Success
-  // Update UserTransactionStatus to "WAITING_CHECK_EVIDENCE"
-  // Insert AdminManagement status =  CHECKING_PAYMENT_EVIDENCE, also with user, transaciton detail
-  // Noti Admin to check
-  // Logging
-};
+export const adminAction = async (
+  prisma: PrismaClient,
+  transactionId: number,
+  status: AdminStatus
+) => {
+  return prisma.$transaction(
+    async (prismaTransaction: Prisma.TransactionClient) => {
+      let result = null;
 
+      switch (status) {
+        case "SENDING_ADDRESS":
+          result = await sendAddress(prismaTransaction, transactionId);
+          break;
+
+        // Add other cases here as needed
+        case "CHECKING_PAYMENT_EVIDENCE":
+        case "CHECKED_PAYMENT_COMPLETED":
+        case "WAITING_BOOK":
+        case "RECEIVED_BOOK":
+        case "SENDING_BOOK_TO_USER":
+        case "COMPLETED":
+        default:
+          throw new Error(`Unhandled status: ${status}`);
+      }
+
+      return result;
+    }
+  );
+};
