@@ -84,8 +84,10 @@ model Notifications {
   id        Int      @id @default(autoincrement())
   userId    Int
   user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  message   String?
+  message   String
+  link      String?
   createdAt DateTime @default(now())
+  read      Boolean  @default(false)
 }
 
 model Offers {
