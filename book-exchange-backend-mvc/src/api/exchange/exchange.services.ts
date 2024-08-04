@@ -10,7 +10,6 @@ import {
 import { updateOffer } from "./offers/offer.services";
 import * as UserStatus from "./user-status/userTransactionStatus.services";
 import * as AdminServices from "./admin/admin.services";
-
 import * as HandleUserTransaction from "./utils/handler/userTransactionHandlers";
 import {
   handleOfferAccepted,
@@ -22,21 +21,20 @@ import {
   sendAddress,
 } from "./utils/handler/adminManagementHandlers";
 import { receivedBookProcess } from "./utils/transactionKey";
+import { ResponseHandler } from "@src/api/utils/ApiResponse";
 
-interface data {
+interface UpdateOfferData {
   status: OfferStatus;
 }
+
 export const updateOfferChain = async (
   prisma: PrismaClient,
   offerId: number,
-  data: data
+  data: UpdateOfferData
 ) => {
   return prisma.$transaction(
     async (prismaTransaction: Prisma.TransactionClient) => {
-      // Update the offer
       const offer = await updateOffer(prismaTransaction, offerId, data);
-
-      // Chain Process
       let transactionCreate = null;
       let userTransaction = null;
 
@@ -52,42 +50,39 @@ export const updateOfferChain = async (
           );
           transactionCreate = acceptedResult.transactionCreate;
           userTransaction = acceptedResult.userTransaction;
+          break;
         case "REJECTED":
           await handleOfferRejected(offer.offeredById);
-        default:
           break;
+        default:
+          throw new Error("Invalid status");
       }
 
-      // Build Response
-      const resultOffer = {
-        offerId: offer.id,
-        status: offer.status,
-        updatedAt: offer.updatedAt,
-      };
-      const resultTransaction = transactionCreate
-        ? {
-            offerId: transactionCreate.offerId,
-            status: transactionCreate.status,
-            createdAt: transactionCreate.createdAt,
-            link: `/transaction/${transactionCreate.id}`,
-          }
-        : undefined;
-      const resultUserTransaciton = userTransaction
-        ? userTransaction
-        : undefined;
-      return {
-        message: transactionCreate
+      return new ResponseHandler(
+        "success",
+        transactionCreate
           ? "Offer accepted, transaction created."
           : "Offer updated.",
-        dataOffer: resultOffer,
-        dataTransaction: resultTransaction,
-        dataUserTransaction: resultUserTransaciton,
-      };
+        {
+          offerId: offer.id,
+          status: offer.status,
+          updatedAt: offer.updatedAt,
+          transaction: transactionCreate
+            ? {
+                offerId: transactionCreate.offerId,
+                status: transactionCreate.status,
+                createdAt: transactionCreate.createdAt,
+                link: `/transaction/${transactionCreate.id}`,
+              }
+            : undefined,
+          userTransaction: userTransaction || undefined,
+        }
+      );
     }
   );
 };
 
-export const updateUserTransacionChain = async (
+export const updateUserTransactionChain = async (
   prisma: PrismaClient,
   transactionId: number,
   userId: number,
@@ -96,7 +91,6 @@ export const updateUserTransacionChain = async (
 ) => {
   return prisma.$transaction(
     async (prismaTransaction: Prisma.TransactionClient) => {
-      // Main Process
       const userTransaction = await UserStatus.updateUserTransaction(
         prismaTransaction,
         transactionId,
@@ -105,7 +99,7 @@ export const updateUserTransacionChain = async (
       );
 
       let result = null;
-      // Chain Process User Transaction Status
+
       switch (status) {
         case "PENDING":
           break;
@@ -116,7 +110,6 @@ export const updateUserTransacionChain = async (
             TransactionStatus.CANCELED
           );
           break;
-
         case "CONFIRMED":
           result = await HandleUserTransaction.ConfirmedCase(
             prismaTransaction,
@@ -124,10 +117,7 @@ export const updateUserTransacionChain = async (
             userId,
             TransactionStatus.CONFIRMED
           );
-          // console.log("result", result);
-
           break;
-        // case "USER_PAYMENT_PENDING":
         case "WAITING_CHECK_EVIDENCE":
           if (imageUrl)
             result = await HandleUserTransaction.UserUpdatePayment(
@@ -137,25 +127,19 @@ export const updateUserTransacionChain = async (
               imageUrl
             );
           break;
-        // for PAYMENT_SUCCESS and PAYMENT_FAILED admin call these function
         case "PAYMENT_SUCCESS":
           result = await HandleUserTransaction.PaymentSuccessCase(
             prismaTransaction,
             transactionId,
             userId
-            // PaymentStatus.COMPLETED
           );
-          console.log("Payment Success", transactionId, userId);
           break;
-
         case "PAYMENT_FAILED":
           result = await HandleUserTransaction.PaymentFailCase(
             prismaTransaction,
             transactionId,
             userId
-            // PaymentStatus.COMPLETED
           );
-          console.log("Payment Failed", transactionId, userId);
           break;
         case "RECEIVED_ADDRESS":
           result = await HandleUserTransaction.ReceivedAddress(
@@ -169,17 +153,19 @@ export const updateUserTransacionChain = async (
             transactionId,
             userId
           );
-        case "SEND_BOOK_COMPLETED":
-        case "WAITING_RECEIVED_BOOK":
-        case "RECEIVED_BOOK":
-
-        default:
           break;
+        default:
+          throw new Error("Invalid status");
       }
 
-      // Build Result
-
-      return { userTransaction, ...result };
+      return new ResponseHandler(
+        "success",
+        "User transaction updated successfully.",
+        {
+          userTransaction,
+          ...result,
+        }
+      );
     }
   );
 };
@@ -197,18 +183,16 @@ export const adminAction = async (
         case "SENDING_ADDRESS":
           result = await sendAddress(prismaTransaction, transactionId);
           break;
-
-        // Add other cases here as needed
         case "CHECKING_PAYMENT_EVIDENCE":
         case "CHECKED_PAYMENT_COMPLETED":
         case "WAITING_BOOK":
         case "RECEIVED_BOOK":
-          // Checking book process, get userId, also Get this userId is owner or offer, bookId ,transactionId from this book.
-
+          // Process logic here
           break;
-        // result = await
         case "SENDING_BOOK_TO_USER":
         case "COMPLETED":
+          // Process logic here
+          break;
         default:
           throw new Error(`Unhandled status: ${status}`);
       }
@@ -218,18 +202,10 @@ export const adminAction = async (
   );
 };
 
-/**
- * 
- * @param code it code that user scan or put from frontned // code is gen from our system.
- * @param transactionId use for find unique key to cross check with code
- * @param userId for who is action we will use this id to check is action from Admin, book owner or book offerer. so we can proceed in this donctiion
- */
 export const bookReceivingProcess = async (
   code: string,
   transactionId: string,
   userId: string
 ) => {
-
-  
-
+  // Implement book receiving process here
 };

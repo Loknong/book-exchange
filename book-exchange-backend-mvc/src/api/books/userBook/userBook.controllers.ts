@@ -2,17 +2,7 @@ import { Request, Response } from "express";
 import prisma from "@src/utils/prismaClient";
 import * as services from "./userBook.services";
 import { CreateBookRequest } from "../book.types";
-
-export const template = async (req: Request, res: Response) => {
-  try {
-    res.status(200).json();
-  } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
-  }
-};
+import { ResponseHandler } from "@src/api/utils/ApiResponse";
 
 // get user book list
 
@@ -21,14 +11,24 @@ export const handleGetUserBooks = async (
   res: Response
 ) => {
   const ownerId = Number(req.params.ownerId);
+
   try {
     const books = await services.getUserBook(prisma, ownerId);
-    res.status(200).json(books);
+    const response = new ResponseHandler(
+      "success",
+      "Books fetched successfully",
+      books
+    );
+
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    const response = new ResponseHandler(
+      "error",
+      "An error occured while fetching books",
+      undefined,
+      error instanceof Error ? error.message : "Unexpected error occurred."
+    );
+    res.status(500).json(response);
   }
 };
 
@@ -46,16 +46,30 @@ export const handleCreateUserBook = async (
   try {
     const bookCover = req.file?.filename;
     if (!bookCover) {
-      return res.status(400).json({ error: "Book cover is required." });
+      const response = new ResponseHandler(
+        "error",
+        "Book cover is required",
+        undefined,
+        "Book cover is required."
+      );
+      return res.status(400).json(response);
     }
 
     const book = await services.createUserBook(prisma, data, bookCover);
-    res.status(200).json(book);
+    const response = new ResponseHandler(
+      "success",
+      "Book created successfully",
+      book
+    );
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    const response = new ResponseHandler(
+      "error",
+      "An error occured while creating book",
+      undefined,
+      error instanceof Error ? error.message : "Unexpected error occurred."
+    );
+    res.status(500).json(response);
   }
 };
 
@@ -67,12 +81,20 @@ export const handleDeleteUserBook = async (
   const bookId = Number(req.params.bookId);
   try {
     const book = await services.deleteUserBook(prisma, bookId);
-    res.status(200).json(book);
+    const response = new ResponseHandler(
+      "success",
+      "Book deleted successfully",
+      book
+    );
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    const response = new ResponseHandler(
+      "error",
+      "An error occured while deleting book",
+      undefined,
+      error instanceof Error ? error.message : "Unexpected error occurred."
+    );
+    res.status(500).json(response);
   }
 };
 
@@ -81,12 +103,20 @@ export const handleUpdateBookDetail = async (req: Request, res: Response) => {
   const bookId = Number(req.params.bookId);
   try {
     const book = await services.updateUserBookDetail(prisma, bookId, req.body);
-    res.status(200).json(book);
+    const response = new ResponseHandler(
+      "success",
+      "Book updated successfully",
+      book
+    );
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    const response = new ResponseHandler(
+      "error",
+      "An error occured while updating book",
+      undefined,
+      error instanceof Error ? error.message : "Unexpected error occurred."
+    );
+    res.status(500).json(response);
   }
 };
 
@@ -102,11 +132,19 @@ export const handleUpdateBookImage = async (
     const book = bookImageName
       ? await services.updateUserBookImage(prisma, bookId, bookImageName)
       : { message: "Image not found" };
-    res.status(200).json(book);
+    const response = new ResponseHandler(
+      "success",
+      "Book image updated successfully",
+      book
+    );
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    const response = new ResponseHandler(
+      "error",
+      "An error occured while updating book image",
+      undefined,
+      error instanceof Error ? error.message : "Unexpected error occurred."
+    );
+    res.status(500).json(response);
   }
 };

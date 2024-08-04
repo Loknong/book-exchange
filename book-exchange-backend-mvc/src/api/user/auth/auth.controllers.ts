@@ -6,6 +6,7 @@ import {
   UserLoginRequest,
   UserLogoutRequest,
 } from "./auth.types";
+import { ResponseHandler } from "@src/api/utils/ApiResponse";
 
 export const handleRegisterTransaction = async (
   req: Request<{}, {}, CreateUserRequest>,
@@ -14,7 +15,7 @@ export const handleRegisterTransaction = async (
   console.log("Enter Transaciton Create user");
   console.log("Request :", req.body);
   console.log("Request :", req.file);
-  //   const { firstName, lastName, email, username, password } = req.body;
+
   const pictureName = req.file?.filename;
   console.log(pictureName);
 
@@ -37,8 +38,18 @@ export const handleLoginUser = async (
   res: Response
 ) => {
   try {
-    const result = await authService.loginUser(prisma, req.body);
-    res.status(200).json(result);
+    const user = await authService.loginUser(prisma, req.body);
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+    const { token, ...userData } = user;
+    const responseData = { user: userData, token };
+    const response = new ResponseHandler(
+      "success",
+      "User logged in successfully",
+      responseData
+    );
+    res.status(200).json(response);
   } catch (error) {
     res.status(400).json({
       error:

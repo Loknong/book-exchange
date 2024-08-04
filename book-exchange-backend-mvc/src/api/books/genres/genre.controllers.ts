@@ -1,17 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "@src/utils/prismaClient";
 import * as services from "./genre.services";
-
-export const template = async (req: Request, res: Response) => {
-  try {
-    res.status(200).json();
-  } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
-  }
-};
+import { ResponseHandler } from "@src/api/utils/ApiResponse";
 
 export const handleCreateGenres = async (
   req: Request<{}, {}, { name: string }>,
@@ -19,7 +9,12 @@ export const handleCreateGenres = async (
 ) => {
   try {
     const genre = await services.addGenres(prisma, req.body.name);
-    res.status(200).json(genre);
+    const response = new ResponseHandler(
+      "success",
+      "Genre created successfully",
+      genre
+    );
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json({
       error:
@@ -31,12 +26,20 @@ export const handleCreateGenres = async (
 export const handleGetGenres = async (req: Request, res: Response) => {
   try {
     const genres = await services.getGenres(prisma);
-    res.status(200).json(genres);
+    const response = new ResponseHandler(
+      "success",
+      "Genres fetched successfully",
+      genres
+    );
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    const response = new ResponseHandler(
+      "error",
+      "An error occured while fetching genres",
+      undefined,
+      error instanceof Error ? error.message : "Unexpected error occurred."
+    );
+    res.status(500).json(response);
   }
 };
 
@@ -51,15 +54,23 @@ export const handleUpdateGenre = async (
   try {
     if (req.body.isAdmin) {
       const genre = await services.updateGenres(prisma, id, name);
-      res.status(200).json(genre);
+      const response = new ResponseHandler(
+        "success",
+        "Genre updated successfully",
+        genre
+      );
+      res.status(200).json(response);
     } else {
       throw new Error("Only admin roles can update genres");
     }
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    const response = new ResponseHandler(
+      "error",
+      "An error occured while updating genre",
+      undefined,
+      error instanceof Error ? error.message : "Unexpected error occurred."
+    );
+    res.status(500).json(response);
   }
 };
 
@@ -70,11 +81,19 @@ export const handleDeleteGenre = async (
   const genreId = Number(req.params.genreId);
   try {
     const genre = await services.deleteGenres(prisma, genreId);
-    res.status(200).json(genre);
+    const response = new ResponseHandler(
+      "success",
+      "Genre deleted successfully",
+      genre
+    );
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    const response = new ResponseHandler(
+      "error",
+      "An error occured while updating genre",
+      undefined,
+      error instanceof Error ? error.message : "Unexpected error occurred."
+    );
+    res.status(500).json(response);
   }
 };

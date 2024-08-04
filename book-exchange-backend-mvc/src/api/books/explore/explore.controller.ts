@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import prisma from "@src/utils/prismaClient";
 import * as services from "./explore.services";
+import { ResponseHandler } from "@src/api/utils/ApiResponse";
 
 export const handleGetBookListings = async (req: Request, res: Response) => {
   try {
     console.log("params", req.query);
-    
+
     const {
       title,
       author,
@@ -28,12 +29,20 @@ export const handleGetBookListings = async (req: Request, res: Response) => {
       limit: limitNumber,
       view: view as string,
     });
+    const response = new ResponseHandler(
+      "success",
+      "Book listings fetched successfully",
+      bookListings
+    );
 
-    res.status(200).json(bookListings);
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    const response = new ResponseHandler(
+      "error",
+      "Failed to fetch book listings",
+      undefined,
+      error instanceof Error ? error.message : "Unexpected error occurred."
+    );
+    res.status(500).json(response);
   }
 };

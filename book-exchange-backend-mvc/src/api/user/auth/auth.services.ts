@@ -1,7 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { CreateUserRequest, UserLoginRequest } from "./auth.types";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
+const secretKey = process.env.JWT_SECRET_KEY || "secret";
 // registerUser
 export const registerUser = async (
   prisma: PrismaClient,
@@ -94,6 +96,12 @@ export const loginUser = async (
       throw new Error("Invalid username or password.");
     }
 
+    const token = jwt.sign(
+      { user: { id: user.id, role: user.role } },
+      secretKey,
+      { expiresIn: "1h" }
+    );
+
     const result = await prisma.users.update({
       where: { id: user.id },
       data: { isLoggedIn: true },
@@ -107,6 +115,7 @@ export const loginUser = async (
       username: result.username,
       credit: result.credit,
       isLoggedIn: result.isLoggedIn,
+      token, // Include the token in the response
     };
   } catch (error) {
     console.error("Error logging in user:", error);

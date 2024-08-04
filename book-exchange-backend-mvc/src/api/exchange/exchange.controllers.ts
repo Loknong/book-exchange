@@ -3,6 +3,7 @@ import prisma from "@src/utils/prismaClient";
 import * as services from "./exchange.services";
 import { shouldGoNext } from "@src/utils/stateTransition";
 import { UserTranStatus } from "@prisma/client";
+import { ResponseHandler } from "../utils/ApiResponse";
 
 import fs from "fs";
 import path from "path";
@@ -10,7 +11,6 @@ import path from "path";
 export const handleUpdateOffer = async (req: Request, res: Response) => {
   const { offerId } = req.params;
   const data = req.body;
-  console.log("Im in");
 
   try {
     const result = await services.updateOfferChain(
@@ -18,12 +18,13 @@ export const handleUpdateOffer = async (req: Request, res: Response) => {
       parseInt(offerId),
       data
     );
-    res.status(200).json(result);
+    res
+      .status(200)
+      .json(new ResponseHandler("success", "Offer updated", result));
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    res
+      .status(500)
+      .json(new ResponseHandler("error", "Unexpected error occured", error));
   }
 };
 
@@ -38,21 +39,20 @@ export const handleUpdateUserStatus = async (
   const transactionId = Number(req.params.transactionId);
   const userId = Number(req.params.userId);
   const status = req.body.status;
-  console.log("Im in");
-  console.log("SSS", status);
 
   try {
-    const result = await services.updateUserTransacionChain(
+    const result = await services.updateUserTransactionChain(
       prisma,
       transactionId,
       userId,
       status
     );
-    res.status(200).json(result);
+    res
+      .status(200)
+      .json(new ResponseHandler("success", "User transaction updated", result));
   } catch (error) {
-    res.status(500).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    res
+      .status(500)
+      .json(new ResponseHandler("error", "Unexpected error occured", error));
   }
 };
