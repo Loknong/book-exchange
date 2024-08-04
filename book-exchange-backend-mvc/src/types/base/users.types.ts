@@ -1,3 +1,5 @@
+import { UserRole } from "@prisma/client";
+
 export interface User {
   id: number;
   firstName: string;
@@ -20,7 +22,10 @@ export interface CreateUserRequest {
   email: string;
   username: string;
   password: string;
+  role?: UserRole;
 }
+
+
 
 export interface UpdateUserRequest {
   firstName?: string;
@@ -34,9 +39,6 @@ export interface UpdateUserRequest {
   isLoggedIn?: boolean;
   expiredAt?: Date;
 }
-
-
-
 
 export interface UserResponse {
   id: number;

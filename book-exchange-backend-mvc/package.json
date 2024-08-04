@@ -21,6 +21,7 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.10.0",
     "nodemon": "^3.1.2",
+    "qrcode": "^1.5.3",
     "tsconfig-paths": "^4.2.0",
     "uuid": "^9.0.1"
   },
@@ -30,6 +31,7 @@
     "@types/express": "^4.17.21",
     "@types/multer": "^1.4.11",
     "@types/node": "^20.13.0",
+    "@types/qrcode": "^1.5.5",
     "@types/uuid": "^9.0.8",
     "typescript": "^5.4.5"
   }

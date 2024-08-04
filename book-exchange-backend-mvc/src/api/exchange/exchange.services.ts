@@ -17,7 +17,11 @@ import {
   handleOfferRejected,
 } from "./utils/handler/offerHandlers";
 import { v4 as uuidv4 } from "uuid";
-import { sendAddress } from "./utils/handler/adminManagementHandlers";
+import {
+  receivedBook,
+  sendAddress,
+} from "./utils/handler/adminManagementHandlers";
+import { receivedBookProcess } from "./utils/transactionKey";
 
 interface data {
   status: OfferStatus;
@@ -156,15 +160,15 @@ export const updateUserTransacionChain = async (
         case "RECEIVED_ADDRESS":
           result = await HandleUserTransaction.ReceivedAddress(
             prismaTransaction,
-            transactionId,
-          )
+            transactionId
+          );
           break;
         case "SENDING_BOOK":
           result = await HandleUserTransaction.SendingBook(
             prismaTransaction,
             transactionId,
             userId
-          )
+          );
         case "SEND_BOOK_COMPLETED":
         case "WAITING_RECEIVED_BOOK":
         case "RECEIVED_BOOK":
@@ -199,6 +203,10 @@ export const adminAction = async (
         case "CHECKED_PAYMENT_COMPLETED":
         case "WAITING_BOOK":
         case "RECEIVED_BOOK":
+          // Checking book process, get userId, also Get this userId is owner or offer, bookId ,transactionId from this book.
+
+          break;
+        // result = await
         case "SENDING_BOOK_TO_USER":
         case "COMPLETED":
         default:
@@ -208,4 +216,20 @@ export const adminAction = async (
       return result;
     }
   );
+};
+
+/**
+ * 
+ * @param code it code that user scan or put from frontned // code is gen from our system.
+ * @param transactionId use for find unique key to cross check with code
+ * @param userId for who is action we will use this id to check is action from Admin, book owner or book offerer. so we can proceed in this donctiion
+ */
+export const bookReceivingProcess = async (
+  code: string,
+  transactionId: string,
+  userId: string
+) => {
+
+  
+
 };

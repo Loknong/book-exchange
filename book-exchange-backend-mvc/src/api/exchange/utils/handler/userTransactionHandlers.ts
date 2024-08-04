@@ -371,9 +371,9 @@ export const PaymentFailCase = async (
 
 export const ReceivedAddress = async (
   prismaTransaction: Prisma.TransactionClient,
-  transactionId: number,
-  evidenceOfferedBy?: string,
-  evidenceOfferedTo?: string
+  transactionId: number
+  // evidenceOfferedBy?: string,
+  // evidenceOfferedTo?: string
 ) => {
   // await prismaTransaction.transactionDetails.updateMany({
   //   where: { transactionId },
@@ -383,20 +383,10 @@ export const ReceivedAddress = async (
   //   },
   // });
 
-  const transaction = await prismaTransaction.transactions.update({
-    where: { id: transactionId },
-    data: { status: "ADDRESS_SENT" },
-  });
-
-  const adminManagement = await prismaTransaction.adminManagement.update({
-    where: { transactionId },
-    data: { status: "SENDING_ADDRESS" },
-  });
-
   await sendNotification(transactionId, "Address sent");
   await logAction("Address sent to users", transactionId);
 
-  return { transaction, adminManagement };
+  return {};
 };
 
 export const SendingBook = async (
@@ -464,3 +454,5 @@ export const SendingBook = async (
 
   return { userTransaction, adminManagement };
 };
+
+

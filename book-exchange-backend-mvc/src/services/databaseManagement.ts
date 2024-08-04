@@ -6,6 +6,7 @@ import * as userProfileModel from "../models/userProfilePictures.services";
 import * as genreModel from "../models/genres.services";
 import * as bookModel from "../models/books.services";
 import * as bookImagesModel from "../models/bookImages.services";
+import { UserRole } from "@prisma/client";
 
 import {
   BookResponse,
@@ -18,6 +19,7 @@ import {
   UserResponse,
 } from "@src/types";
 import { CreateAddressRequest } from "@src/api/user/addresses/address.types";
+
 const mockUsers: CreateUserRequest[] = [
   {
     firstName: "John",
@@ -25,6 +27,7 @@ const mockUsers: CreateUserRequest[] = [
     email: "john.doe@example.com",
     username: "johndoe",
     password: "password123",
+    role: UserRole.USER,
   },
   {
     firstName: "Jane",
@@ -32,6 +35,7 @@ const mockUsers: CreateUserRequest[] = [
     email: "jane.smith@example.com",
     username: "janesmith",
     password: "password123",
+    role: UserRole.USER,
   },
   {
     firstName: "Alice",
@@ -39,6 +43,7 @@ const mockUsers: CreateUserRequest[] = [
     email: "alice.johnson@example.com",
     username: "alicejohnson",
     password: "password123",
+    role: UserRole.USER,
   },
   {
     firstName: "Bob",
@@ -46,6 +51,7 @@ const mockUsers: CreateUserRequest[] = [
     email: "bob.brown@example.com",
     username: "bobbrown",
     password: "password123",
+    role: UserRole.USER,
   },
   {
     firstName: "Charlie",
@@ -53,6 +59,7 @@ const mockUsers: CreateUserRequest[] = [
     email: "charlie.davis@example.com",
     username: "charliedavis",
     password: "password123",
+    role: UserRole.USER,
   },
   {
     firstName: "David",
@@ -60,6 +67,7 @@ const mockUsers: CreateUserRequest[] = [
     email: "david.wilson@example.com",
     username: "davidwilson",
     password: "password123",
+    role: UserRole.USER,
   },
   {
     firstName: "Eve",
@@ -67,6 +75,7 @@ const mockUsers: CreateUserRequest[] = [
     email: "eve.taylor@example.com",
     username: "evetaylor",
     password: "password123",
+    role: UserRole.USER,
   },
   {
     firstName: "Frank",
@@ -74,6 +83,7 @@ const mockUsers: CreateUserRequest[] = [
     email: "frank.moore@example.com",
     username: "frankmoore",
     password: "password123",
+    role: UserRole.USER,
   },
   {
     firstName: "Grace",
@@ -81,6 +91,7 @@ const mockUsers: CreateUserRequest[] = [
     email: "grace.white@example.com",
     username: "gracewhite",
     password: "password123",
+    role: UserRole.USER,
   },
   {
     firstName: "Henry",
@@ -88,6 +99,15 @@ const mockUsers: CreateUserRequest[] = [
     email: "henry.clark@example.com",
     username: "henryclark",
     password: "password123",
+    role: UserRole.USER,
+  },
+  {
+    firstName: "Jukkapan",
+    lastName: "Kongjun",
+    email: "jukkapan.kn@gmail.com",
+    username: "admin",
+    password: "password123",
+    role: UserRole.ADMIN,
   },
 ];
 const mockGenres: CreateGenreRequest[] = [
@@ -466,7 +486,6 @@ const mockBooks: CreateBookRequest[] = [
     views: Math.floor(Math.random() * 1000) + 1, // Add this line
   },
 ];
-
 
 export const resetDatabase = async (prisma: PrismaClient) => {
   const resetDatabase = prisma.$transaction(async (transactionPrisma) => {

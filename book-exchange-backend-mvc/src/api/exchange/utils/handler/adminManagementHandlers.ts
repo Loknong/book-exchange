@@ -10,6 +10,7 @@ import { logAction } from "@src/api/log/log.services";
 import * as AdminServices from "../../admin/admin.services";
 import * as Transaction from "../../transactions/transaction.services";
 import { generateUniqueCode } from "../generateUniqueCode";
+import { receivedBookProcess } from "../transactionKey";
 
 export const sendAddress = async (
   prismaTransaction: Prisma.TransactionClient,
@@ -86,4 +87,20 @@ export const sendAddress = async (
   });
 
   return { message: "Addresses sent successfully" };
+};
+
+export const receivedBook = async (
+  prismaTransaction: Prisma.TransactionClient,
+  transactionId: number,
+  
+) => {
+  const code = "Just a random string";
+  const transactionUniqueKey = "UniqueKey";
+  const userId = 1;
+  const checkingBook = await receivedBookProcess(
+    code,
+    transactionUniqueKey,
+    userId,
+    prismaTransaction
+  );
 };

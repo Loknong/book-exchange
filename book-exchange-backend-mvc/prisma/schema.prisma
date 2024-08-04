@@ -30,6 +30,7 @@ model Users {
   token             String?
   pictureId         Int?
   addressId         Int?
+  role              UserRole                @default(USER)
   isLoggedIn        Boolean                 @default(false)
   createdAt         DateTime                @default(now())
   updatedAt         DateTime                @updatedAt
@@ -43,6 +44,11 @@ model Users {
   addresses         UserAddress[]
   profilePictures   UserProfilePictures[]
   logs              Logs[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
 
 model Books {
@@ -257,18 +263,19 @@ model UserProfilePictures {
 }
 
 model TransactionDetails {
-  id                        Int          @id @default(autoincrement())
-  transactionId             Int
-  transaction               Transactions @relation(fields: [transactionId], references: [id], onDelete: Cascade)
-  offeredByAddress          String
-  offeredToAddress          String
-  offeredByCode             String
-  offeredToCode             String
-  offeredBySendingEvidence  String?
-  offeredToSendingEvidence  String?
+  id                              Int          @id @default(autoincrement())
+  transactionId                   Int
+  transaction                     Transactions @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  offeredByAddress                String
+  offeredToAddress                String
+  offeredByCode                   String
+  offeredToCode                   String
+  offeredBySendingEvidence        String?
+  offeredToSendingEvidence        String?
+  uniqueKey                       String?      @unique
   adminSendingEvidenceToOfferedBy String?
   adminSendingEvidenceToOfferedTo String?
-  createdAt                 DateTime     @default(now())
+  createdAt                       DateTime     @default(now())
 }
 
 enum BookStatus {

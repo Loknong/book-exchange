@@ -12,8 +12,10 @@ export const createUser = async (
   data: CreateUserRequest
 ): Promise<UserResponse> => {
   console.log(data);
+  if (!data.role) throw new Error("Not");
 
   const user = await prisma.users.create({ data });
+
   console.log(user);
 
   return user;
