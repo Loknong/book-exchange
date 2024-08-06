@@ -8,12 +8,11 @@ export const FILE_BASE_URL = "http://localhost:3003/uploads";
 //!-------------------------- User Auth --------------------------
 
 //* Login
-export const loginUser = async (username: string, userPassword: string) => {
-  const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+export const loginUser = async (username: string, password: string) => {
+  const response = await axios.post(`${API_BASE_URL}/users/auth/login`, {
     username,
-    userPassword,
+    password,
   });
-  console.log(response.data);
   return response.data;
 };
 
@@ -24,8 +23,6 @@ export const signupUser = async (user: Partial<User>) => {
   return response.data;
 };
 //! //////////////////////////////////////////////////////////////
-
-
 
 //!-------------------------- Book API --------------------------
 
@@ -64,9 +61,6 @@ export const fetchUserInventory = async (userId: string) => {
   return response.data;
 };
 //! //////////////////////////////////////////////////////////////
-
-
-
 
 //!-------------------------- User Action API --------------------------
 

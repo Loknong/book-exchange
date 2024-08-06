@@ -8,6 +8,7 @@ import AddBookForm from "./components/user/AddBookForm";
 import TransactionHistory from "./components/user/TransactionHistory";
 import BookShelf from "./pages/BookShelf";
 import UserPage from "./pages/UserPage";
+import ComponentTestPage from "./pages/ComponentTestPage";
 
 // import BearBox from "./zustand-basic/components/BearBox";
 
@@ -23,6 +24,8 @@ function App() {
           <Route path="add-book" element={<AddBookForm />} />
           <Route path="history" element={<TransactionHistory />} />
         </Route>
+        <Route path="/component-test" element={<ComponentTestPage />} />
+        <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </>
   );

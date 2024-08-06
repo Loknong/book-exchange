@@ -1,40 +1,57 @@
-import  { ReactNode } from "react";
+// book-exchange-frontend/src/components/layout/MainLayout.tsx
+import React, { useState } from "react";
 import { useUserStore } from "../../stores/useUserStore";
+import "./MainLayout.css";
 
 interface LayoutProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export default function MainLayout({ children }: LayoutProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const userId = useUserStore((state) => state.user?.userId);
   const userFirstName = useUserStore((state) => state.user?.firstName);
   const userLastName = useUserStore((state) => state.user?.lastName);
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
-    <>
-      <div className="">
-        <div className="bg-orange-50 h-15 border-b border-orange-400 flex flex-row justify-between px-4 py-2">
-          <div className="self-center">Header</div>
-          <div>
-            <ul className="flex flex-row text-sm gap-6">
-              <li>
-                UserID : <UserDetialList data={userId?.toString()} />
-              </li>
-              <li>
-                First Name : <UserDetialList data={userFirstName} />
-              </li>
-              <li>
-                Last Name : <UserDetialList data={userLastName} />
-              </li>
-            </ul>
-          </div>
-        </div>{" "}
-        <div className="border">{children}</div>
-      </div>
-    </>
+    <div className="main-layout">
+      <header className="header flex justify-between items-center p-4 bg-gray-100">
+        <div className="hamburger cursor-pointer" onClick={toggleMenu}>
+          &#9776;
+        </div>
+        <div>Header</div>
+        <div>
+          <input
+            type="text"
+            placeholder="Search..."
+            className="p-2 border border-gray-300 rounded"
+          />
+        </div>
+      </header>
+      <nav
+        className={`navbar ${menuOpen ? "navbar-menu active" : "navbar-menu"}`}
+      >
+        <div className="hamburger cursor-pointer p-4" onClick={toggleMenu}>
+          &#9776;
+        </div>
+        <ul className="p-4">
+          <li className="py-2 text-white">Menu Item 1</li>
+          <li className="py-2 text-white">Menu Item 2</li>
+          <li className="py-2 text-white">Menu Item 3</li>
+        </ul>
+      </nav>
+      {menuOpen && (
+        <div
+          className={`overlay ${menuOpen ? "active" : ""}`}
+          onClick={toggleMenu}
+        ></div>
+      )}
+      <main className="main p-4">{children}</main>
+      <footer className="footer p-4 bg-gray-100">Footer</footer>
+    </div>
   );
 }
-
-const UserDetialList = ({ data = "" }) => {
-  return <span className="bg-orange-300 w-20 block text-center">{data}</span>;
-};

@@ -22,6 +22,7 @@ import {
 } from "./utils/handler/adminManagementHandlers";
 import { receivedBookProcess } from "./utils/transactionKey";
 import { ResponseHandler } from "@src/api/utils/ApiResponse";
+import prisma from "@src/services/prismaService";
 
 interface UpdateOfferData {
   status: OfferStatus;
@@ -202,10 +203,40 @@ export const adminAction = async (
   );
 };
 
-export const bookReceivingProcess = async (
-  code: string,
-  transactionId: string,
-  userId: string
-) => {
-  // Implement book receiving process here
-};
+// export const bookReceivingProcess = async (
+//   prisma: PrismaClient,
+//   transactionId: string,
+//   userId: string,
+//   code?: string
+// ) => {
+//   // Implement book receiving process here
+//   return prisma.$transaction(
+//     async (prismaTransaction: Prisma.TransactionClient) => {
+//       const transaction = await prismaTransaction.transactions.findUnique({
+//         where: {
+//           id: parseInt(transactionId),
+//         },
+//         include: {
+
+//         },
+//       });
+
+//       if (!transaction) {
+//         throw new Error("Transaction not found");
+//       }
+
+//       const userTransaction = transaction.userTransactions[0];
+
+//       if (!userTransaction) {
+//         throw new Error("User transaction not found");
+//       }
+
+//       return new ResponseHandler(
+//         "success",
+//         "Book received successfully",
+//         result
+//       );
+//     }
+//   );
+//   )
+// };

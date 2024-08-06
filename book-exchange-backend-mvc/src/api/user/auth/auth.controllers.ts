@@ -24,12 +24,15 @@ export const handleRegisterTransaction = async (
       ? await authService.registerUserWithProfile(prisma, req.body, pictureName)
       : await authService.registerUser(prisma, req.body);
 
-    res.status(200).json(user);
+    res
+      .status(200)
+      .json(
+        new ResponseHandler("success", "User registered successfully", user)
+      );
   } catch (error) {
-    res.status(400).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    res
+      .status(500)
+      .json(new ResponseHandler("error", "Unexpected error occured", error));
   }
 };
 
@@ -40,6 +43,7 @@ export const handleLoginUser = async (
   try {
     const user = await authService.loginUser(prisma, req.body);
     if (!user) {
+
       return res.status(401).json({ message: "Invalid credentials" });
     }
     const { token, ...userData } = user;
@@ -51,10 +55,9 @@ export const handleLoginUser = async (
     );
     res.status(200).json(response);
   } catch (error) {
-    res.status(400).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    res
+      .status(500)
+      .json(new ResponseHandler("error", "Unexpected error occured", error));
   }
 };
 
@@ -65,11 +68,10 @@ export const handleLogoutUser = async (
   try {
     const userId = req.body.userId;
     const result = await authService.logoutUser(prisma, userId);
-    res.status(200).json(result);
+    res.status(200).json(new ResponseHandler("success", "User logged out"));
   } catch (error) {
-    res.status(400).json({
-      error:
-        error instanceof Error ? error.message : "unexpected error occured.",
-    });
+    res
+      .status(500)
+      .json(new ResponseHandler("error", "Unexpected error occured", error));
   }
 };

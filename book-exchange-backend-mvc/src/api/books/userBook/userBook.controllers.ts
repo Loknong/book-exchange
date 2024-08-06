@@ -11,7 +11,16 @@ export const handleGetUserBooks = async (
   res: Response
 ) => {
   const ownerId = Number(req.params.ownerId);
-
+  const userId = req.body.user.id; // from auth middleware
+  if (ownerId !== userId) {
+    const response = new ResponseHandler(
+      "error",
+      "Unauthorized",
+      undefined,
+      "You are not authorized to view this resource."
+    );
+    return res.status(401).json(response);
+  }
   try {
     const books = await services.getUserBook(prisma, ownerId);
     const response = new ResponseHandler(

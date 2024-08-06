@@ -8,8 +8,17 @@ export interface Book {
   description?: string;
   ownerId: number;
   thumbnail?: string;
-  createdAt: Date;
-  updatedAt: Date;
+
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface BookCard extends Book {
+  bookImageId: number;
+  genreId: number;
+  condition: string;
+  views: number;
+  status: string;
 }
 
 export interface BookInventory {

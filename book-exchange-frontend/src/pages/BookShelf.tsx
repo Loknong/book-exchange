@@ -1,48 +1,35 @@
-import BookShelfMain from "../components/bookshelf/BookShelfMain";
-import MainLayout from "../components/layout/MainLayout";
+// book-exchange-frontend/src/pages/BookShelf.tsx
+import React from "react";
+import BookCard from "../components/books/BookCard";
+import { BookCard as BookCardType } from "../models/Books";
 
-export default function BookShelf() {
+const books: BookCardType[] = [
+  {
+    bookId: 1,
+    title: "Brave New World",
+    author: "Aldous Huxley",
+    genreId: 2,
+    condition: "Used",
+    description: "A dystopian novel set in a futuristic World State.",
+    ownerId: 1,
+    status: "PUBLIC",
+    bookImageId: 1,
+    views: 123,
+    bookView: 0,
+    createdAt: undefined,
+    updatedAt: undefined,
+  },
+  // Add more book objects here
+];
+
+const BookShelf: React.FC = () => {
   return (
-    <MainLayout>
-      <div className="flex flex-col items-center">
-        <Banner />
-        <div className="flex flex-row">
-          <div>
-            <SearchArea />
-            <BookShelfMain />
-            <Pagination />
-          </div>
-          <div>
-            <ContactDev />
-            <BookHighLight />
-            <HistorySearch />
-          </div>
-        </div>
-      </div>
-    </MainLayout>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+      {books.map((book) => (
+        <BookCard key={book.bookId} book={book} />
+      ))}
+    </div>
   );
-}
-
-const Banner = () => {
-  return <div>Banner</div>;
 };
 
-const SearchArea = () => {
-  return <div>SearchArea</div>;
-};
-
-const ContactDev = () => {
-  return <div>ContactDev</div>;
-};
-
-const BookHighLight = () => {
-  return <div>BookHighLight</div>;
-};
-
-const HistorySearch = () => {
-  return <div>HistorySearch</div>;
-};
-
-const Pagination = () => {
-  return <div>HistorySearch</div>;
-};
+export default BookShelf;

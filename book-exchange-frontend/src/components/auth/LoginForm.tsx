@@ -1,85 +1,77 @@
 import React, { useState } from "react";
-import { loginUser } from "../../api/api";
-import { useUserStore } from "../../stores/useUserStore";
-import { AxiosError } from "axios";
+import { useForm, FormProvider } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
+import { loginUser } from "../../api/api";
+import Input from "../base/Input";
+import Button from "../base/Button";
+import Modal from "../base/Modal";
 
-export default function LoginForm() {
-  const [username, setUsername] = useState<string>("");
-  const [userPassword, setUserPassword] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
-  const setUser = useUserStore((state) => state.setUser);
-  const user = useUserStore((state) => state.user?.username);
+const schema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(4, "Password must be at least 6 characters"),
+});
+
+type FormData = z.infer<typeof schema>;
+
+const LoginForm: React.FC = () => {
+  const methods = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
   const navigate = useNavigate();
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const onSubmit = async (data: FormData) => {
+    console.log("Submitting data:", data); // Log the data being submitted
     try {
-      const response = await loginUser(username, userPassword);
-      console.log("Res Info",user);
-      
-      if (response.user) {
-        
-        setUser(response.user);
-        setError(null);
-        // Need redirect if success
-        navigate("/user");
-      } else{
-        setError('Error')
+      const { response } = await loginUser(data.username, data.password);
+      console.log("Response", response.data);
+
+      if (response.status === "success") {
+        console.log("Enter");
+
+        navigate("/main");
+      } else {
+        setErrorMessage(response.message);
+        setModalOpen(true);
       }
     } catch (err) {
-      setUser(null);
       if (err instanceof AxiosError) {
-        console.error("Login Failed", err);
-        setError(err.response?.data.message || "An error occured");
+        setErrorMessage(err.response?.data.message || "An error occurred");
       } else {
-        console.error("An unexpected eorr ouccurred");
+        setErrorMessage("Unexpected error");
       }
+      setModalOpen(true);
     }
   };
-  return (
-    <div className="mt-20">
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-md mx-auto p-4 bg-white rounded shadow-md"
-      >
-        <div className="mb-4">
-          <label htmlFor="" className="block text-gray-500">
-            Username
-          </label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-            required
-            className="w-full px-4 py-2 my-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="" className="block text-gray-500">
-            Password
-          </label>
-          <input
-            type="password"
-            value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}
-            placeholder="Password"
-            required
-            className="w-full px-4 py-2 my-2 border rounded"
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 w-full rounded"
-        >
-          Login
-        </button>
-      </form>
 
-      <div className="py-5 max-w-lg mx-auto">
-        {user && <div className="bg-green-400 text-white">Welcome, {user}</div>}
-        {error && <div className="bg-red-500 text-white">{error}</div>}
-      </div>
-    </div>
+  return (
+    <FormProvider {...methods}>
+      <form
+        onSubmit={methods.handleSubmit(onSubmit)}
+        className="bg-orange-200 max-w-xl w-full px-4 py-4 pb-6 rounded shadow-md"
+      >
+        <div>LoginForm</div>
+        <Input name="username" label="Username" type="text" />
+        <Input name="password" label="Password" type="password" />
+        <Button type="submit" variant="primary">
+          Login
+        </Button>
+      </form>
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+        <div className="p-4">
+          <h2 className="text-xl mb-2">Login Error</h2>
+          <p>{errorMessage}</p>
+          <Button variant="primary" onClick={() => setModalOpen(false)}>
+            Close
+          </Button>
+        </div>
+      </Modal>
+    </FormProvider>
   );
-}
+};
+
+export default LoginForm;

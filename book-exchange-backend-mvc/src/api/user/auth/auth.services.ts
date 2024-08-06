@@ -87,13 +87,13 @@ export const loginUser = async (
     });
 
     if (!user) {
-      throw new Error("Invalid username or password.");
+      return null; // Return null for invalid username
     }
 
     const isPasswordValid = await bcrypt.compare(data.password, user.password);
 
     if (!isPasswordValid) {
-      throw new Error("Invalid username or password.");
+      return null; // Return null for invalid password
     }
 
     const token = jwt.sign(
