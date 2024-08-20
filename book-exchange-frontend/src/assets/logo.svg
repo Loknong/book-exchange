@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="88"
+   height="30"
+   viewBox="0 0 88 30"
+   fill="none"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="logo.svg"
+   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="6.4833372"
+     inkscape:cx="21.439576"
+     inkscape:cy="36.940852"
+     inkscape:window-width="1680"
+     inkscape:window-height="997"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:44.1653px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#ff6f00;fill-opacity:1;stroke:#e98c28;stroke-width:0"
+     x="45.16959"
+     y="34.186604"
+     id="text5624"
+     transform="scale(1.1815337,0.84635757)"><tspan
+       sodipodi:role="line"
+       id="tspan7418"
+       x="45.16959"
+       y="34.186604"
+       style="stroke-width:0">X</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.3333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#003e75;fill-opacity:1;stroke:#e98c28;stroke-width:0"
+     x="11.464548"
+     y="27.973465"
+     id="text7240"><tspan
+       sodipodi:role="line"
+       id="tspan7238"
+       x="11.464548"
+       y="27.973465"
+       style="font-size:21.3333px">URN</tspan></text>
+  <rect
+     style="opacity:1;fill:#003e75;fill-opacity:1;stroke:#e98c28;stroke-width:0"
+     id="rect7294"
+     width="58.212997"
+     height="1.844999"
+     x="0.31410694"
+     y="8.4950008" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.3333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;opacity:1;fill:#003e75;fill-opacity:1;stroke:#e98c28;stroke-width:0"
+     x="58.363155"
+     y="28.490196"
+     id="text7416"><tspan
+       sodipodi:role="line"
+       id="tspan7414"
+       x="58.363155"
+       y="28.490196">l</tspan></text>
+  <path
+     style="opacity:1;fill:#ff6f00;fill-opacity:0.996835;stroke:#e98c28;stroke-width:0"
+     d="m 1.2358907,9.5005038 c 0,0 0.1229771,1.1067942 0,0 z"
+     id="path7582" />
+  <rect
+     style="opacity:1;fill:#003e75;fill-opacity:1;stroke:#e98c28;stroke-width:0"
+     id="rect9200"
+     width="1.944999"
+     height="18.663227"
+     x="7.5149307"
+     y="9.7172174" />
+</svg>

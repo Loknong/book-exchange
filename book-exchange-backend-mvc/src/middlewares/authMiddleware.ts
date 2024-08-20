@@ -4,6 +4,11 @@ import { UserRole } from "@prisma/client"; // Import the enum from Prisma
 
 const secretKey = process.env.JWT_SECRET_KEY || "secret";
 
+export interface AuthenticatedUser {
+  id: number;
+  role: UserRole;
+}
+
 export const authMiddleware = (requiredRoles: UserRole[] = []) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(" ")[1];
@@ -15,8 +20,9 @@ export const authMiddleware = (requiredRoles: UserRole[] = []) => {
 
     try {
       const decoded = jwt.verify(token, secretKey) as {
-        user: { id: string; role: UserRole };
+        user: AuthenticatedUser;
       };
+
       req.body.user = decoded.user;
 
       if (requiredRoles.length && !requiredRoles.includes(decoded.user.role)) {

@@ -12,21 +12,32 @@ export const createUserAddress = async (
   data: CreateAddressRequest
 ) => {
   return prisma.$transaction(async (prismaTransaction) => {
-    const userAddress = await prismaTransaction.userAddress.create({ data });
+    const userAddressData = { ...data };
+    delete userAddressData.useThis;
+
+    const userAddress = await prismaTransaction.userAddress.create({
+      data: userAddressData,
+    });
+
     const tempUserInfo = await prismaTransaction.users.findUnique({
       where: { id: userAddress.userId },
     });
-    if (tempUserInfo?.addressId === null) {
+
+    console.log("tempUserInfo", tempUserInfo);
+
+    if (tempUserInfo?.addressId === null || data.useThis === true) {
+      console.log("Update User Address");
+
       await prismaTransaction.users.update({
-        where: { id: tempUserInfo.id },
+        where: { id: tempUserInfo?.id },
         data: { addressId: userAddress.id },
       });
     }
 
-    const userInfo = await prismaTransaction.users.findUnique({
+    const userInfo = await prismaTransaction.users.findMany({
       where: { id: userAddress.userId },
     });
-    return { message: "Create User successfully.", data: userInfo };
+    return { addedAddress: userAddress, userInfo };
   });
 };
 

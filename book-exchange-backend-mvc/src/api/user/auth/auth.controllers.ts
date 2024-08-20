@@ -42,9 +42,9 @@ export const handleLoginUser = async (
 ) => {
   try {
     const user = await authService.loginUser(prisma, req.body);
-    if (!user) {
-
-      return res.status(401).json({ message: "Invalid credentials" });
+    // Check if there's an error returned from the loginUser function
+    if (user?.error) {
+      return res.status(401).json({ message: user.error });
     }
     const { token, ...userData } = user;
     const responseData = { user: userData, token };
@@ -68,10 +68,30 @@ export const handleLogoutUser = async (
   try {
     const userId = req.body.userId;
     const result = await authService.logoutUser(prisma, userId);
-    res.status(200).json(new ResponseHandler("success", "User logged out"));
+    res
+      .status(200)
+      .json(new ResponseHandler("success", "User logged out", result));
   } catch (error) {
     res
       .status(500)
       .json(new ResponseHandler("error", "Unexpected error occured", error));
   }
 };
+
+export const handleKickAllUser = async (req: Request, res: Response) => { 
+ 
+  try {
+    console.log("Kick all users");
+    
+    const result = await authService.kickAllUser(prisma);
+    console.log("Result", result);
+    
+    res
+      .status(200)
+      .json(new ResponseHandler("success", "All users logged out", result));
+  } catch (error) {
+    res
+      .status(500)
+      .json(new ResponseHandler("error", "Unexpected error occured", error));
+  } 
+}

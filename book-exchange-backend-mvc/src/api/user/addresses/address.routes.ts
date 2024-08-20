@@ -5,10 +5,11 @@ import * as validate from "./address.validation";
 
 const router = Router();
 
-router.get('/list',
-  validateRequest(validate.userAddressListSchema),
+router.post(
+  "/list",
+  validateRequest( validate.userAddressListSchema),
   controller.handleGetUserAddressList
-)
+);
 
 router.post(
   "/",

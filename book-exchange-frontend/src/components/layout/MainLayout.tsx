@@ -1,6 +1,5 @@
 // book-exchange-frontend/src/components/layout/MainLayout.tsx
 import React, { useState } from "react";
-import { useUserStore } from "../../stores/useUserStore";
 import "./MainLayout.css";
 
 interface LayoutProps {
@@ -9,9 +8,6 @@ interface LayoutProps {
 
 export default function MainLayout({ children }: LayoutProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const userId = useUserStore((state) => state.user?.userId);
-  const userFirstName = useUserStore((state) => state.user?.firstName);
-  const userLastName = useUserStore((state) => state.user?.lastName);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);

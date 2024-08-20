@@ -1,42 +1,46 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
 
 interface InputProps {
-  name: string;
-  label: string;
   type?: string;
   placeholder?: string;
+  value?: string;
+  name?: string;
+  shadow?: "sm" | "md" | "lg" | "xl" | "2xl" | "inner" | "none";
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  variant?: "default" | "success" | "warning" | "danger";
+  disabled?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
-  name,
-  label,
   type = "text",
   placeholder,
+  value,
+  onChange,
+  name,
+  shadow = "default",
+  variant = "default",
+  disabled = false,
 }) => {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
+  const baseStyle = `p-2 rounded w-full transition ease-in-out duration-150 ${shadow === "default" ? "shadow" : `shadow-${shadow}`}`;
+  const variantStyle = {
+    default: "bg-secondary-muted border-neutral text-text-primary focus:border-primary focus:ring-primary",
+    success: "bg-secondary-muted border-success text-success focus:border-success-dark focus:ring-success-dark",
+    warning: "bg-secondary-muted border-warning text-warning focus:border-warning-dark focus:ring-warning-dark",
+    danger: "bg-secondary-muted border-danger text-danger focus:border-danger-dark focus:ring-danger-dark",
+  }[variant];
+
+  const disabledStyle = "bg-neutral-light text-neutral-dark cursor-not-allowed shadow-none";
 
   return (
-    <div className="my-4">
-      <label htmlFor={name} className="block my-2 text-gray-800">
-        {label}
-      </label>
-      <input
-        id={name}
-        type={type}
-        placeholder={placeholder}
-        {...register(name)}
-        className="w-full p-2 border border-gray-300 rounded"
-      />
-      {errors[name] && (
-        <p className="text-red-500 text-sm">
-          {errors[name]?.message?.toString()}
-        </p>
-      )}
-    </div>
+    <input
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      name={name}
+      onChange={onChange}
+      className={`${baseStyle} ${disabled ? disabledStyle : variantStyle}`}
+      disabled={disabled}
+    />
   );
 };
 

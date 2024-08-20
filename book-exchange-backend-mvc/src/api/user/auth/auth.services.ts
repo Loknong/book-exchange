@@ -87,15 +87,18 @@ export const loginUser = async (
     });
 
     if (!user) {
-      return null; // Return null for invalid username
+      return { error: "Invalid username" }; // Return null for invalid username
     }
 
     const isPasswordValid = await bcrypt.compare(data.password, user.password);
 
     if (!isPasswordValid) {
-      return null; // Return null for invalid password
+      return { error: "Invalid password" }; // Return null for invalid password
     }
 
+    if (user.token) {
+      return { error: "User is already logged in" };
+    }
     const token = jwt.sign(
       { user: { id: user.id, role: user.role } },
       secretKey,
@@ -104,7 +107,7 @@ export const loginUser = async (
 
     const result = await prisma.users.update({
       where: { id: user.id },
-      data: { isLoggedIn: true },
+      data: { token, isLoggedIn: true },
     });
 
     return {
@@ -115,6 +118,7 @@ export const loginUser = async (
       username: result.username,
       credit: result.credit,
       isLoggedIn: result.isLoggedIn,
+      role: result.role,
       token, // Include the token in the response
     };
   } catch (error) {
@@ -129,7 +133,7 @@ export const loginUser = async (
 export const logoutUser = async (prisma: PrismaClient, userId: number) => {
   const result = await prisma.users.update({
     where: { id: userId },
-    data: { isLoggedIn: false },
+    data: { token: null, isLoggedIn: false },
   });
   return {
     id: result.id,
@@ -140,3 +144,10 @@ export const logoutUser = async (prisma: PrismaClient, userId: number) => {
     isLoggedIn: result.isLoggedIn,
   };
 };
+
+export const kickAllUser = async (prisma: PrismaClient) => {
+  const result = await prisma.users.updateMany({
+    data: { token: null, isLoggedIn: false },
+  });
+  return { count: result.count };
+}

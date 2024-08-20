@@ -19,4 +19,6 @@ router.post(
 )
 
 router.put("/logout", validateRequest(logoutUserSchema), authController.handleLogoutUser)
-export default router
+
+router.put("/kickAll", authController.handleKickAllUser)
+export default router 

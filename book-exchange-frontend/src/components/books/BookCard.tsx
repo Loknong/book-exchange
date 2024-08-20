@@ -2,6 +2,7 @@
 import React from "react";
 import Card from "../base/Card";
 import type { BookCard } from "../../models/Books";
+import Book from "../../assets/react.svg"
 
 interface BookCardProps {
   book: BookCard;
@@ -11,11 +12,11 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
   return (
     <Card>
       <img
-        src={`/images/books/${book.bookImageId}.jpg`}
+        src={Book}
         alt={book.title}
-        className="w-full h-48 object-cover rounded-t"
+        className="w-full h-48 object-fill rounded-t border p-2 py-4"
       />
-      <div className="p-4">
+      <div className="px-4">
         <h2 className="text-xl font-bold">{book.title}</h2>
         <p className="text-gray-700">by {book.author}</p>
         <p className="text-gray-600">Genre: {book.genreId}</p>

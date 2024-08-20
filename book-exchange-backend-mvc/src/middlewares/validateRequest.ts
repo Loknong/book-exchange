@@ -10,6 +10,8 @@ export const validateRequest = (
     if (bodySchema) {
       const { error } = bodySchema.validate(req.body);
       if (error) {
+        console.log("bodySchema", error);
+
         return res.status(400).json({ error: error.details[0].message });
       }
     }
@@ -17,6 +19,8 @@ export const validateRequest = (
     if (querySchema) {
       const { error } = querySchema.validate(req.query);
       if (error) {
+        console.log("querySchema", error);
+
         return res.status(400).json({ error: error.details[0].message });
       }
     }
@@ -24,6 +28,8 @@ export const validateRequest = (
     if (paramsSchema) {
       const { error } = paramsSchema.validate(req.params);
       if (error) {
+        console.log("paramsSchema", error);
+
         return res.status(400).json({ error: error.details[0].message });
       }
     }

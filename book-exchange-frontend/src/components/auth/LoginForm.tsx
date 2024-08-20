@@ -8,6 +8,7 @@ import { loginUser } from "../../api/api";
 import Input from "../base/Input";
 import Button from "../base/Button";
 import Modal from "../base/Modal";
+import { useUserStore } from "../../stores/userStore";
 
 const schema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -24,16 +25,26 @@ const LoginForm: React.FC = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const { setUser } = useUserStore();
+
   const onSubmit = async (data: FormData) => {
     console.log("Submitting data:", data); // Log the data being submitted
     try {
-      const { response } = await loginUser(data.username, data.password);
+      const response = await loginUser(data.username, data.password);
       console.log("Response", response.data);
 
       if (response.status === "success") {
-        console.log("Enter");
+        // Store the token in local storage
+        localStorage.setItem("authToken", response.data.token);
 
-        navigate("/main");
+        // Set user info in Zustand
+        setUser(
+          response.data.user.id,
+          response.data.user.username,
+          response.data.user.role
+        );
+
+        navigate("/address");
       } else {
         setErrorMessage(response.message);
         setModalOpen(true);
