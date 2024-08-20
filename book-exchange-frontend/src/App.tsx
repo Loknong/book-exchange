@@ -20,14 +20,14 @@ import BaseLayout from "./components/layout/BaseLayout";
 import CommonLayout from "./components/layout/common/CommonLayout";
 
 import MainLayout2 from "./components/layout/MainLayout2";
-import Pallete from "./pages/Pallete";
 import NotFoundPage from "./pages/NotFoundPage";
+import LandingPage from "./components/Home/LandingPage";
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<MainLayout2 />}>
-          <Route index element={<Pallete />} />
+          <Route index element={<LandingPage />} />
           <Route path="signup" element={<SignupForm />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>

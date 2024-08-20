@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App.tsx";
@@ -10,7 +10,7 @@ document.title = "Turnix Book Exchange";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Router>
-      <TestPanel />
+      {/* <TestPanel /> */}
       <App />
     </Router>
   </React.StrictMode>

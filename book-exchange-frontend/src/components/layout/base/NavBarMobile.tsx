@@ -26,12 +26,12 @@ const Navbar: React.FC<NavbarProps> = ({
   navigate,
 }) => {
   return (
-    <nav className="bg-secondary-muted ">
-      <div className="container flex">
-        <CategoriesDropdown items={dropdownItems} navigate={navigate} />
+    <nav className="bg-secondary-muted absolute top-0 z-55 w-[200px] min-h-screen">
+      <div className="container flex flex-col">
+        {/* <CategoriesDropdown items={dropdownItems} navigate={navigate} /> */}
 
-        <div className="flex items-center justify-between flex-grow pl-0 md:pl-12 ">
-          <div className="flex items-center space-x-6 whitespace-nowrap">
+        <div className="items-center justify-between flex-grow pl-12 ">
+          <div className="flex flex-col items-center space-x-6">
             {navLinks.map((link, index) => (
               <NavLink
                 key={index}
