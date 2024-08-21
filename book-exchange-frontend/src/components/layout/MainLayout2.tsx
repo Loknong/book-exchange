@@ -21,11 +21,11 @@ const MainLayout2 = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="fixed w-full top-0 left-0 z-888">
+      <div className="fixed w-full top-0 left-0 z-50">
         <Header menuList={menuList} toggleNav={toggleNavigation} />
       </div>
 
-      <div className="md:mt-[82px] mt-[71px] md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2">
+      <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2">
         <Navbar
           dropdownItems={dropdownItems}
           navLinks={navLinks}

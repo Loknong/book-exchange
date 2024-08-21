@@ -18,8 +18,6 @@ export const dropdownItems = [
 
 export const navLinks = [
   { label: "Home", url: "/" },
-  { label: "My Books", url: "/my-books" },
-  { label: "Exchange", url: "/exchange" },
   { label: "Explore", url: "/explore" },
   { label: "About us", url: "/about" },
   { label: "Contact us", url: "/contact" },

@@ -10,7 +10,7 @@ interface CategoriesDropdownProps {
 
 function CategoryDropdown({ items, navigate }: CategoriesDropdownProps) {
   return (
-    <div className=" px-8 py-6 bg-primary hidden md:flex items-center cursor-pointer relative group">
+    <div className=" px-8 py-3 bg-primary hidden md:flex items-center cursor-pointer relative group">
       <FaBars className="text-white" />
       <span className="capitalize ml-2 text-white">All Categories</span>
       <Dropdown items={items} navigate={navigate} />

@@ -22,6 +22,9 @@ import CommonLayout from "./components/layout/common/CommonLayout";
 import MainLayout2 from "./components/layout/MainLayout2";
 import NotFoundPage from "./pages/NotFoundPage";
 import LandingPage from "./components/Home/LandingPage";
+import BookExplorePage from "./components/BookExplore/BookExplorePage";
+import AboutPage from "./pages/AboutPage";
+import ContactUsPage from "./pages/ContactPage";
 function App() {
   return (
     <>
@@ -30,6 +33,9 @@ function App() {
           <Route index element={<LandingPage />} />
           <Route path="signup" element={<SignupForm />} />
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="explore" element={<BookExplorePage />} />
+          <Route path="about" element={<AboutPage />}></Route>
+          <Route path="contact" element={<ContactUsPage />}></Route>
         </Route>
         <Route path="/test" element={<CommonLayout />}></Route>
         <Route path="login" element={<LoginPage />} />

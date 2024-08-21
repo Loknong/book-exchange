@@ -46,7 +46,7 @@ function LoginPage() {
   };
   return (
     <div className="flex flex-col min-h-screen">
-      <div className=" container py-16">
+      <div className=" container py-0">
         <img
           onClick={() => navigate("/")}
           src={Logo}

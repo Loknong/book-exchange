@@ -2,72 +2,76 @@ import React from "react";
 import Banner from "./Banner";
 import Feature from "./Feature";
 import Category from "./Category";
-import Product from "./Product";
+import IconFastExchange from "../../assets/images/icons/delivery-van.svg";
+import IconTrustWorthy from "../../assets/images/icons/money-back.svg";
+import IconServiceHours from "../../assets/images/icons/service-hours.svg";
+import BookCard from "../BookExplore/BookCard";
+import ProductImg from "../../assets/images/products/product1.jpg";
 
 const LandingPage: React.FC = () => {
   return (
     <>
       <Banner
-        title="Best Collection for Home Decoration"
-        description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur alias similique a nobis et voluptates corporis quis quam,"
-        backgroundImage=""
-        buttonText="Shop Now"
+        title="Discover Your Next Great Read"
+        description="Exchange your books with ease and explore a vast collection of titles. Join the Turnix community and share your love for reading."
+        backgroundImage="images/banner-bg.jpg" // Replace with your actual image path
+        buttonText="Explore Now"
         buttonLink="#"
       />
 
       <div className="container py-16">
-        <div className="w-10/12 mx-auto grid grid-cols-3 gap-6 justify-center">
+        <div className="w-10/12 mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 justify-center">
           <Feature
-            icon="images/icons/delivery-van.svg"
-            title="Free Delivery"
-            description="order over $200"
+            icon={IconFastExchange} // Replace with your actual icon path
+            title="Fast Exchange"
+            description="Swap books with members in your area."
           />
           <Feature
-            icon="images/icons/money-back.svg"
-            title="Money Return"
-            description="30 Days money return"
+            icon={IconTrustWorthy} // Replace with your actual icon path
+            title="Trustworthy Community"
+            description="Safe and reliable book exchanges."
           />
           <Feature
-            icon="images/icons/service-hours.svg"
+            icon={IconServiceHours} // Replace with your actual icon path
             title="24/7 Support"
-            description="Customer support"
+            description="We're here to help whenever you need it."
           />
         </div>
       </div>
 
       <div className="container py-16">
         <h2 className="text-3xl font-medium text-gray-800 uppercase mb-6">
-          Shop by Category
+          Browse by Genre
         </h2>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <Category
-            image="images/category/category-1.jpg"
-            title="Bedroom"
+            image="images/category/fiction.jpg" // Replace with your actual image path
+            title="Fiction"
             link="#"
           />
           <Category
-            image="images/category/category-2.jpg"
-            title="Sofa"
+            image="images/category/non-fiction.jpg" // Replace with your actual image path
+            title="Non-Fiction"
             link="#"
           />
           <Category
-            image="images/category/category-3.jpg"
-            title="Office"
+            image="images/category/mystery.jpg" // Replace with your actual image path
+            title="Mystery"
             link="#"
           />
           <Category
-            image="images/category/category-4.jpg"
-            title="Outdoor"
+            image="images/category/scifi.jpg" // Replace with your actual image path
+            title="Science Fiction"
             link="#"
           />
           <Category
-            image="images/category/category-5.jpg"
-            title="Mattress"
+            image="images/category/romance.jpg" // Replace with your actual image path
+            title="Romance"
             link="#"
           />
           <Category
-            image="images/category/category-6.jpg"
-            title="Dining"
+            image="images/category/young-adult.jpg" // Replace with your actual image path
+            title="Young Adult"
             link="#"
           />
         </div>
@@ -75,19 +79,41 @@ const LandingPage: React.FC = () => {
 
       <div className="container pb-16">
         <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">
-          Top New Arrival
+          New Arrivals
         </h2>
-        <div className="grid grid-cols-4 gap-6">
-          <Product
-            image="images/products/product9.jpg"
-            name="Guyer Chair"
-            price="$45.00"
-            originalPrice="$65.00"
-            rating={5}
-            reviews={150}
-            link="#"
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <BookCard
+            image={ProductImg}
+            title="The Great Gatsby"
+            author="F. Scott Fitzgerald"
+            condition="New"
+            views={150}
+            link="product/1"
           />
-          {/* Repeat <Product /> component for other products */}
+          <BookCard
+            image={ProductImg}
+            title="The Great Gatsby"
+            author="F. Scott Fitzgerald"
+            condition="New"
+            views={150}
+            link="product/1"
+          />{" "}
+          <BookCard
+            image={ProductImg}
+            title="The Great Gatsby"
+            author="F. Scott Fitzgerald"
+            condition="New"
+            views={150}
+            link="product/1"
+          />{" "}
+          <BookCard
+            image={ProductImg}
+            title="The Great Gatsby"
+            author="F. Scott Fitzgerald"
+            condition="New"
+            views={150}
+            link="product/1"
+          />
         </div>
       </div>
     </>
