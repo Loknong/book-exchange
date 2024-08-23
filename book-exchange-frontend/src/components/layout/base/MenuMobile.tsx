@@ -17,7 +17,7 @@ const MenuMobile = ({ isVisible, toggleNav, menuList, navigate }: Props) => {
     >
       {/* menu section */}
       <div
-        className={`col-span-9 bg-white shadow-sm overflow-y-auto  flex flex-col transition  duration-300 ${
+        className={`col-span-9 bg-white shadow-sm overflow-y-auto z-50  flex flex-col transition  duration-300 ${
           isVisible ? "transform translate-x-0" : "transform -translate-x-full"
         }`}
       >
@@ -60,13 +60,13 @@ const MenuMobile = ({ isVisible, toggleNav, menuList, navigate }: Props) => {
       </div>
 
       {/* overlay section */}
-      <div className="col-span-3 relative" onClick={toggleNav}>
+      <div className="absolute inset-0 z-40" onClick={toggleNav}>
         <div
-          className={`bg-black h-full transition-opacity duration-300 ${
+          className={`bg-black h-full transition-opacity relative duration-300 ${
             isVisible ? `opacity-80` : `hidden`
           }`}
         />
-        <button className="absolute z-50 top-7 left-1/2 -translate-x-1/2">
+        <button className="absolute z-40 top-7 right-7 -translate-x-1/2">
           <FaTimes className="text-2xl text-white cursor-pointer" />
         </button>
       </div>

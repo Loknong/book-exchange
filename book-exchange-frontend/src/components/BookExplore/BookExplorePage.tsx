@@ -7,7 +7,7 @@ const BookExplorePage: React.FC = () => {
   return (
     <div className="container grid grid-cols-4 gap-6 pt-4 pb-16 items-start">
       {/* Sidebar */}
-      <div className="col-span-1 bg-white px-4 pb-6 items-start shadow rounded overflow-hidden">
+      <div className="md:col-span-1 hidden bg-white px-4 pb-6 items-start shadow rounded overflow-hidden">
         <div className="divide-y divide-gray-200 space-y-5">
           <SidebarFilter
             title="Genres"
