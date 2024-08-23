@@ -9,16 +9,15 @@ type Props = {
 const ProtectedRoute = ({ children }: Props) => {
   const { userId, initializeUser, loading } = useUserStore();
 
-  // useEffect(() => {
-  //   if (userId === null) {
-  //     initializeUser(); // Initialize user from token if not already set
-  //   }
-  
-  // }, [userId, initializeUser, loading]);
+  useEffect(() => {
+    if (userId === null) {
+      initializeUser(); // Initialize user from token if not already set
+    }
+  }, [userId, initializeUser, loading]);
 
-  // if (loading) {
-  //   return <div>Loading...</div>; // or a more sophisticated loading indicator
-  // }
+  if (loading) {
+    return <div>Loading...</div>; // or a more sophisticated loading indicator
+  }
 
   if (!userId) {
     {

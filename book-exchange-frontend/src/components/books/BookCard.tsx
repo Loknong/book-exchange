@@ -10,7 +10,7 @@ interface BookCardProps {
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
   return (
-    <Card>
+    <Card title={book.title}>
       <img
         src={Book}
         alt={book.title}

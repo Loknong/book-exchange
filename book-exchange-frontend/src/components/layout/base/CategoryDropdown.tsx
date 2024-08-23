@@ -1,4 +1,3 @@
-import React from "react";
 import Dropdown from "./Dropdown";
 import { FaBars } from "react-icons/fa";
 import { IconType } from "react-icons";

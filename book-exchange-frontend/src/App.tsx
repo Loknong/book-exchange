@@ -7,7 +7,7 @@ import AddBookForm from "./components/user/AddBookForm";
 import TransactionHistory from "./components/user/TransactionHistory";
 import BookShelf from "./pages/BookShelf";
 import UserPage from "./pages/UserPage";
-import ComponentTestPage from "./pages/ComponentTestPage";
+// import ComponentTestPage from "./pages/ComponentTestPage";
 
 // import BearBox from "./zustand-basic/components/BearBox";
 import AddressPage from "./pages/AddressPage";
@@ -63,7 +63,7 @@ function App() {
           <Route path="add-book" element={<AddBookForm />} />
           <Route path="history" element={<TransactionHistory />} />
         </Route>
-        <Route path="/component-test" element={<ComponentTestPage />} />
+        {/* <Route path="/component-test" element={<ComponentTestPage />} /> */}
       </Routes>
     </>
   );

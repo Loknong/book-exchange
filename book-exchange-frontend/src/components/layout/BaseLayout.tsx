@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoCloseOutline } from "react-icons/io5";
 
@@ -11,7 +11,7 @@ export default function ShelfLayout() {
   const CloseOutlineClass = isMenuExpanded ? "block" : "hidden";
   const HamburgerMenuClass = isMenuExpanded ? "hidden" : "block";
 
-  const ProfileMenuMobile = isMenuExpanded ? "block" : "hidden";
+  // const ProfileMenuMobile = isMenuExpanded ? "block" : "hidden";
 
   return (
     <div className="bg-slate-200 h-full flex flex-col text-white">

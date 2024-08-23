@@ -11,7 +11,7 @@ interface BannerProps {
 const Banner: React.FC<BannerProps> = ({
   title,
   description,
-  backgroundImage,
+  // backgroundImage,
   buttonText,
   buttonLink,
 }) => {

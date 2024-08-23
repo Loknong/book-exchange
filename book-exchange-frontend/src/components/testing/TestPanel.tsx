@@ -12,10 +12,12 @@ export default function TestPanel() {
   const navigate = useNavigate();
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
     setIsDragging(true);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
+    e.preventDefault()
     if (isDragging) {
       const panel = panelRef.current;
       if (panel) {

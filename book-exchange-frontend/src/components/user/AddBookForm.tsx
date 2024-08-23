@@ -2,7 +2,7 @@ import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Input from "../base/Input";
+// import Input from "../base/Input";
 import Button from "../base/Button";
 import { addBook } from "../../api/api";
 import { AxiosError } from "axios";
@@ -47,11 +47,11 @@ const AddBookForm: React.FC = () => {
         className="bg-orange-200 max-w-xl w-full px-4 py-4 pb-6 rounded shadow-md"
       >
         <div>AddBookForm</div>
-        <Input name="title" label="Title" />
+        {/* <Input name="title" label="Title" />
         <Input name="author" label="Author" />
         <Input name="genre" label="Genre" />
         <Input name="bookCondition" label="Book Condition" />
-        <Input name="description" label="Description" />
+        <Input name="description" label="Description" /> */}
         <div className="my-4">
           <label htmlFor="thumbnail" className="block my-2 text-gray-800">
             Thumbnail

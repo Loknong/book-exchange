@@ -1,5 +1,4 @@
 import React from "react";
-import CategoriesDropdown from "./CategoryDropdown";
 import NavLink from "./NavLink";
 import { IconType } from "react-icons";
 
@@ -21,7 +20,6 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({
-  dropdownItems,
   navLinks,
   navigate,
 }) => {

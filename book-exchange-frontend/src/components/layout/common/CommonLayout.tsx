@@ -4,7 +4,7 @@ import Notification from "../../common/Notification";
 import ProfileCard from "../../common/ProfileCard";
 import ModalForm from "../../common/Modal";
 import DashboardWidget from "../../common/DashboardWidget";
-import Table from "../../common/Table";
+// import Table from "../../common/Table";
 import Button from "../../base/Button";
 import BookCard from "../../BookCard";
 
@@ -15,6 +15,12 @@ interface Book {
   status: string;
   imageUrl: string;
 }
+
+// interface TableProps {
+//   headers: string[];
+//   data: Book[];
+//   onActionClick: (action: string, row: Book) => void;
+// }
 
 const CommonLayout = () => {
   const [notificationVisible, setNotificationVisible] = useState(true);
@@ -59,9 +65,9 @@ const CommonLayout = () => {
     console.log("Delete Profile");
   };
 
-  const handleTableActionClick = (action: string, row: Book) => {
-    console.log(`${action} action on`, row);
-  };
+  // const handleTableActionClick = (action: string, row: Book) => {
+  //   console.log(`${action} action on`, row);
+  // };
 
   const handleBookEdit = (book: Book) => {
     console.log("Edit Book:", book);
@@ -138,14 +144,14 @@ const CommonLayout = () => {
       </section>
 
       {/* Table Example */}
-      <section>
+      {/* <section>
         <h2 className="text-xl font-bold mb-4">Table Example</h2>
         <Table
           headers={["Title", "Author", "Status"]}
           data={tableData}
           onActionClick={handleTableActionClick}
         />
-      </section>
+      </section> */}
 
       {/* Book Card Example */}
       <section>
