@@ -43,7 +43,7 @@ const LandingPage: React.FC = () => {
         <h2 className="text-3xl font-medium text-gray-800 uppercase mb-6">
           Browse by Genre
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-3  gap-3">
           <Category
             image="images/category/fiction.jpg" // Replace with your actual image path
             title="Fiction"
@@ -81,7 +81,7 @@ const LandingPage: React.FC = () => {
         <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">
           New Arrivals
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <BookCard
             image={ProductImg}
             title="The Great Gatsby"

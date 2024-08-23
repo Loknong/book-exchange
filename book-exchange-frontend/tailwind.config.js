@@ -22,6 +22,7 @@ export default {
         secondary: {
           DEFAULT: "#1A202C", // Dark Navy Blue
           muted: "#2D3748", // Mid Navy Blue
+          lighe: "#718096"  // Light Navy Blue
         },
         neutral: {
           DEFAULT: "#E2E8F0", // Light Gray/Blue

@@ -8,10 +8,17 @@ import { menuList, dropdownItems, navLinks } from "../../utils/mock/LayoutMock";
 import Breadcrumb from "./base/Breadcrumb";
 import Footer from "./base/Footer";
 import { useState } from "react";
+import MenuMobile from "./base/MenuMobile";
 
+const navList = [
+  { name: "Home", link: "/" },
+  { name: "About", link: "/about" },
+  { name: "Contact", link: "/contact" },
+];
 const MainLayout2 = () => {
   const [isNavExpanded, setIsNavExpanded] = useState<boolean>(false);
   const navigate = useNavigate();
+
   const backToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -20,11 +27,16 @@ const MainLayout2 = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen relative">
       <div className="fixed w-full top-0 left-0 z-50">
         <Header menuList={menuList} toggleNav={toggleNavigation} />
       </div>
-
+      <MenuMobile
+        navigate={navigate}
+        menuList={navList}
+        isVisible={isNavExpanded}
+        toggleNav={toggleNavigation}
+      />
       <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2">
         <Navbar
           dropdownItems={dropdownItems}

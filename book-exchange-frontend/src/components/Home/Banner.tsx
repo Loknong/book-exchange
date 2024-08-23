@@ -1,5 +1,5 @@
 import React from "react";
-import banner from "../../assets/images/banner-bg.jpg"
+import banner from "../../assets/images/banner-bg.jpg";
 interface BannerProps {
   title: string;
   description: string;
@@ -18,7 +18,7 @@ const Banner: React.FC<BannerProps> = ({
   return (
     <div
       className="bg-cover py-36 bg-center bg-no-repeat"
-      style={{ backgroundImage:  `url(${banner})` }}
+      style={{ backgroundImage: `url(${banner})` }}
     >
       <div className="container">
         <h1 className="text-6xl text-gray-800 font-medium mb-4 capitalize">
