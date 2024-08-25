@@ -1,0 +1,17 @@
+/* BookCard.css */
+.card {
+    width: 100%; /* Full width on small screens */
+  }
+  
+  @media (min-width: 768px) {
+    .card {
+      width: calc(33.333% - 20px); /* Three cards per row on medium screens */
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .card {
+      width: calc(25% - 20px); /* Four cards per row on larger screens */
+    }
+  }
+  

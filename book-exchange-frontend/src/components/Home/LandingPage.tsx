@@ -45,32 +45,32 @@ const LandingPage: React.FC = () => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3  gap-3">
           <Category
-            image="images/category/fiction.jpg" // Replace with your actual image path
+            image={ProductImg} // Replace with your actual image path
             title="Fiction"
             link="#"
           />
           <Category
-            image="images/category/non-fiction.jpg" // Replace with your actual image path
+            image={ProductImg} // Replace with your actual image path
             title="Non-Fiction"
             link="#"
           />
           <Category
-            image="images/category/mystery.jpg" // Replace with your actual image path
+            image={ProductImg} // Replace with your actual image path
             title="Mystery"
             link="#"
           />
           <Category
-            image="images/category/scifi.jpg" // Replace with your actual image path
+            image={ProductImg} // Replace with your actual image path
             title="Science Fiction"
             link="#"
           />
           <Category
-            image="images/category/romance.jpg" // Replace with your actual image path
+            image={ProductImg} // Replace with your actual image path
             title="Romance"
             link="#"
           />
           <Category
-            image="images/category/young-adult.jpg" // Replace with your actual image path
+            image={ProductImg} // Replace with your actual image path
             title="Young Adult"
             link="#"
           />

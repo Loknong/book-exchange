@@ -2,12 +2,14 @@ import React from "react";
 import SidebarFilter from "./SideBarFilter";
 import BookCard from "./BookCard";
 import ProductImg from "../../assets/images/products/product1.jpg";
+import { TfiMenuAlt } from "react-icons/tfi";
+import { CgMenuGridO } from "react-icons/cg";
 
 const BookExplorePage: React.FC = () => {
   return (
-    <div className="container grid grid-cols-4 gap-6 pt-4 pb-16 items-start">
+    <div className="md:container grid grid-cols-4 gap-6 pt-4 pb-16 items-start">
       {/* Sidebar */}
-      <div className="md:col-span-1 hidden bg-white px-4 pb-6 items-start shadow rounded overflow-hidden">
+      <div className="lg:col-span-1 lg:block hidden bg-white px-4 pb-6 items-start shadow rounded overflow-hidden">
         <div className="divide-y divide-gray-200 space-y-5">
           <SidebarFilter
             title="Genres"
@@ -40,10 +42,12 @@ const BookExplorePage: React.FC = () => {
       </div>
 
       {/* Book List */}
-      <div className="col-span-3">
+      <div className="lg:col-span-3 col-span-4">
         {/* Sorting */}
         <div className="flex items-center mb-4">
           <select className="w-44 text-sm text-gray-600 px-4 py-3 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
+       
+
             <option value="default">Default</option>
             <option value="views">Most Viewed</option>
             <option value="condition">Best Condition</option>
@@ -51,17 +55,17 @@ const BookExplorePage: React.FC = () => {
           </select>
 
           <div className="flex gap-2 ml-auto">
-            <div className="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
-              <i className="fa fa-th" aria-hidden="true"></i>
+            <div className="border border-primary text-xl w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
+              <i><CgMenuGridO/></i>
             </div>
-            <div className="border border-gray-300 w-10 h-9 flex items-center justify-center text-gray-600 rounded cursor-pointer">
-              <i className="fa fa-list" aria-hidden="true"></i>
+            <div className="border border-gray-300 text-xl w-10 h-9 flex items-center justify-center text-gray-600 rounded cursor-pointer">
+             <i><TfiMenuAlt /></i>
             </div>
           </div>
         </div>
 
         {/* Book Grid */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-2 lg:gap-6 md:gap-4 gap-2">
           <BookCard
             image={ProductImg}
             title="The Great Gatsby"
@@ -69,6 +73,22 @@ const BookExplorePage: React.FC = () => {
             condition="New"
             views={150}
             link="product/1"
+          />
+          <BookCard
+            image={ProductImg}
+            title="1984"
+            author="George Orwell"
+            condition="Used - Like New"
+            views={300}
+            link="product/2"
+          />
+          <BookCard
+            image={ProductImg}
+            title="1984"
+            author="George Orwell"
+            condition="Used - Like New"
+            views={300}
+            link="product/2"
           />
           <BookCard
             image={ProductImg}
