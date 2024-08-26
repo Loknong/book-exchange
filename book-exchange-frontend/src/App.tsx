@@ -25,6 +25,11 @@ import LandingPage from "./components/Home/LandingPage";
 import BookExplorePage from "./components/BookExplore/BookExplorePage";
 import AboutPage from "./pages/AboutPage";
 import ContactUsPage from "./pages/ContactPage";
+
+import ProductDetailPage from "./pages/ProductDetailPage";
+
+// Mobile-specific routes
+import SearchPage from "./pages/mobile/SearchPage";
 function App() {
   return (
     <>
@@ -34,9 +39,15 @@ function App() {
           <Route path="signup" element={<SignupForm />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path="explore" element={<BookExplorePage />} />
+          <Route path="explore/product/:id" element={<ProductDetailPage />} />
+          <Route path="product/:id" element={<ProductDetailPage />} />
           <Route path="about" element={<AboutPage />}></Route>
           <Route path="contact" element={<ContactUsPage />}></Route>
+
+          {/* Mobile-specific routes */}
+          <Route path="search" element={<SearchPage />} />
         </Route>
+
         <Route path="/test" element={<CommonLayout />}></Route>
         <Route path="login" element={<LoginPage />} />
 

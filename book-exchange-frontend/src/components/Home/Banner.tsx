@@ -1,5 +1,6 @@
 import React from "react";
 import banner from "../../assets/images/banner-bg.jpg";
+import { useNavigate } from "react-router-dom";
 interface BannerProps {
   title: string;
   description: string;
@@ -15,6 +16,7 @@ const Banner: React.FC<BannerProps> = ({
   buttonText,
   buttonLink,
 }) => {
+  const navigate = useNavigate();
   return (
     <div
       className="bg-cover py-36 bg-center bg-no-repeat"
@@ -27,7 +29,7 @@ const Banner: React.FC<BannerProps> = ({
         <p>{description}</p>
         <div className="mt-12">
           <a
-            href={buttonLink}
+            onClick={() => navigate(buttonLink)}
             className="bg-primary border border-primary text-white px-8 py-3 font-medium rounded-md hover:bg-transparent hover:text-primary transition"
           >
             {buttonText}
