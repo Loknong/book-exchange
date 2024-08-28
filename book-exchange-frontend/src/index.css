@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.menu-mobile {
+  overflow-y: auto;
+  max-height: 100vh; /* Ensure it doesn't exceed the viewport height */
+}

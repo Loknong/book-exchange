@@ -11,7 +11,7 @@ interface Props {
 const MenuMobile = ({ isVisible, toggleNav, menuList, navigate }: Props) => {
   return (
     <div
-      className={`fixed inset-0 z-50 grid grid-cols-12 transition duration-500 ${
+      className={`menu-mobile fixed inset-0 z-50 grid grid-cols-12 transition duration-500 ${
         isVisible ? `opacity-100` : `opacity-0 pointer-events-none`
       }`}
     >

@@ -47,9 +47,14 @@ const LandingPage: React.FC = () => {
       </div>
 
       <div className="container md:pb-16 pb-6">
-        <h2 className="md:text-2xl text-xl font-medium text-gray-800 uppercase md:mb-6 mb-2">
-          New Arrivals
-        </h2>
+        <div className="flex justify-between items-center md:mb-6 mb-2">
+          <h2 className="md:text-2xl text-xl font-medium text-gray-800 uppercase ">
+            New Arrivals
+          </h2>
+          <span className="text-gray-400 underline capitalize font-semibold cursor-pointer">
+            see all
+          </span>
+        </div>
         {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {books.map((book, index) => (
             <BookCard
@@ -63,7 +68,7 @@ const LandingPage: React.FC = () => {
             />
           ))}
         </div> */}
-        <div className="flex md:space-x-6 space-x-2 overflow-x-auto py-2 md:py-4">
+        <div className="flex md:space-x-6 space-x-2 overflow-x-auto scrollbar-hide py-2 md:py-4">
           {books.map((book, index) => (
             <div key={index} className="flex-none w-40 md:w-60">
               <BookCard

@@ -66,7 +66,7 @@ const getRandomGenres = () => {
 };
 
 // Mocking 50 book details
-const books: Book[] = Array.from({ length: 50 }, (_, i) => ({
+const books: Book[] = Array.from({ length: 1000 }, (_, i) => ({
     id: (i + 1).toString(),
     title: `Book Title ${i + 1}`,
     author: `Author ${i + 1}`,

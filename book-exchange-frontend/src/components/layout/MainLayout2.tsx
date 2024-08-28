@@ -7,8 +7,9 @@ import Navbar from "./base/Navbar";
 import { menuList, dropdownItems, navLinks } from "../../utils/mock/LayoutMock";
 import Breadcrumb from "./base/Breadcrumb";
 import Footer from "./base/Footer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MenuMobile from "./base/MenuMobile";
+import { useSwipeable } from "react-swipeable";
 
 const navList = [
   { name: "Home", link: "/" },
@@ -26,11 +27,27 @@ const MainLayout2 = () => {
     setIsNavExpanded(!isNavExpanded);
   };
 
+  useEffect(() => {
+    if (isNavExpanded) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [isNavExpanded]);
+
+  // Handlers for swipe gestures
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setIsNavExpanded(false),
+    onSwipedRight: () => setIsNavExpanded(true),
+    trackMouse: true, // to also allow swiping with the mouse
+  });
+
   return (
-    <div className="flex flex-col min-h-screen relative">
+    <div className="flex flex-col min-h-screen relative" {...handlers}>
       <div className="fixed w-full top-0 left-0 z-50">
         <Header menuList={menuList} toggleNav={toggleNavigation} />
       </div>
+      ƒ
       <MenuMobile
         navigate={navigate}
         menuList={navList}
@@ -44,14 +61,11 @@ const MainLayout2 = () => {
           navigate={navigate}
         />
       </div>
-
       <Breadcrumb />
-
       {/* main content */}
       <div className="container min-h-[30vh]">
         <Outlet />
       </div>
-
       {/* back to top button */}
       <button
         className="rounded-full shadow-lg fixed bottom-10 right-10 bg-primary text-white p-2"
@@ -62,7 +76,6 @@ const MainLayout2 = () => {
         </span>
         <span className="md:block hidden">Back to Top</span>
       </button>
-
       <Footer />
     </div>
   );

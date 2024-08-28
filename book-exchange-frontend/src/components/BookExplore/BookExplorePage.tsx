@@ -5,13 +5,12 @@ import { TfiMenuAlt } from "react-icons/tfi";
 import { CgMenuGridO } from "react-icons/cg";
 import books from "../../utils/mock/Books";
 
-const genres: string[] = []
+const genres: string[] = [];
 // Iterate through each book in the mock data
 books.forEach((book) => {
   book.genres.forEach((genre) => {
-    // Check if the genre is not already in the array
     if (genres.indexOf(genre) === -1) {
-      genres.push(genre); // Add the genre to the array if it's not already present
+      genres.push(genre);
     }
   });
 });
@@ -21,18 +20,20 @@ console.log(genres);
 const BookExplorePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [viewLimit, setViewLimit] = useState(10);
-
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-  const totalBooks = books.length;
-  const totalPages = Math.ceil(totalBooks / viewLimit);
 
   useEffect(() => {
-    console.log("Selected", selectedGenres);
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [selectedGenres]);
 
+  const filteredBooks = selectedGenres.length
+    ? books.filter((book) =>
+        book.genres.some((genre) => selectedGenres.includes(genre))
+      )
+    : books;
 
-
-  }, [selectedGenres])
-
+  const totalBooks = filteredBooks.length;
+  const totalPages = Math.ceil(totalBooks / viewLimit);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -43,15 +44,86 @@ const BookExplorePage: React.FC = () => {
     setCurrentPage(1); // Reset to the first page when the limit changes
   };
 
+  const handleEllipsisClick = () => {
+    const page = prompt("Enter the page number:");
+    const pageNumber = parseInt(page || "0", 10);
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      handlePageChange(pageNumber);
+    } else {
+      alert("Invalid page number");
+    }
+  };
+
   const startIndex = (currentPage - 1) * viewLimit;
-  const selectedBooks = books.slice(startIndex, startIndex + viewLimit);
+  const paginatedBooks = filteredBooks.slice(
+    startIndex,
+    startIndex + viewLimit
+  );
+
+  // Function to generate pagination with ellipsis
+  const renderPagination = () => {
+    const pages = [];
+    const showPagesCount = 3; // Number of pages to show at the start and end
+
+    // Add first few pages
+    for (let i = 1; i <= showPagesCount && i <= totalPages; i++) {
+      pages.push(i);
+    }
+
+    // Ellipsis if there are more pages between start and end
+    if (currentPage > showPagesCount + 1) {
+      pages.push("...");
+    }
+
+    // Add pages around the current page
+    const startPage = Math.max(currentPage - 1, showPagesCount + 1);
+    const endPage = Math.min(currentPage + 1, totalPages - showPagesCount);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    // Ellipsis if there are more pages between start and end
+    if (currentPage < totalPages - showPagesCount) {
+      pages.push("...");
+    }
+
+    // Add last few pages
+    for (let i = totalPages - showPagesCount + 1; i <= totalPages; i++) {
+      if (i > showPagesCount) {
+        pages.push(i);
+      }
+    }
+
+    return pages.map((page, index) =>
+      typeof page === "number" ? (
+        <button
+          key={index}
+          onClick={() => handlePageChange(page)}
+          className={`px-3 py-1 border ${
+            currentPage === page
+              ? "bg-primary text-white"
+              : "bg-white text-primary"
+          }`}
+        >
+          {page}
+        </button>
+      ) : (
+        <button
+          key={index}
+          onClick={handleEllipsisClick}
+          className="px-3 py-1 border bg-white text-primary"
+        >
+          {page}
+        </button>
+      )
+    );
+  };
 
   // Generate `sidebarFilters` dynamically inside the component
   const genreCount: Record<string, number> = {};
   const conditionCount: Record<string, number> = {};
   const languageCount: Record<string, number> = {};
-
-
 
   books.forEach((book) => {
     book.genres.forEach((genre) => {
@@ -81,7 +153,7 @@ const BookExplorePage: React.FC = () => {
     {
       title: "Genres",
       options: Object.keys(genreCount)
-        .sort((a, b) => a.localeCompare(b))  // Sort genres alphabetically
+        .sort((a, b) => a.localeCompare(b)) // Sort genres alphabetically
         .map((genre, index) => ({
           id: `genre-${index + 1}`,
           label: genre,
@@ -105,13 +177,6 @@ const BookExplorePage: React.FC = () => {
       })),
     },
   ];
-
-  const filteredBooks = selectedGenres.length
-    ? selectedBooks.filter((book) =>
-      book.genres.some((genre) => selectedGenres.includes(genre))
-    )
-    : selectedBooks;
-
 
   return (
     <div className="md:container grid grid-cols-4 gap-6 pt-4 pb-16 items-start">
@@ -159,7 +224,7 @@ const BookExplorePage: React.FC = () => {
 
         {/* Book Grid */}
         <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-2 lg:gap-6 md:gap-4 gap-2">
-          {filteredBooks.map((book, index) => (
+          {paginatedBooks.map((book, index) => (
             <BookCard
               key={index}
               image={book.images[0]}
@@ -170,7 +235,6 @@ const BookExplorePage: React.FC = () => {
               link={`product/${book.id}`}
             />
           ))}
-
         </div>
 
         {/* Pagination */}
@@ -178,25 +242,23 @@ const BookExplorePage: React.FC = () => {
           <button
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
-            className={`px-3 py-1 border rounded-l ${currentPage === 1 ? 'bg-gray-200' : 'bg-primary text-white'}`}
+            className={`px-3 py-1 border rounded-l ${
+              currentPage === 1 ? "bg-gray-200" : "bg-primary text-white"
+            }`}
           >
             Previous
           </button>
 
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => handlePageChange(i + 1)}
-              className={`px-3 py-1 border ${currentPage === i + 1 ? 'bg-primary text-white' : 'bg-white text-primary'}`}
-            >
-              {i + 1}
-            </button>
-          ))}
+          {renderPagination()}
 
           <button
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
-            className={`px-3 py-1 border rounded-r ${currentPage === totalPages ? 'bg-gray-200' : 'bg-primary text-white'}`}
+            className={`px-3 py-1 border rounded-r ${
+              currentPage === totalPages
+                ? "bg-gray-200"
+                : "bg-primary text-white"
+            }`}
           >
             Next
           </button>
