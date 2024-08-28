@@ -17,7 +17,7 @@ const LandingPage: React.FC = () => {
         buttonLink="/explore"
       />
 
-      <div className="container py-16">
+      <div className="container py-10 md:py-16">
         <div className="w-10/12 mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 justify-center">
           {features.map((feature, index) => (
             <Feature
@@ -30,7 +30,7 @@ const LandingPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="container py-16">
+      <div className="container py-10 md:py-16">
         <h2 className="text-3xl font-medium text-gray-800 uppercase mb-6">
           Browse by Genre
         </h2>
@@ -46,11 +46,11 @@ const LandingPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="container pb-16">
-        <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">
+      <div className="container md:pb-16 pb-6">
+        <h2 className="md:text-2xl text-xl font-medium text-gray-800 uppercase md:mb-6 mb-2">
           New Arrivals
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {books.map((book, index) => (
             <BookCard
               image={book.image}
@@ -61,6 +61,20 @@ const LandingPage: React.FC = () => {
               link={book.link}
               key={index}
             />
+          ))}
+        </div> */}
+        <div className="flex md:space-x-6 space-x-2 overflow-x-auto py-2 md:py-4">
+          {books.map((book, index) => (
+            <div key={index} className="flex-none w-40 md:w-60">
+              <BookCard
+                image={book.image}
+                title={book.title}
+                author={book.author}
+                condition={book.condition}
+                views={book.views}
+                link={book.link}
+              />
+            </div>
           ))}
         </div>
       </div>

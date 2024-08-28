@@ -1,75 +1,117 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SidebarFilter from "./SideBarFilter";
 import BookCard from "./BookCard";
-import ProductImg from "../../assets/images/products/product1.jpg";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { CgMenuGridO } from "react-icons/cg";
+import books from "../../utils/mock/Books";
+
+const genres: string[] = []
+// Iterate through each book in the mock data
+books.forEach((book) => {
+  book.genres.forEach((genre) => {
+    // Check if the genre is not already in the array
+    if (genres.indexOf(genre) === -1) {
+      genres.push(genre); // Add the genre to the array if it's not already present
+    }
+  });
+});
+
+console.log(genres);
 
 const BookExplorePage: React.FC = () => {
-  const books = [
-    {
-      image: ProductImg,
-      title: "The Great Gatsby",
-      author: "F. Scott Fitzgerald",
-      condition: "New",
-      views: 150,
-      link: "product/1",
-    },
-    {
-      image: ProductImg,
-      title: "1984",
-      author: "George Orwell",
-      condition: "Used - Like New",
-      views: 300,
-      link: "product/2",
-    },
-    {
-      image: ProductImg,
-      title: "1984",
-      author: "George Orwell",
-      condition: "Used - Like New",
-      views: 300,
-      link: "product/2",
-    },
-    {
-      image: ProductImg,
-      title: "1984",
-      author: "George Orwell",
-      condition: "Used - Like New",
-      views: 300,
-      link: "product/2",
-    },
-  ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const [viewLimit, setViewLimit] = useState(10);
+
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const totalBooks = books.length;
+  const totalPages = Math.ceil(totalBooks / viewLimit);
+
+  useEffect(() => {
+    console.log("Selected", selectedGenres);
+
+
+
+  }, [selectedGenres])
+
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleViewLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setViewLimit(Number(e.target.value));
+    setCurrentPage(1); // Reset to the first page when the limit changes
+  };
+
+  const startIndex = (currentPage - 1) * viewLimit;
+  const selectedBooks = books.slice(startIndex, startIndex + viewLimit);
+
+  // Generate `sidebarFilters` dynamically inside the component
+  const genreCount: Record<string, number> = {};
+  const conditionCount: Record<string, number> = {};
+  const languageCount: Record<string, number> = {};
+
+
+
+  books.forEach((book) => {
+    book.genres.forEach((genre) => {
+      if (genreCount[genre]) {
+        genreCount[genre] += 1;
+      } else {
+        genreCount[genre] = 1;
+      }
+    });
+
+    const condition = book.condition;
+    if (conditionCount[condition]) {
+      conditionCount[condition] += 1;
+    } else {
+      conditionCount[condition] = 1;
+    }
+
+    const language = book.language;
+    if (languageCount[language]) {
+      languageCount[language] += 1;
+    } else {
+      languageCount[language] = 1;
+    }
+  });
 
   const sidebarFilters = [
     {
       title: "Genres",
-      options: [
-        { id: "genre-1", label: "Science Fiction", count: 15 },
-        { id: "genre-2", label: "Mystery", count: 12 },
-        { id: "genre-3", label: "Biography", count: 8 },
-        { id: "genre-4", label: "Romance", count: 20 },
-      ],
+      options: Object.keys(genreCount)
+        .sort((a, b) => a.localeCompare(b))  // Sort genres alphabetically
+        .map((genre, index) => ({
+          id: `genre-${index + 1}`,
+          label: genre,
+          count: genreCount[genre],
+        })),
     },
     {
       title: "Condition",
-      options: [
-        { id: "condition-1", label: "New", count: 10 },
-        { id: "condition-2", label: "Used - Like New", count: 8 },
-        { id: "condition-3", label: "Used - Good", count: 12 },
-        { id: "condition-4", label: "Used - Acceptable", count: 5 },
-      ],
+      options: Object.keys(conditionCount).map((condition, index) => ({
+        id: `condition-${index + 1}`,
+        label: condition,
+        count: conditionCount[condition],
+      })),
     },
     {
       title: "Language",
-      options: [
-        { id: "language-1", label: "English", count: 25 },
-        { id: "language-2", label: "Spanish", count: 10 },
-        { id: "language-3", label: "French", count: 7 },
-        { id: "language-4", label: "German", count: 3 },
-      ],
+      options: Object.keys(languageCount).map((language, index) => ({
+        id: `language-${index + 1}`,
+        label: language,
+        count: languageCount[language],
+      })),
     },
   ];
+
+  const filteredBooks = selectedGenres.length
+    ? selectedBooks.filter((book) =>
+      book.genres.some((genre) => selectedGenres.includes(genre))
+    )
+    : selectedBooks;
+
 
   return (
     <div className="md:container grid grid-cols-4 gap-6 pt-4 pb-16 items-start">
@@ -81,6 +123,7 @@ const BookExplorePage: React.FC = () => {
               key={index}
               title={filter.title}
               options={filter.options}
+              selectedGenres={setSelectedGenres}
             />
           ))}
         </div>
@@ -90,11 +133,14 @@ const BookExplorePage: React.FC = () => {
       <div className="lg:col-span-3 col-span-4">
         {/* Sorting */}
         <div className="flex items-center mb-4">
-          <select className="w-44 text-sm text-gray-600 px-4 py-3 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
-            <option value="default">Default</option>
-            <option value="views">Most Viewed</option>
-            <option value="condition">Best Condition</option>
-            <option value="recent">Recently Added</option>
+          <select
+            className="w-44 text-sm text-gray-600 px-4 py-3 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary"
+            onChange={handleViewLimitChange}
+            value={viewLimit}
+          >
+            <option value={5}>Show 5</option>
+            <option value={10}>Show 10</option>
+            <option value={20}>Show 20</option>
           </select>
 
           <div className="flex gap-2 ml-auto">
@@ -113,17 +159,47 @@ const BookExplorePage: React.FC = () => {
 
         {/* Book Grid */}
         <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-2 lg:gap-6 md:gap-4 gap-2">
-          {books.map((book, index) => (
+          {filteredBooks.map((book, index) => (
             <BookCard
               key={index}
-              image={book.image}
+              image={book.images[0]}
               title={book.title}
               author={book.author}
               condition={book.condition}
               views={book.views}
-              link={book.link}
+              link={`product/${book.id}`}
             />
           ))}
+
+        </div>
+
+        {/* Pagination */}
+        <div className="mt-6 flex justify-center">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+            className={`px-3 py-1 border rounded-l ${currentPage === 1 ? 'bg-gray-200' : 'bg-primary text-white'}`}
+          >
+            Previous
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => handlePageChange(i + 1)}
+              className={`px-3 py-1 border ${currentPage === i + 1 ? 'bg-primary text-white' : 'bg-white text-primary'}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+            className={`px-3 py-1 border rounded-r ${currentPage === totalPages ? 'bg-gray-200' : 'bg-primary text-white'}`}
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>

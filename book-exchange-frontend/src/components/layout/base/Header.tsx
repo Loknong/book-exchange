@@ -53,14 +53,12 @@ const Header = ({ menuList, toggleNav }: Props) => {
             >
               <div className="text-2xl relative">
                 {menu.icon}
-                <span className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex justify-center items-center text-white text-xs bg-primary">
-                  5
-                </span>
+                <span className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex justify-center items-center text-white text-xs bg-primary">5</span>
               </div>
               <div className="text-xs leading-3">{menu.name}</div>
             </a>
           ))}
-        </div>
+        </div> 
 
         {/* mobile emote group */}
         <div className="flex flex-row items-center gap-4 md:hidden ">

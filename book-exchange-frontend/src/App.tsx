@@ -12,6 +12,7 @@ import UserPage from "./pages/UserPage";
 // import BearBox from "./zustand-basic/components/BearBox";
 import AddressPage from "./pages/AddressPage";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AuthLayout from "./components/layout/AuthLayout";
@@ -28,8 +29,16 @@ import ContactUsPage from "./pages/ContactPage";
 
 import ProductDetailPage from "./pages/ProductDetailPage";
 
+// Form
+import ReactFormPage from "./pages/testing/ReactFormPage";
+import RegularForm from "./react-form/regularRegister";
+import RegularWithHook from "./react-form/RegularWithHook";
+import ExchangeBookRegular from "./react-form/ExchangeBookRegular";
+import ExchangeBookWithForm from "./react-form/ExchangeBookWithForm";
+
 // Mobile-specific routes
 import SearchPage from "./pages/mobile/SearchPage";
+
 function App() {
   return (
     <>
@@ -46,14 +55,27 @@ function App() {
 
           {/* Mobile-specific routes */}
           <Route path="search" element={<SearchPage />} />
+
+
+          {/* practice form */}
+          <Route path="form" element={<ReactFormPage />} >
+            <Route path="regular" element={<RegularForm />} />
+            <Route path="hook-form" element={<RegularWithHook />} />
+            <Route path="exchange-regular" element={<ExchangeBookRegular />} />
+            <Route path="exchange-hook-form" element={<ExchangeBookWithForm />} />
+
+          </Route>
         </Route>
 
-        <Route path="/test" element={<CommonLayout />}></Route>
         <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route path="/test" element={<CommonLayout />}></Route>
+
 
         <Route path="/auth" element={<AuthLayout />}>
-          <Route path="login" element={<LoginPage />} />
+
           <Route path="signup" element={<SignupForm />} />
+
         </Route>
 
         <Route path="/in" element={<BaseLayout />}>

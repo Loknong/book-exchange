@@ -16,7 +16,7 @@ function Breadcrumb() {
   const fullBreadcrumbs = [{ label: "Home", url: "/" }, ...breadcrumbs];
   useEffect(() => {
     console.log("pathnames", pathnames);
-    return () => {};
+    return () => { };
   }, [pathnames]);
   return (
     <div className="container py-4 flex items-center gap-2 ">
@@ -32,9 +32,10 @@ function Breadcrumb() {
                 <span className="ml-1">{item.label}</span>
               </div>
             ) : (
+              // last menu
               <p className="text-gray-600 font-medium flex items-center gap-2 capitalize">
                 {item.label === "Home" ? <FaHome /> : undefined}
-                {item.label}
+                {item.label.replace("-"," ")}
               </p>
             )}
             {index < fullBreadcrumbs.length - 1 && (

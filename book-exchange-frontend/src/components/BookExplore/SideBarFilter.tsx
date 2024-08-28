@@ -9,9 +9,24 @@ interface FilterOption {
 interface SidebarFilterProps {
   title: string;
   options: FilterOption[];
+  selectedGenres: (genres: string[]) => void;
 }
 
-const SidebarFilter: React.FC<SidebarFilterProps> = ({ title, options }) => {
+const SidebarFilter: React.FC<SidebarFilterProps> = ({
+  title,
+  options,
+  selectedGenres,
+}) => {
+  const handleGenreChange = (genre: string, checked: boolean) => {
+    selectedGenres((prevGenres: string[]) => {
+      if (checked) {
+        return [...prevGenres, genre];
+      } else {
+        return prevGenres.filter((g) => g !== genre);
+      }
+    });
+  };
+
   return (
     <div className="pt-4">
       <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
@@ -24,8 +39,12 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({ title, options }) => {
               type="checkbox"
               id={option.id}
               className="text-primary focus:ring-0 rounded-sm cursor-pointer"
+              onChange={(e) => handleGenreChange(option.label, e.target.checked)}
             />
-            <label htmlFor={option.id} className="ml-3 text-gray-600 cursor-pointer">
+            <label
+              htmlFor={option.id}
+              className="ml-3 text-gray-600 cursor-pointer"
+            >
               {option.label}
             </label>
             <div className="ml-auto text-gray-600 text-sm">({option.count})</div>

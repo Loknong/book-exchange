@@ -46,12 +46,12 @@ const MainLayout2 = () => {
       </div>
 
       <Breadcrumb />
-      
+
       {/* main content */}
       <div className="container min-h-[30vh]">
         <Outlet />
       </div>
-      
+
       {/* back to top button */}
       <button
         className="rounded-full shadow-lg fixed bottom-10 right-10 bg-primary text-white p-2"

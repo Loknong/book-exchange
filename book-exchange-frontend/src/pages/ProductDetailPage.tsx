@@ -1,94 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ProductImg from "../assets/book.jpg";
-import OtherImage from "../assets/images/complete.png";
+import books from "../utils/mock/Books";
 
-// Enums for specific values
-enum ConditionEnum {
-  NEW = "New",
-  USED_LIKE_NEW = "Used - Like New",
-  USED_GOOD = "Used - Good",
-  USED_ACCEPTABLE = "Used - Acceptable",
-}
+import { AvailabilityStatusEnum } from "../utils/mock/Books";
 
-enum AvailabilityStatusEnum {
-  AVAILABLE = "Available",
-  PENDING = "Pending",
-  EXCHANGED = "Exchanged",
-}
-
-// Interface for the owner details
-interface BookOwner {
-  username: string;
-  location: string;
-  memberSince: string; // Assuming a string format like "January 2021"
-}
-
-// Interface for the exchange-related options
-interface ExchangeOptions {
-  preferredBooks: string[]; // Array of book titles that the owner prefers for exchange
-  exchangeLocation: string; // Location where the exchange can occur
-  exchangeCondition: string; // Condition required for the exchange
-}
-
-// Interface for availability details
-interface Availability {
-  status: AvailabilityStatusEnum;
-  listedDate: string; // Assuming a string format for date like "August 15, 2024"
-}
-
-// Main Book interface
-interface Book {
-  id: string; // Assuming the ID is a string
-  title: string;
-  author: string;
-  condition: ConditionEnum;
-  views: number;
-  description: string;
-  genres: string[]; // Array of genres
-  language: string;
-  images: string[]; // Array of image URLs or paths
-  owner: BookOwner;
-  exchangeOptions: ExchangeOptions;
-  availability: Availability;
-}
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
-  // Mock fetching book details based on the ID
-  const book: Book = {
-    id: id ?? "1",
-    title: "The Great Gatsby",
-    author: "F. Scott Fitzgerald",
-    condition: ConditionEnum.NEW,
-    views: 150,
-    description:
-      "The Great Gatsby is a novel written by American author F. Scott Fitzgerald that follows a cast of characters living in the fictional towns of West Egg and East Egg on prosperous Long Island in the summer of 1922.",
-    genres: ["Classics", "Fiction"],
-    language: "English",
-    images: [ProductImg, OtherImage], // More than 5 images
-    owner: {
-      username: "BookLover123",
-      location: "New York, USA",
-      memberSince: "January 2021",
-    },
-    exchangeOptions: {
-      preferredBooks: ["1984", "To Kill a Mockingbird"],
-      exchangeLocation: "Local meet-up or mail",
-      exchangeCondition: "Book of similar condition or better",
-    },
-    availability: {
-      status: AvailabilityStatusEnum.AVAILABLE,
-      listedDate: "August 15, 2024",
-    },
-  };
+  // Find the book with the matching ID
+  const book = books.find((book) => book.id === id);
+
+  if (!book) {
+    return <div>Book not found</div>; // Handle the case where the book is not found
+  }
 
   const [selectedImage, setSelectedImage] = useState<string>(book.images[0]);
+  const [isWish, setIsWish] = useState<boolean>(false);
 
   const handleImageSelect = (image: string) => {
     setSelectedImage(image);
   };
+  useEffect(() => {
+    console.log(books);
+
+
+
+  }, [])
+
 
   return (
     <div className="md:container mx-auto px-4 py-6">
@@ -108,9 +47,8 @@ const ProductDetailPage: React.FC = () => {
                 key={index}
                 src={image}
                 alt={`${book.title} - ${index + 1}`}
-                className={`h-24 w-24 object-cover rounded cursor-pointer ${
-                  image === selectedImage ? "border-2 border-primary" : ""
-                }`}
+                className={`h-24 w-24 object-cover rounded cursor-pointer ${image === selectedImage ? "border-2 border-primary" : ""
+                  }`}
                 onClick={() => handleImageSelect(image)}
               />
             ))}
@@ -181,19 +119,16 @@ const ProductDetailPage: React.FC = () => {
             <p className="text-md text-gray-600">
               <strong>Status:</strong>{" "}
               <span
-                className={`${
-                  book.availability.status === AvailabilityStatusEnum.AVAILABLE
-                    ? `text-green-500`
-                    : ""
-                } ${
-                  book.availability.status === AvailabilityStatusEnum.PENDING
+                className={`${book.availability.status === AvailabilityStatusEnum.AVAILABLE
+                  ? `text-green-500`
+                  : ""
+                  } ${book.availability.status === AvailabilityStatusEnum.PENDING
                     ? `text-yellow-500`
                     : ""
-                } ${
-                  book.availability.status === AvailabilityStatusEnum.EXCHANGED
+                  } ${book.availability.status === AvailabilityStatusEnum.EXCHANGED
                     ? `text-red-500`
                     : ""
-                }`}
+                  }`}
               >
                 {book.availability.status}
               </span>
@@ -202,9 +137,20 @@ const ProductDetailPage: React.FC = () => {
               <strong>Listed Date:</strong> {book.availability.listedDate}
             </p>
           </div>
-          <button className="bg-primary text-white px-6 py-2 rounded hover:bg-primary-dark transition">
-            Request Exchange
-          </button>
+          <div className="flex flex-row space-x-2">
+            <button className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark transition">
+              Request Exchange
+            </button>
+            <button
+              onClick={() => setIsWish(!isWish)}
+              className={` px-4 py-2 rounded 
+              ${isWish === true ? `text-white bg-primary-light border-primary`
+                  : `bg-primary text-white  hover:bg-primary-dark transition`
+                }`}
+            >
+              Make Wish List
+            </button>
+          </div>
         </div>
       </div>
     </div>

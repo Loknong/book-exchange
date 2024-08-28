@@ -22,9 +22,9 @@ const BookCard: React.FC<BookCardProps> = ({ book, onEdit, onDelete }) => {
       <img
         src={book.imageUrl}
         alt={book.title}
-        className="w-32 h-48 mb-4 rounded-lg shadow-lg object-cover"
+        className="md:w-32 w-24 h-38 md:h-48 mb-4 rounded-lg shadow-lg object-cover"
       />
-      <p className="text-lg font-semibold">{book.author}</p>
+      <p className="md:text-lg text-md font-semibold">{book.author}</p>
       <p
         className={`text-sm ${
           book.status === "Available" ? "text-green-600" : "text-red-600"
