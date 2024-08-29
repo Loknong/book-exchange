@@ -19,11 +19,11 @@ const Banner: React.FC<BannerProps> = ({
   const navigate = useNavigate();
   return (
     <div
-      className="bg-cover py-36 bg-center bg-no-repeat"
+      className="bg-cover md:py-36 py-24 bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${banner})` }}
     >
       <div className="container">
-        <h1 className="text-6xl text-gray-800 font-medium mb-4 capitalize">
+        <h1 className="md:text-6xl text-3xl text-gray-800 font-medium mb-4 capitalize">
           {title}
         </h1>
         <p>{description}</p>

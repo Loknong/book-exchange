@@ -47,14 +47,15 @@ const MainLayout2 = () => {
       <div className="fixed w-full top-0 left-0 z-50">
         <Header menuList={menuList} toggleNav={toggleNavigation} />
       </div>
-      
+
       <MenuMobile
         navigate={navigate}
         menuList={navList}
         isVisible={isNavExpanded}
         toggleNav={toggleNavigation}
       />
-      <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2">
+
+      <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2 md:block hidden">
         <Navbar
           dropdownItems={dropdownItems}
           navLinks={navLinks}

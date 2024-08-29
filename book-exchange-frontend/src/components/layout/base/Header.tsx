@@ -37,13 +37,16 @@ const Header = ({ menuList, toggleNav }: Props) => {
           >
             <div className="text-2xl relative">
               {menu.icon}
-              <span className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex justify-center items-center text-white text-xs bg-primary">5</span>
+              <span className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex justify-center items-center text-white text-xs bg-primary">
+                5
+              </span>
             </div>
             <div className="text-xs leading-3">{menu.name}</div>
           </a>
         ))}
-      </div>)
-  }
+      </div>
+    );
+  };
 
   const RenderGuestMenu = () => {
     return (
@@ -56,8 +59,8 @@ const Header = ({ menuList, toggleNav }: Props) => {
           <div className="text-xs leading-3">Login/Register</div>
         </a>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <header className="md:mx-0  py-4 shadow-sm bg-white">
@@ -74,61 +77,64 @@ const Header = ({ menuList, toggleNav }: Props) => {
             <img src={Logo} alt="Turnix" className="h-8 w-auto" />
           </div>
         </div>
+
+        {<span>{userId === null ? "Guest Mode" : "User Mode"} </span>}
         
-        {userId}
         <div className="md:block hidden">
-          <SearchBar handleClose={() => { }} onSearch={() => { }} />
+          <SearchBar handleClose={() => {}} onSearch={() => {}} />
         </div>
 
         {/* header menu list desktop view */}
-        {
-          userId === null ? <RenderGuestMenu /> : <RenderUserMenu />
-        }
-
+        {userId === null ? <RenderGuestMenu /> : <RenderUserMenu />}
 
         {/* mobile emote group */}
-        <div className="flex flex-row items-center gap-4 md:hidden ">
-          <div className="flex flex-row items-center gap-2 md:hidden">
-            <SearchMobile />
-          </div>
-
-          {/* notification */}
-          <div className="">
-            <IoMdNotificationsOutline className="text-xl" />
-          </div>
-
-          {/* header menu list mobile view */}
-          <div className="relative mr-3">
-            <div
-              onClick={() => setUserMenu(!userMenu)}
-              className={`${userMenu && `bg-gray-300`
-                }  w-4 h-4 rounded-full absolute opacity-50 -top-3 -right-3`}
-            ></div>
-
-            <div
-              onClick={() => setUserMenu(!userMenu)}
-              className="z-100 cursor-pointer"
-            >
-              <FaEllipsisV />
+        {userId === null ? (
+          ``
+        ) : (
+          <div className="flex flex-row items-center gap-4 md:hidden ">
+            <div className="flex flex-row items-center gap-2 md:hidden">
+              <SearchMobile />
             </div>
 
-            {userMenu && (
-              <div className="flex flex-col w-[230px] absolute right-2 top-8 md:hidden bg-white z-50 divide-y divide-gray-300 border border-gray-100 rounded shadow-md">
-                {menuList.map((menu, index) => (
-                  <a
-                    key={index}
-                    href="#"
-                    className=" text-gray-700 hover:text-primary hover:bg-gray-50 transition relative flex items-center gap-5 p-5"
-                    onClick={() => navigete(menu.url)}
-                  >
-                    <div className="text-2xl">{menu.icon}</div>
-                    <div className="text-xs leading-3">{menu.name}</div>
-                  </a>
-                ))}
+            {/* notification */}
+            <div className="">
+              <IoMdNotificationsOutline className="text-xl" />
+            </div>
+
+            {/* header menu list mobile view */}
+            <div className="relative mr-3">
+              <div
+                onClick={() => setUserMenu(!userMenu)}
+                className={`${
+                  userMenu && `bg-gray-300`
+                }  w-4 h-4 rounded-full absolute opacity-50 -top-3 -right-3`}
+              ></div>
+
+              <div
+                onClick={() => setUserMenu(!userMenu)}
+                className="z-100 cursor-pointer"
+              >
+                <FaEllipsisV />
               </div>
-            )}
+
+              {userMenu && (
+                <div className="flex flex-col w-[230px] absolute right-2 top-8 md:hidden bg-white z-50 divide-y divide-gray-300 border border-gray-100 rounded shadow-md">
+                  {menuList.map((menu, index) => (
+                    <a
+                      key={index}
+                      href="#"
+                      className=" text-gray-700 hover:text-primary hover:bg-gray-50 transition relative flex items-center gap-5 p-5"
+                      onClick={() => navigete(menu.url)}
+                    >
+                      <div className="text-2xl">{menu.icon}</div>
+                      <div className="text-xs leading-3">{menu.name}</div>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </header>
   );
