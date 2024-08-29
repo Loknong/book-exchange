@@ -7,52 +7,71 @@ import Navbar from "./base/Navbar";
 import { menuList, dropdownItems, navLinks } from "../../utils/mock/LayoutMock";
 import Breadcrumb from "./base/Breadcrumb";
 import Footer from "./base/Footer";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MenuMobile from "./base/MenuMobile";
 import { useSwipeable } from "react-swipeable";
+import { useLayoutStore } from "../../stores/layoutStore";
 
 const navList = [
   { name: "Home", link: "/" },
   { name: "About", link: "/about" },
   { name: "Contact", link: "/contact" },
 ];
-const MainLayout2 = () => {
-  const [isNavExpanded, setIsNavExpanded] = useState<boolean>(false);
+const MainLayout = () => {
+  // const [isNavExpanded, setIsNavExpanded] = useState<boolean>(false);
+
+  const { isSidebarOpen, toggleSidebar, setSidebarOpen } = useLayoutStore();
   const navigate = useNavigate();
 
   const backToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  const toggleNavigation = () => {
-    setIsNavExpanded(!isNavExpanded);
-  };
 
   useEffect(() => {
-    if (isNavExpanded) {
+    if (isSidebarOpen) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
     }
-  }, [isNavExpanded]);
+  }, [isSidebarOpen]);
 
   // Handlers for swipe gestures
   const handlers = useSwipeable({
-    onSwipedLeft: () => setIsNavExpanded(false),
-    onSwipedRight: () => setIsNavExpanded(true),
+    onSwipedLeft: () => setSidebarOpen(false),
+    onSwipedRight: () => setSidebarOpen(true),
     trackMouse: true, // to also allow swiping with the mouse
   });
+
+  // const toggleNavigation = () => {
+  //   setIsNavExpanded(!isNavExpanded);
+  // };
+
+  // useEffect(() => {
+  //   if (isNavExpanded) {
+  //     document.body.classList.add("overflow-hidden");
+  //   } else {
+  //     document.body.classList.remove("overflow-hidden");
+  //   }
+  // }, [isNavExpanded]);
+
+  // // Handlers for swipe gestures
+  // const handlers = useSwipeable({
+  //   onSwipedLeft: () => setIsNavExpanded(false),
+  //   onSwipedRight: () => setIsNavExpanded(true),
+  //   trackMouse: true, // to also allow swiping with the mouse
+  // });
 
   return (
     <div className="flex flex-col min-h-screen relative" {...handlers}>
       <div className="fixed w-full top-0 left-0 z-50">
-        <Header menuList={menuList} toggleNav={toggleNavigation} />
+        <Header menuList={menuList} toggleNav={toggleSidebar} />
       </div>
 
       <MenuMobile
         navigate={navigate}
         menuList={navList}
-        isVisible={isNavExpanded}
-        toggleNav={toggleNavigation}
+        isVisible={isSidebarOpen}
+        toggleNav={toggleSidebar}
       />
 
       <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2 md:block hidden">
@@ -82,4 +101,4 @@ const MainLayout2 = () => {
   );
 };
 
-export default MainLayout2;
+export default MainLayout;

@@ -1,6 +1,8 @@
 import { FaTimes } from "react-icons/fa";
 import { GoHome } from "react-icons/go";
 import { FaRegUser } from "react-icons/fa6";
+import { useUserStore } from "../../../stores/userStore";
+import { MdLogout } from "react-icons/md";
 
 interface Props {
   isVisible: boolean;
@@ -10,6 +12,8 @@ interface Props {
 }
 
 const MenuMobile = ({ isVisible, toggleNav, menuList, navigate }: Props) => {
+  const userId = useUserStore().userId;
+  const clearUser = useUserStore().clearUser;
   return (
     <div
       className={`menu-mobile fixed inset-0 z-50 grid grid-cols-12 transition duration-500 ${
@@ -25,13 +29,28 @@ const MenuMobile = ({ isVisible, toggleNav, menuList, navigate }: Props) => {
         {/* Head */}
         <div className="bg-secondary-muted flex flex-col">
           <div className="p-4 space-x-4 flex justify-end items-center text-white">
-            <div
-              className="flex flex-row space-x-4 items-center"
-              onClick={() => navigate("/login")}
-            >
-              <span className="text-md">Sign in </span>
-              <FaRegUser className="w-8 text-xl font-semibold" />
-            </div>
+            <>
+              {userId === null ? (
+                <div
+                  className="flex flex-row space-x-4 items-center cursor-pointer hover:text-primary"
+                  onClick={() => navigate("/login")}
+                >
+                  <span className="text-md">Sign in </span>
+                  <FaRegUser className="w-8 text-xl font-semibold" />
+                </div>
+              ) : (
+                <div
+                  className="flex flex-row space-x-4 items-center hover:text-primary cursor-pointer"
+                  onClick={() => {
+                    clearUser();
+                    navigate("/");
+                  }}
+                >
+                  <span className="text-md">Logout </span>
+                  <MdLogout className="w-8 text-xl font-semibold" />
+                </div>
+              )}
+            </>
           </div>
           <div className="text-white px-4 pb-4">
             <p className="font-semibold text-xl">Browse</p>

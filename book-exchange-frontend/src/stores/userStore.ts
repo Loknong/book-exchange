@@ -32,7 +32,11 @@ export const useUserStore = create<UserState>((set) => ({
     console.log("Setting user:", { userId, username, role });
     set({ userId, username, role, loading: false });
   },
-  clearUser: () => set({ userId: null, username: null, role: null }),
+  clearUser: () => {
+    set({ userId: null, username: null, role: null });
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("tokenExpiration");
+  },
   initializeUser: () => {
     const token = localStorage.getItem("authToken");
     const tokenExpiration = localStorage.getItem("tokenExpiration");
@@ -82,5 +86,3 @@ export const useUserStore = create<UserState>((set) => ({
     }
   },
 }));
-
-
