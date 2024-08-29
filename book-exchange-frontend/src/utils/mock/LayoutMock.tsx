@@ -29,6 +29,12 @@ export const menuList = [
   { name: "Account", url: "/account", icon: <FaUser /> },
 ];
 
+export const menuMobileList = [
+  { name: "My Books", url: "/my-books", icon: <FaBook /> },
+  { name: "Exchange Requests", url: "/exchange-requests", icon: <FaSyncAlt /> },
+  { name: "Account", url: "/account", icon: <FaUser /> },
+];
+
 // export  const breadcrumbExploreItems = [
 //   { label: "Home", url: "/", icon: FaBook },
 //   { label: "Explore Books" },

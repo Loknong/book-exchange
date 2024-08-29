@@ -63,7 +63,7 @@ const Header = ({ menuList, toggleNav }: Props) => {
   };
 
   return (
-    <header className="md:mx-0  py-4 shadow-sm bg-white">
+    <header className="md:mx-0 pr-2 md:px-0 py-4 shadow-sm bg-white">
       <div className="md:container  flex items-center justify-between">
         <div className="flex items-center">
           <RxHamburgerMenu
@@ -79,7 +79,7 @@ const Header = ({ menuList, toggleNav }: Props) => {
         </div>
 
         {<span>{userId === null ? "Guest Mode" : "User Mode"} </span>}
-        
+
         <div className="md:block hidden">
           <SearchBar handleClose={() => {}} onSearch={() => {}} />
         </div>

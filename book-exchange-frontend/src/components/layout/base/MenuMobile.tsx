@@ -1,8 +1,9 @@
 import { FaTimes } from "react-icons/fa";
-import { GoHome } from "react-icons/go";
 import { FaRegUser } from "react-icons/fa6";
 import { useUserStore } from "../../../stores/userStore";
 import { MdLogout } from "react-icons/md";
+import { useLayoutStore } from "../../../stores/layoutStore";
+import { menuList as importMenuList } from "../../../utils/mock/LayoutMock";
 
 interface Props {
   isVisible: boolean;
@@ -10,10 +11,30 @@ interface Props {
   menuList: { name: string; link: string }[];
   navigate: (path: string) => void;
 }
+interface MainMenuProps {
+  name: string;
+  url: string;
+  icon: React.ReactNode;
+  navigate: (path: string) => void;
+}
 
 const MenuMobile = ({ isVisible, toggleNav, menuList, navigate }: Props) => {
   const userId = useUserStore().userId;
   const clearUser = useUserStore().clearUser;
+  const { setSidebarOpen } = useLayoutStore();
+
+  const MainMenu = ({ name, url, icon, navigate }: MainMenuProps) => {
+    return (
+      <div
+        className="flex justify-between items-center cursor-pointer hover:text-primary"
+        onClick={() => navigate(url)}
+      >
+        <span className="text-secondary font-bold text-xl">{name}</span>
+        <div className="w-6 h-6">{icon}</div>
+      </div>
+    );
+  };
+
   return (
     <div
       className={`menu-mobile fixed inset-0 z-50 grid grid-cols-12 transition duration-500 ${
@@ -43,6 +64,7 @@ const MenuMobile = ({ isVisible, toggleNav, menuList, navigate }: Props) => {
                   className="flex flex-row space-x-4 items-center hover:text-primary cursor-pointer"
                   onClick={() => {
                     clearUser();
+                    setSidebarOpen(false);
                     navigate("/");
                   }}
                 >
@@ -60,11 +82,16 @@ const MenuMobile = ({ isVisible, toggleNav, menuList, navigate }: Props) => {
 
         {/* Sections with divide */}
         <div className="divide-y-4 divide-secondary-light flex flex-col">
-          <div className="flex justify-between items-center p-4">
-            <span className="text-secondary font-bold text-xl">
-              TURNiX Home
-            </span>
-            <GoHome className="w-6 h-6" />
+          <div className="flex  flex-col justify-between  p-4">
+            {importMenuList.map((item, index) => (
+              <MainMenu
+                key={index}
+                name={item.name}
+                url={item.url}
+                icon={item.icon}
+                navigate={navigate}
+              />
+            ))}
           </div>
 
           <div className="p-4">

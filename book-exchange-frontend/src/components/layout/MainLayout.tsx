@@ -35,6 +35,10 @@ const MainLayout = () => {
     }
   }, [isSidebarOpen]);
 
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, []);
+
   // Handlers for swipe gestures
   const handlers = useSwipeable({
     onSwipedLeft: () => setSidebarOpen(false),
@@ -42,31 +46,13 @@ const MainLayout = () => {
     trackMouse: true, // to also allow swiping with the mouse
   });
 
-  // const toggleNavigation = () => {
-  //   setIsNavExpanded(!isNavExpanded);
-  // };
-
-  // useEffect(() => {
-  //   if (isNavExpanded) {
-  //     document.body.classList.add("overflow-hidden");
-  //   } else {
-  //     document.body.classList.remove("overflow-hidden");
-  //   }
-  // }, [isNavExpanded]);
-
-  // // Handlers for swipe gestures
-  // const handlers = useSwipeable({
-  //   onSwipedLeft: () => setIsNavExpanded(false),
-  //   onSwipedRight: () => setIsNavExpanded(true),
-  //   trackMouse: true, // to also allow swiping with the mouse
-  // });
-
   return (
     <div className="flex flex-col min-h-screen relative" {...handlers}>
       <div className="fixed w-full top-0 left-0 z-50">
         <Header menuList={menuList} toggleNav={toggleSidebar} />
       </div>
 
+      {/* mobile navigation on sidenav*/}
       <MenuMobile
         navigate={navigate}
         menuList={navList}
@@ -74,7 +60,8 @@ const MainLayout = () => {
         toggleNav={toggleSidebar}
       />
 
-      <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2 md:block hidden">
+      {/* <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2 md:block hidden"> */}
+      <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2 ">
         <Navbar
           dropdownItems={dropdownItems}
           navLinks={navLinks}
@@ -96,6 +83,7 @@ const MainLayout = () => {
         </span>
         <span className="md:block hidden">Back to Top</span>
       </button>
+
       <Footer />
     </div>
   );

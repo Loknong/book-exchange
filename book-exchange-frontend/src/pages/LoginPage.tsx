@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,7 +35,9 @@ function LoginPage() {
   const setUser = useUserStore((state) => state.setUser);
   const onSubmit = (data: LoginFormInputs) => {
     if (isMockMode()) {
-      const user = mockUsers.find((user) => user.email === data.email && user.password === data.password);
+      const user = mockUsers.find(
+        (user) => user.email === data.email && user.password === data.password
+      );
       if (user) {
         setUser(user.id, user.username, user.role);
         localStorage.setItem("authToken", JSON.stringify(user)); // Save user info in localStorage
@@ -68,8 +69,9 @@ function LoginPage() {
             <input
               type="email"
               id="email"
-              className={`block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400 ${errors.email ? "border-red-500" : ""
-                }`}
+              className={`block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400 ${
+                errors.email ? "border-red-500" : ""
+              }`}
               placeholder="Enter your email address"
               {...register("email")}
             />
@@ -86,8 +88,9 @@ function LoginPage() {
             <input
               type="password"
               id="password"
-              className={`block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400 ${errors.password ? "border-red-500" : ""
-                }`}
+              className={`block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400 ${
+                errors.password ? "border-red-500" : ""
+              }`}
               placeholder="Enter your password"
               {...register("password")}
             />
@@ -123,10 +126,11 @@ function LoginPage() {
             <button
               type="submit"
               disabled={!isValid}
-              className={`block w-full text-center border py-2 rounded text-white uppercase font-medium transition ${isValid
-                ? "bg-primary hover:bg-transparent hover:text-primary  border-primary "
-                : "bg-gray-300 cursor-not-allowed"
-                }`}
+              className={`block w-full text-center border py-2 rounded text-white uppercase font-medium transition ${
+                isValid
+                  ? "bg-primary hover:bg-transparent hover:text-primary  border-primary "
+                  : "bg-gray-300 cursor-not-allowed"
+              }`}
             >
               Login
             </button>
@@ -158,15 +162,15 @@ function LoginPage() {
 
       <p className="mt-4 text-gray-600 text-center">
         Don't have an account?
-        <span onClick={() => navigate("/register")} className="text-primary ml-2">
+        <span
+          onClick={() => navigate("/register")}
+          className="text-primary ml-2"
+        >
           Register now
         </span>
       </p>
     </AuthFormHandler>
-
   );
 }
 
 export default LoginPage;
-
-
