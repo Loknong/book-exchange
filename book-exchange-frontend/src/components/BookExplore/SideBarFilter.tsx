@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface FilterOption {
   id: string;
@@ -17,13 +17,14 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
   options,
   selectedGenres,
 }) => {
+  const [, setGenres] = useState<string[]>([]);
   const handleGenreChange = (genre: string, checked: boolean) => {
-    selectedGenres((prevGenres: string[]) => {
-      if (checked) {
-        return [...prevGenres, genre];
-      } else {
-        return prevGenres.filter((g) => g !== genre);
-      }
+    setGenres((prevGenres) => {
+      const newGenres = checked
+        ? [...prevGenres, genre]
+        : prevGenres.filter((g) => g !== genre);
+      selectedGenres(newGenres);
+      return newGenres;
     });
   };
 
@@ -39,7 +40,9 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
               type="checkbox"
               id={option.id}
               className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-              onChange={(e) => handleGenreChange(option.label, e.target.checked)}
+              onChange={(e) =>
+                handleGenreChange(option.label, e.target.checked)
+              }
             />
             <label
               htmlFor={option.id}
@@ -47,7 +50,9 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({
             >
               {option.label}
             </label>
-            <div className="ml-auto text-gray-600 text-sm">({option.count})</div>
+            <div className="ml-auto text-gray-600 text-sm">
+              ({option.count})
+            </div>
           </div>
         ))}
       </div>

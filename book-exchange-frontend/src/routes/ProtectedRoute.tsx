@@ -11,11 +11,13 @@ const ProtectedRoute = ({ children }: Props) => {
 
   useEffect(() => {
     if (userId === null) {
+      console.log("User ID is null, initializing user...");
       initializeUser(); // Initialize user from token if not already set
     }
   }, [userId, initializeUser, loading]);
 
   if (loading) {
+    console.log("Loading state is true, showing loading message...");
     return <div>Loading...</div>; // or a more sophisticated loading indicator
   }
 

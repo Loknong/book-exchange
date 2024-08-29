@@ -1,53 +1,84 @@
-// book-exchange-frontend/src/components/layout/MainLayout.tsx
-import React, { useState } from "react";
-import "./MainLayout.css";
+import Header from "./base/Header";
+import { useNavigate } from "react-router-dom";
+import { FaChevronUp } from "react-icons/fa";
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+import { Outlet } from "react-router-dom";
+import Navbar from "./base/Navbar";
+import { menuList, dropdownItems, navLinks } from "../../utils/mock/LayoutMock";
+import Breadcrumb from "./base/Breadcrumb";
+import Footer from "./base/Footer";
+import { useEffect, useState } from "react";
+import MenuMobile from "./base/MenuMobile";
+import { useSwipeable } from "react-swipeable";
 
-export default function MainLayout({ children }: LayoutProps) {
-  const [menuOpen, setMenuOpen] = useState(false);
+const navList = [
+  { name: "Home", link: "/" },
+  { name: "About", link: "/about" },
+  { name: "Contact", link: "/contact" },
+];
+const MainLayout2 = () => {
+  const [isNavExpanded, setIsNavExpanded] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+  const backToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const toggleNavigation = () => {
+    setIsNavExpanded(!isNavExpanded);
   };
 
+  useEffect(() => {
+    if (isNavExpanded) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [isNavExpanded]);
+
+  // Handlers for swipe gestures
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setIsNavExpanded(false),
+    onSwipedRight: () => setIsNavExpanded(true),
+    trackMouse: true, // to also allow swiping with the mouse
+  });
+
   return (
-    <div className="main-layout">
-      <header className="header flex justify-between items-center p-4 bg-gray-100">
-        <div className="hamburger cursor-pointer" onClick={toggleMenu}>
-          &#9776;
-        </div>
-        <div>Header</div>
-        <div>
-          <input
-            type="text"
-            placeholder="Search..."
-            className="p-2 border border-gray-300 rounded"
-          />
-        </div>
-      </header>
-      <nav
-        className={`navbar ${menuOpen ? "navbar-menu active" : "navbar-menu"}`}
+    <div className="flex flex-col min-h-screen relative" {...handlers}>
+      <div className="fixed w-full top-0 left-0 z-50">
+        <Header menuList={menuList} toggleNav={toggleNavigation} />
+      </div>
+      
+      <MenuMobile
+        navigate={navigate}
+        menuList={navList}
+        isVisible={isNavExpanded}
+        toggleNav={toggleNavigation}
+      />
+      <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2">
+        <Navbar
+          dropdownItems={dropdownItems}
+          navLinks={navLinks}
+          navigate={navigate}
+        />
+      </div>
+      <Breadcrumb />
+      {/* main content */}
+      <div className="container min-h-[30vh]">
+        <Outlet />
+      </div>
+      {/* back to top button */}
+      <button
+        className="rounded-full shadow-lg fixed bottom-10 right-10 bg-primary text-white p-2"
+        onClick={backToTop}
       >
-        <div className="hamburger cursor-pointer p-4" onClick={toggleMenu}>
-          &#9776;
-        </div>
-        <ul className="p-4">
-          <li className="py-2 text-white">Menu Item 1</li>
-          <li className="py-2 text-white">Menu Item 2</li>
-          <li className="py-2 text-white">Menu Item 3</li>
-        </ul>
-      </nav>
-      {menuOpen && (
-        <div
-          className={`overlay ${menuOpen ? "active" : ""}`}
-          onClick={toggleMenu}
-        ></div>
-      )}
-      <main className="main p-4">{children}</main>
-      <footer className="footer p-4 bg-gray-100">Footer</footer>
+        <span className="md:hidden block">
+          <FaChevronUp />
+        </span>
+        <span className="md:block hidden">Back to Top</span>
+      </button>
+      <Footer />
     </div>
   );
-}
+};
+
+export default MainLayout2;

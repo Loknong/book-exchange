@@ -41,6 +41,7 @@ const Navbar: React.FC<NavbarProps> = ({
               />
             ))}
           </div>
+          
           <div
             className="text-gray-200 hover:text-white transition cursor-pointer md:ml-0 ml-6"
             onClick={() => navigate("/login")}

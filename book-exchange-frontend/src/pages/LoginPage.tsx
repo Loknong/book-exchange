@@ -6,6 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 
 import { AuthFormHandler } from "../components/layout/AuthFormHandler";
+import { isMockMode } from "../utils/mode";
+import { mockUsers } from "../utils/mock/UserMockData";
+import { useUserStore } from "../stores/userStore";
 const loginSchema = z.object({
   email: z
     .string()
@@ -20,10 +23,6 @@ const loginSchema = z.object({
 
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
-
-
-
-
 function LoginPage() {
   const {
     register,
@@ -34,9 +33,26 @@ function LoginPage() {
     mode: "onChange",
   });
   const navigate = useNavigate();
+  const setUser = useUserStore((state) => state.setUser);
   const onSubmit = (data: LoginFormInputs) => {
-    console.log(data);
+    if (isMockMode()) {
+      const user = mockUsers.find((user) => user.email === data.email && user.password === data.password);
+      if (user) {
+        setUser(user.id, user.username, user.role);
+        localStorage.setItem("authToken", JSON.stringify(user)); // Save user info in localStorage
+        const expirationTime = new Date().getTime() + 30 * 60 * 1000; // 30 minutes from now
+        localStorage.setItem("authToken", JSON.stringify(user)); // Save user info in localStorage
+        localStorage.setItem("tokenExpiration", expirationTime.toString()); // Save the expiration time
+        navigate("/"); // Redirect to the main page or any protected route
+      } else {
+        console.error("Invalid credentials");
+      }
+    } else {
+      // Here would be your API call in production mode
+      console.log("API login logic here", data);
+    }
   };
+
   return (
     <AuthFormHandler>
       <h2 className="text-3xl uppercase font-medium mb-1">Sign In</h2>
@@ -152,3 +168,5 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
+

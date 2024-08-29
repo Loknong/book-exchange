@@ -10,7 +10,6 @@ document.title = "Turnix Book Exchange";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Router>
-      {/* <TestPanel /> */}
       <App />
     </Router>
   </React.StrictMode>
