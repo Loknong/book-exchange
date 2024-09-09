@@ -61,7 +61,7 @@ export const useUserStore = create(
        */
       setUser: (userId, username, role, remember, authToken, tokenExpiration) => {
         console.log("Setting user:", { userId, username, role, authToken, tokenExpiration });
-
+        set({tokenExpiration: null})
         set({ userId, username, role, remember, authToken, tokenExpiration, loading: false });
       },
       clearUser: () => {
@@ -143,6 +143,8 @@ export const useUserStore = create(
         console.log("check expire function");
         console.log("CurrentTime", currentTime);
         console.log("Token Expirication", tokenExpiration);
+
+        // Check if remember me is checked we extend it 30 minutes when checkExpire function is call
         if (remember) {
           console.log("Remember me is checked");
 
@@ -150,13 +152,15 @@ export const useUserStore = create(
 
         }
         console.log("New Token Expirication", tokenExpiration);
+
+        // If remember me is not checked we do not extend the token expiration, tokenExpiration must not be null
         if (tokenExpiration === null) return;
         if (currentTime >= tokenExpiration) {
           console.log("Token has expired from check Expire function");
           set({ userId: null, authToken: null, tokenExpiration: null, loading: false, username: null });
-          return
+          return;
         }
-        set({tokenExpiration: null})
+        
       },
 
     }),
