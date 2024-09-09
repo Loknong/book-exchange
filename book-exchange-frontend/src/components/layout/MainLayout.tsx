@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import MenuMobile from "./base/MenuMobile";
 import { useSwipeable } from "react-swipeable";
 import { useLayoutStore } from "../../stores/layoutStore";
+import { useUserStore } from "../../stores/userStore";
 
 const navList = [
   { name: "Home", link: "/" },
@@ -19,7 +20,7 @@ const navList = [
 ];
 const MainLayout = () => {
   // const [isNavExpanded, setIsNavExpanded] = useState<boolean>(false);
-
+const checkExpire = useUserStore((state) => state.checkExpire)
   const { isSidebarOpen, toggleSidebar, setSidebarOpen } = useLayoutStore();
   const navigate = useNavigate();
 
@@ -38,6 +39,10 @@ const MainLayout = () => {
   useEffect(() => {
     setSidebarOpen(false);
   }, []);
+
+  useEffect(() =>{
+    checkExpire();
+  },[])
 
   // Handlers for swipe gestures
   const handlers = useSwipeable({

@@ -6,7 +6,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import SearchMobile from "../../SearchMobile";
 import { useState } from "react";
-import useInitializeUser from "../../../hooks/useInitailizeUser";
+import { useUserStore } from "../../../stores/userStore";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 interface MenuList {
@@ -23,7 +23,7 @@ interface Props {
 const Header = ({ menuList, toggleNav }: Props) => {
   const navigete = useNavigate();
   const [userMenu, setUserMenu] = useState<boolean>(false);
-  const { userId } = useInitializeUser();
+  const userId = useUserStore((state) => state.userId);
 
   const RenderUserMenu = () => {
     return (

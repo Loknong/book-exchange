@@ -2,6 +2,7 @@ import React from "react";
 import CategoriesDropdown from "./CategoryDropdown";
 import NavLink from "./NavLink";
 import { IconType } from "react-icons";
+import { useUserStore } from "../../../stores/userStore";
 
 interface DropdownItem {
   label: string;
@@ -25,6 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({
   navLinks,
   navigate,
 }) => {
+  const userId = useUserStore((state) => state.userId)
   return (
     <nav className="bg-secondary-muted ">
       <div className="container flex">
@@ -41,12 +43,18 @@ const Navbar: React.FC<NavbarProps> = ({
               />
             ))}
           </div>
-          
+
           <div
             className="text-gray-200 hover:text-white transition cursor-pointer md:ml-0 ml-6"
             onClick={() => navigate("/login")}
           >
-            Login/Register
+
+            {userId === null ?
+              <span>
+                Login / Register
+              </span> : ``
+            }
+
           </div>
         </div>
       </div>

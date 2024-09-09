@@ -1,6 +1,9 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
+import { useUserStore } from "./stores/userStore";
+import { useEffect } from "react";
 
+// Old Page
 import AddressPage from "./pages/AddressPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -17,7 +20,6 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import AboutPage from "./pages/AboutPage";
 import ContactUsPage from "./pages/ContactPage";
 
-
 // Form
 import ReactFormPage from "./pages/testing/ReactFormPage";
 import RegularForm from "./react-form/regularRegister";
@@ -33,6 +35,16 @@ import ProfileInfo from "./components/ProfileInfo";
 import SearchPage from "./pages/mobile/SearchPage";
 
 function App() {
+  const initializeUser = useUserStore((state) => state.initializeUser);
+  const checkExpire = useUserStore((state) => state.checkExpire)
+  useEffect(() => {
+    initializeUser();
+  }, []);
+
+  useEffect(() => {
+    checkExpire();
+  },[])
+
   return (
     <>
       <Routes>
