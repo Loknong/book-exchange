@@ -38,7 +38,11 @@ function LoginPage() {
       const user = mockUsers.find(user => user.email === data.email && user.password === data.password);
       if (user) {
         const authToken = JSON.stringify(user); // Mock token
-        const expirationTime = new Date().getTime() + 0.5 * 60 * 1000;
+        const expirationTime = new Date().getTime() + 30 * 60 * 1000;
+        console.log("Mock token:", authToken);
+        console.log("Expiration time:", expirationTime);
+        
+        
 
         setUser(user.id, user.username, user.role, data.remember, authToken, expirationTime);
 
