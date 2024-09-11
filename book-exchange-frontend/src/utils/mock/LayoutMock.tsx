@@ -19,6 +19,7 @@ export const dropdownItems = [
 export const navLinks = [
   { label: "Home", url: "/" },
   { label: "Explore", url: "/explore" },
+  { label:"Explore Open Library", url: "/explore-open-library"},
   { label: "About us", url: "/about" },
   { label: "Contact us", url: "/contact" },
 ];

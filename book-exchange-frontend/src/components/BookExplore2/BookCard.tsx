@@ -3,46 +3,42 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch, FaHeart } from "react-icons/fa";
 
 interface BookCardProps {
-  image: string;
+  coverId: number | undefined; // The cover ID to fetch the image from OpenLibrary
   title: string;
   author: string;
-  condition: string;
-  views: number;
-  link: string; // This will be used for navigating programmatically
+  link: string; // Link to navigate to the book detail page
 }
 
-const BookCard: React.FC<BookCardProps> = ({
-  image,
-  title,
-  author,
-  condition,
-  views,
-  link,
-}) => {
+const BookCard: React.FC<BookCardProps> = ({ coverId, title, author, link }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate(link);
+    navigate(link); // Navigate to the book detail page
   };
 
   return (
     <div
-      className="lg:px-4 md:px-2 px-1 py-4 bg-white shadow rounded overflow-hidden"
+      className="lg:px-4 md:px-2 px-1 py-4 bg-white shadow rounded overflow-hidden group"
       onClick={handleNavigate}
       style={{ cursor: "pointer" }}
     >
       <div className="relative">
-        <img
-          src={image}
-          alt={title}
-          className="w-full object-cover h-32 md:h-48 lg:h-56"
-        />
+        {coverId ? (
+          <img
+            src={`https://covers.openlibrary.org/b/id/${coverId}-L.jpg`}
+            alt={title}
+            className="w-full object-cover h-32 md:h-48 lg:h-56"
+          />
+        ) : (
+          <div className="w-full h-32 md:h-48 lg:h-56 bg-gray-200 flex items-center justify-center text-gray-500">
+            No Image
+          </div>
+        )}
         <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
           <div
             className="bg-primary text-white text-lg rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-800 transition"
             onClick={(e) => {
               e.stopPropagation(); // Prevent navigation on icon click
-              // Add any specific action for the search icon here
             }}
           >
             <FaSearch />
@@ -65,18 +61,18 @@ const BookCard: React.FC<BookCardProps> = ({
         <p className="text-xs md:text-sm text-gray-600">By {author}</p>
         <div className="flex items-center">
           <p className="text-xs md:text-sm text-gray-600">
-            Condition: {condition}
+            Condition: {'mock-good'}
           </p>
         </div>
         <div className="flex items-center">
-          <p className="text-xs md:text-sm text-gray-600">Views: {views}</p>
+          <p className="text-xs md:text-sm text-gray-600">Views: {20}</p>
         </div>
       </div>
       <div
         className="bg-primary border border-primary rounded-b text-white w-full block py-1 text-sm md:text-base lg:text-lg hover:bg-transparent hover:text-primary transition text-center"
         onClick={handleNavigate}
       >
-        Make an Offer
+        View Details
       </div>
     </div>
   );

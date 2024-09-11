@@ -34,6 +34,10 @@ import ProfileInfo from "./components/ProfileInfo";
 // Mobile-specific routes
 import SearchPage from "./pages/mobile/SearchPage";
 
+// Testing Page
+import BookExplorePage_2 from "./components/BookExplore2/BookExplorePage_2";
+import ProductDetailPage_2 from "./pages/ProductDetailPage2";
+
 function App() {
   const initializeUser = useUserStore((state) => state.initializeUser);
   const checkExpire = useUserStore((state) => state.checkExpire)
@@ -43,23 +47,19 @@ function App() {
 
   useEffect(() => {
     checkExpire();
-  },[])
+  }, [])
 
   return (
     <>
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route
-            index
-            element={
-
-              <LandingPage />
-            }
-          />
+          <Route index element={<LandingPage />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path="explore" element={<BookExplorePage />} />
+          <Route path="explore-open-library" element={<BookExplorePage_2 />} />
           <Route path="explore/product/:id" element={<ProductDetailPage />} />
           <Route path="product/:id" element={<ProductDetailPage />} />
+          <Route path="product/works/:id" element={<ProductDetailPage_2 />} />
 
           {/* Company Detail page */}
           <Route path="about" element={<AboutPage />}></Route>

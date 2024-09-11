@@ -20,7 +20,7 @@ const navList = [
 ];
 const MainLayout = () => {
   // const [isNavExpanded, setIsNavExpanded] = useState<boolean>(false);
-const checkExpire = useUserStore((state) => state.checkExpire)
+  const checkExpire = useUserStore((state) => state.checkExpire)
   const { isSidebarOpen, toggleSidebar, setSidebarOpen } = useLayoutStore();
   const navigate = useNavigate();
 
@@ -40,9 +40,9 @@ const checkExpire = useUserStore((state) => state.checkExpire)
     setSidebarOpen(false);
   }, []);
 
-  useEffect(() =>{
+  useEffect(() => {
     checkExpire();
-  },[])
+  }, [])
 
   // Handlers for swipe gestures
   const handlers = useSwipeable({
@@ -67,6 +67,7 @@ const checkExpire = useUserStore((state) => state.checkExpire)
 
       {/* <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2 md:block hidden"> */}
       <div className="md:mt-[82px] mt-[71px] z-40 md:overflow-x-visible overflow-x-auto bg-secondary-muted md:py-0 py-2 ">
+
         <Navbar
           dropdownItems={dropdownItems}
           navLinks={navLinks}
