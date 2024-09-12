@@ -17,19 +17,24 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 function LoginPage() {
-  const { register, handleSubmit, formState: { errors, isValid } } = useForm<LoginFormInputs>({
+  const { register, handleSubmit, formState: { errors, isValid }, setError } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
     mode: "onChange",
   });
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser);
   const checkExpire = useUserStore((state) => state.checkExpire);
+  const userId = useUserStore((state) => state.userId);
 
   useEffect(() => {
     checkExpire();
   }, [])
 
-
+  useEffect(() => {
+    if (userId) {
+      navigate('/');
+    }
+  }, []);
 
   const onSubmit = (data: LoginFormInputs) => {
     console.log("Login Data", data);
@@ -41,14 +46,15 @@ function LoginPage() {
         const expirationTime = new Date().getTime() + 30 * 60 * 1000;
         console.log("Mock token:", authToken);
         console.log("Expiration time:", expirationTime);
-        
-        
+
+
 
         setUser(user.id, user.username, user.role, data.remember, authToken, expirationTime);
 
         navigate("/"); // Redirect to the main page or any protected route
       } else {
         console.error("Invalid credentials");
+        setError("root", { message: "Invalid credentials" });
       }
     } else {
       // Here would be your API call in production mode
@@ -101,6 +107,7 @@ function LoginPage() {
               Login
             </button>
           </div>
+          {errors.root && <p className="text-red-500 text-sm mt-1">{errors.root.message}</p>}
         </div>
       </form>
 

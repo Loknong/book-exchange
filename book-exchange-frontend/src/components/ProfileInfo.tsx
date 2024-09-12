@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Profile from "../assets/book.jpg";
-interface UserProfile {
+import { useUserStore } from "../stores/userStore";
+
+export interface UserProfile {
   name: string;
   email: string;
   bio: string;
@@ -10,12 +12,17 @@ interface UserProfile {
 }
 
 const ProfileInfo: React.FC = () => {
+
+  const getAuthToken = useUserStore((state) => state.getParsedAuthToken);
+  const userData = getAuthToken() as UserProfile;
+
+
   const [user, setUser] = useState<UserProfile>({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    username: "johndoe123",
-    phone: "+1234567890",
+    name: userData.name,
+    email: userData.email,
+    bio: userData.bio,
+    username: userData.username,
+    phone: userData.phone,
     profilePicture: Profile,
   });
 
@@ -81,7 +88,7 @@ const ProfileInfo: React.FC = () => {
               name="name"
               value={user.name}
               onChange={handleInputChange}
-              className="border border-gray-300 p-2 rounded-md"
+              className="border border-gray-300 focus:outline-none  focus:border-primary p-2 rounded-md"
             />
           </div>
 
@@ -92,7 +99,7 @@ const ProfileInfo: React.FC = () => {
               name="username"
               value={user.username}
               onChange={handleInputChange}
-              className="border border-gray-300 p-2 rounded-md"
+              className="border border-gray-300 focus:outline-none  focus:border-primary p-2 rounded-md"
             />
           </div>
 
@@ -103,7 +110,7 @@ const ProfileInfo: React.FC = () => {
               name="email"
               value={user.email}
               onChange={handleInputChange}
-              className="border border-gray-300 p-2 rounded-md"
+              className="border border-gray-300 focus:outline-none  focus:border-primary p-2 rounded-md"
             />
           </div>
 
@@ -114,7 +121,7 @@ const ProfileInfo: React.FC = () => {
               name="phone"
               value={user.phone}
               onChange={handleInputChange}
-              className="border border-gray-300 p-2 rounded-md"
+              className="border border-gray-300 focus:outline-none  focus:border-primary p-2 rounded-md"
             />
           </div>
 
@@ -124,7 +131,7 @@ const ProfileInfo: React.FC = () => {
               name="bio"
               value={user.bio}
               onChange={handleInputChange}
-              className="border border-gray-300 p-2 rounded-md"
+              className="border border-gray-300 focus:outline-none  focus:border-primary p-2 rounded-md"
             />
           </div>
 
@@ -161,7 +168,7 @@ const ProfileInfo: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="mt-6 bg-blue-600 text-white px-4 py-2 rounded-md"
+            className="mt-6 bg-primary text-white px-4 py-2 rounded-md hover:bg-transparent hover:text-primary border border-primary"
           >
             Edit Profile
           </button>

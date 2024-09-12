@@ -37,6 +37,7 @@ import SearchPage from "./pages/mobile/SearchPage";
 // Testing Page
 import BookExplorePage_2 from "./components/BookExplore2/BookExplorePage_2";
 import ProductDetailPage_2 from "./pages/ProductDetailPage2";
+import FormPage from "./pages/form/FormPage";
 
 function App() {
   const initializeUser = useUserStore((state) => state.initializeUser);
@@ -76,6 +77,9 @@ function App() {
 
           {/* Mobile-specific routes */}
           <Route path="search" element={<SearchPage />} />
+
+          {/* Testing Form Page */}
+          <Route path="form-page" element={<FormPage />} />
 
           {/* practice form */}
           <Route path="form" element={<ReactFormPage />}>

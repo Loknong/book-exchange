@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import ExchangeRequestModal from "../components/ExchangeProcess/ExchangeRequestModal"; // Import the modal component
 
 interface BookDetails {
   title: string;
@@ -37,6 +38,9 @@ const ProductDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null); // State to handle errors
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // Selected image state
   const [isWish, setIsWish] = useState<boolean>(false); // State to handle wishlist
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
+
+const [isMakeWishList, setIsMakeWishList] = useState<boolean>(false); // State to handle wishlist
 
   // Fetch the book details from OpenLibrary based on the work ID
   const fetchBookDetails = async () => {
@@ -59,6 +63,15 @@ const ProductDetailPage: React.FC = () => {
     }
   };
 
+
+  const makeWishList = async () => {
+     setIsMakeWishList(true)
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+    setIsWish(!isWish)
+    setIsMakeWishList(false)
+  }
+
+
   useEffect(() => {
     if (id) {
       fetchBookDetails(); // Fetch book details when the component mounts
@@ -66,15 +79,30 @@ const ProductDetailPage: React.FC = () => {
   }, [id]);
 
   if (loading) {
-    return <div>Loading book details...
-      <div role="status">
-        <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-          <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-        </svg>
-        <span className="sr-only">Loading...</span>
+    return (
+      <div>
+        Loading book details...
+        <div role="status">
+          <svg
+            aria-hidden="true"
+            className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+            />
+          </svg>
+          <span className="sr-only">Loading...</span>
+        </div>
       </div>
-    </div>;
+    );
   }
 
   if (error) {
@@ -88,6 +116,9 @@ const ProductDetailPage: React.FC = () => {
   const handleImageSelect = (imageUrl: string) => {
     setSelectedImage(imageUrl);
   };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <div className="md:container mx-auto px-4 py-6">
@@ -105,7 +136,7 @@ const ProductDetailPage: React.FC = () => {
               <img
                 src={selectedImage}
                 alt={book.title}
-                className="w-full h-[350px] object-cover rounded"
+                className="w-full h-[350px] object-fit rounded"
               />
             ) : (
               <div>No cover available</div>
@@ -114,12 +145,12 @@ const ProductDetailPage: React.FC = () => {
 
           {/* Image selector */}
           <div className="flex overflow-x-auto space-x-2 mt-4">
-            {book.covers?.map((coverId, index) => (
+            {book.covers?.slice(0, 5).map((coverId, index) => (
               <img
                 key={index}
                 src={`https://covers.openlibrary.org/b/id/${coverId}-S.jpg`}
                 alt={`${book.title} - ${index + 1}`}
-                className={`h-24 w-24 object-cover rounded cursor-pointer ${selectedImage ===
+                className={`h-24 w-24 object-fit rounded cursor-pointer ${selectedImage ===
                   `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`
                   ? "border-2 border-primary"
                   : ""
@@ -222,21 +253,29 @@ const ProductDetailPage: React.FC = () => {
           </div>
 
           <div className="flex flex-row space-x-2">
-            <button className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark transition">
+            <button
+              className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark transition"
+              onClick={openModal} // Open the modal when the user clicks Request Exchange
+            >
               Request Exchange
             </button>
             <button
-              onClick={() => setIsWish(!isWish)}
-              className={` px-4 py-2 rounded ${isWish
+              onClick={makeWishList}
+              disabled={isMakeWishList}
+              className={` px-4 py-2 rounded disabled:opacity-50 ${isWish
                 ? `text-white bg-primary-light border-primary`
                 : `bg-primary text-white hover:bg-primary-dark transition`
                 }`}
             >
-              {isWish ? "In Wishlist" : "Make Wish List"}
+             {isMakeWishList ? "Loading..." : isWish ? "In Wishlist" : "Make Wish List"}
+              {/* {isWish ? "In Wishlist" : "Make Wish List"} */}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Exchange Request Modal */}
+      <ExchangeRequestModal isOpen={isModalOpen} closeModal={closeModal} />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import SidebarAccout from "./SidebarAccout";
+import SidebarAccout from "./SidebarWrapper";
 import MobileWrapper from "../MobileWrapper";
 
 function AccountLayout() {

@@ -38,6 +38,7 @@ interface Action {
   clearUser: () => void;
   initializeUser: () => void;
   checkExpire: () => void;
+  getParsedAuthToken: () => object | null;
 
 }
 
@@ -61,7 +62,7 @@ export const useUserStore = create(
        */
       setUser: (userId, username, role, remember, authToken, tokenExpiration) => {
         console.log("Setting user:", { userId, username, role, authToken, tokenExpiration });
-        set({tokenExpiration: null})
+        set({ tokenExpiration: null })
         set({ userId, username, role, remember, authToken, tokenExpiration, loading: false });
       },
       clearUser: () => {
@@ -137,7 +138,7 @@ export const useUserStore = create(
       },
       checkExpire: () => {
         console.log("Enter check Expire function");
-        
+
         const { tokenExpiration, remember } = useUserStore.getState()
         const currentTime = Date.now()
         console.log("check expire function");
@@ -160,7 +161,26 @@ export const useUserStore = create(
           set({ userId: null, authToken: null, tokenExpiration: null, loading: false, username: null });
           return;
         }
-        
+
+      },
+
+      // Function to parse authToken into a usable object.
+      getParsedAuthToken: () => {
+        const { authToken } = useUserStore.getState();
+        if (!authToken) {
+          console.error("Auth token not found");
+          return null;
+        }
+
+        try {
+          // Parse the token as JSON
+          const parsedToken = JSON.parse(authToken);
+          console.log("Parsed Token from Store:", parsedToken);
+          return parsedToken;
+        } catch (error) {
+          console.error("Error parsing auth token:", error);
+          return null;
+        }
       },
 
     }),
