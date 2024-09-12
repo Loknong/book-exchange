@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "../base/Modal";
+import Modal from "../base/_TempModal";
 import Form from "./Form";
 import Button from "../base/Button";
 

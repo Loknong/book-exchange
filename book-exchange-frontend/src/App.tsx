@@ -29,6 +29,7 @@ import ExchangeBookWithForm from "./react-form/ExchangeBookWithForm";
 
 // User Accout
 import AccountLayout from "./components/layout/account/AccountLayout";
+import AccountOverview from "./components/Account/AccountOverview";
 import ProfileInfo from "./components/ProfileInfo";
 
 // Mobile-specific routes
@@ -72,9 +73,8 @@ function App() {
               <AccountLayout />
             </ProtectedRoute>
           }>
-            <Route index element={<ProfileInfo />} />
+            <Route index element={<AccountOverview />} />
             <Route path="profile" element={<ProfileInfo />} />
-            <Route path="profile-info" element={<ProfileInfo />} />
           </Route>
 
           {/* Mobile-specific routes */}

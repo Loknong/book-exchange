@@ -24,23 +24,26 @@ const SidebarAccout = () => {
           <h4 className="text-gray-800 font-bold">{user.name}</h4>
         </div>
       </div>
-      <div className="mt-6 bg-white shadow p-4 rounded divide-y divide-gray-200 space-y-4 text-gray-600">
 
-        {/* Account Section */}
-        <SidebarMenu items={sidebarAccountItems} />
+      <div className="mt-6 bg-white shadow p-4 rounded  text-gray-600 min-h-[50rem] flex flex-col justify-between">
+        <div className="divide-y divide-gray-200 space-y-4">
 
-        {/* My Books Section */}
-        <SidebarMenu items={sidebarMyBooksItems} />
 
-        {/* Exchange Requests Section */}
-        <SidebarMenu items={sidebarExchangeItems} />
+          {/* Account Section */}
+          <SidebarMenu items={sidebarAccountItems} />
 
-        {/* Notifications Section */}
-        <SidebarMenu items={sidebarNotificationsItems} />
+          {/* My Books Section */}
+          <SidebarMenu items={sidebarMyBooksItems} />
 
-        {/* Settings Section */}
-        <SidebarMenu items={sidebarSettingsItems} />
+          {/* Exchange Requests Section */}
+          <SidebarMenu items={sidebarExchangeItems} />
 
+          {/* Notifications Section */}
+          <SidebarMenu items={sidebarNotificationsItems} />
+
+          {/* Settings Section */}
+          <SidebarMenu items={sidebarSettingsItems} />
+        </div>
         <div className="space-y-1 pl-8 pt-4">
           <span
             onClick={() => {

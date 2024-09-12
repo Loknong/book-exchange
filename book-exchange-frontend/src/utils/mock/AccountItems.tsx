@@ -8,13 +8,13 @@ import { BiMessageDetail, BiHistory } from "react-icons/bi";
 // Account Items
 export const sidebarAccountItems = [
   {
-    label: "Manage Account",
-    path: "/account/profile",
+    label: "Overviews",
+    path: "/account",
     icon: FaAddressCard,
   },
   {
     label: "Profile Info",
-    path: "/account/profile-info",
+    path: "/account/profile",
     icon: FaUser,
   },
   {
