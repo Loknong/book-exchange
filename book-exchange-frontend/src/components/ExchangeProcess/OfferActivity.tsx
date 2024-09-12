@@ -72,12 +72,12 @@ const offerData: Offer[] = [
 const OfferActivity: React.FC = () => {
     return (
         <div className="bg-white shadow-lg rounded-lg p-6 mb-6 max-h-[56rem] overflow-auto scrollbar-hide">
-            
+
             <div className="grid grid-cols-1 gap-4">
                 {offerData.slice(0, 10).map((offer, index) => (
                     <div
                         key={index}
-                        className={`flex items-center p-4 rounded-lg border ${offer.status === "accepted"
+                        className={`cursor-pointer flex items-center p-4 rounded-lg border ${offer.status === "accepted"
                             ? "border-green-500 bg-green-100"
                             : offer.status === "rejected"
                                 ? "border-red-500 bg-red-100"

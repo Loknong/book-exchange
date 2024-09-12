@@ -37,9 +37,12 @@ const Header = ({ menuList, toggleNav }: Props) => {
           >
             <div className="text-2xl relative">
               {menu.icon}
-              <span className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex justify-center items-center text-white text-xs bg-primary">
-                5
-              </span>
+              {menu.name === "Exchange Requests" && (
+                <span className="absolute -right-3 -top-1 w-5 h-5 rounded-full flex justify-center items-center text-white text-xs bg-primary">
+                  5
+                </span>
+              )}
+
             </div>
             <div className="text-xs leading-3">{menu.name}</div>
           </a>
@@ -81,7 +84,7 @@ const Header = ({ menuList, toggleNav }: Props) => {
         {<span>{userId === null ? "Guest Mode" : "User Mode"} </span>}
 
         <div className="md:block hidden">
-          <SearchBar handleClose={() => {}} onSearch={() => {}} />
+          <SearchBar handleClose={() => { }} onSearch={() => { }} />
         </div>
 
         {/* header menu list desktop view */}
@@ -105,9 +108,8 @@ const Header = ({ menuList, toggleNav }: Props) => {
             <div className="relative mr-3">
               <div
                 onClick={() => setUserMenu(!userMenu)}
-                className={`${
-                  userMenu && `bg-gray-300`
-                }  w-4 h-4 rounded-full absolute opacity-50 -top-3 -right-3`}
+                className={`${userMenu && `bg-gray-300`
+                  }  w-4 h-4 rounded-full absolute opacity-50 -top-3 -right-3`}
               ></div>
 
               <div
