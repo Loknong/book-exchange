@@ -72,7 +72,9 @@ function App() {
               <AccountLayout />
             </ProtectedRoute>
           }>
+            <Route index element={<ProfileInfo />} />
             <Route path="profile" element={<ProfileInfo />} />
+            <Route path="profile-info" element={<ProfileInfo />} />
           </Route>
 
           {/* Mobile-specific routes */}

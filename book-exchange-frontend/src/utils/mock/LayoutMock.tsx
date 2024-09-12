@@ -27,7 +27,7 @@ export const navLinks = [
 export const menuList = [
   { name: "My Books", url: "/my-books", icon: <FaBook /> },
   { name: "Exchange Requests", url: "/exchange-requests", icon: <FaSyncAlt /> },
-  { name: "Account", url: "/account", icon: <FaUser /> },
+  { name: "Account", url: "/account/profile", icon: <FaUser /> },
 ];
 
 export const menuMobileList = [

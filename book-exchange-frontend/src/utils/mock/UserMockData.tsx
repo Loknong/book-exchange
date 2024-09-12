@@ -1,3 +1,5 @@
+import TestUserImage from "../../assets/profile-removebg-preview.png"
+
 // src/mocks/userMockData.ts
 export const mockUsers = [
   // {
@@ -21,8 +23,9 @@ export const mockUsers = [
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     username: "johndoe123",
     phone: "+1234567890",
-    password: "111111", // Not displayed on profile, but needed for authentication logic
-    role: "user", // Not displayed on profile, but needed for access control
+    password: "111111", 
+    role: "user", 
+    profilePicture: TestUserImage,
   },
   {
     id: 2,

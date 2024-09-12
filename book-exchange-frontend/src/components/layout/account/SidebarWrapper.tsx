@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import Profile from "../../../assets/book.jpg";
 import { useUserStore } from "../../../stores/userStore";
 import { sidebarAccountItems, sidebarExchangeItems, sidebarMyBooksItems, sidebarNotificationsItems, sidebarSettingsItems } from "../../../utils/mock/AccountItems";
 import SidebarMenu from "./SideBarMenu";
@@ -15,7 +14,7 @@ const SidebarAccout = () => {
       <div className="px-4 py-3 shadow flex items-center gap-4">
         <div className="flex-shrink-0">
           <img
-            src={Profile}
+            src={user.profilePicture}
             className="rounded-full w-14 h-14 border border-gray-200 p-1 object-cover"
             alt="Profile"
           />

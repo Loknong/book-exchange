@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Profile from "../assets/book.jpg";
 import { useUserStore } from "../stores/userStore";
 
 export interface UserProfile {
@@ -23,7 +22,7 @@ const ProfileInfo: React.FC = () => {
     bio: userData.bio,
     username: userData.username,
     phone: userData.phone,
-    profilePicture: Profile,
+    profilePicture: userData.profilePicture,
   });
 
   const [isEditing, setIsEditing] = useState(false);
